@@ -2,17 +2,26 @@
     <section>
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-            <el-form :inline="true" :model="filters">
-                <el-form-item>
-                    <el-input v-model="filters.name" placeholder="姓名"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" v-on:click="getUsers">查询</el-button>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="handleAdd">新增</el-button>
-                </el-form-item>
-            </el-form>
+            姓名:&nbsp;
+            <el-input v-model="filters.name" style="width:10%"></el-input>
+            &nbsp;&nbsp;创建时间:&nbsp;
+            <el-date-picker type="date" placeholder="开始日期" v-model="filters.startTime" style="width:12%"></el-date-picker>
+            &nbsp;-&nbsp;
+            <el-date-picker type="date" placeholder="结束日期" v-model="filters.endTime" style="width:12%"></el-date-picker>
+            <el-button type="primary" v-on:click="getUsers">查询</el-button>
+            <el-button type="primary" @click="handleAdd">新增</el-button>
+
+            <!--<el-form :inline="true" :model="filters">-->
+                <!--<el-form-item>-->
+                    <!--<el-input v-model="filters.name" placeholder="姓名"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item>-->
+                    <!--<el-button type="primary" v-on:click="getUsers">查询</el-button>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item>-->
+                    <!--<el-button type="primary" @click="handleAdd">新增</el-button>-->
+                <!--</el-form-item>-->
+            <!--</el-form>-->
         </el-col>
 
         <!--列表-->
