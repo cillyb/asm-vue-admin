@@ -177,8 +177,10 @@
             //获取用户列表
             getUsers() {
                 let para = {
-                    page: this.page,
-                    name: this.filters.name
+                    page:{
+                        size: 3,
+                        current: 1
+                    }
                 };
                 this.listLoading = true;
                 //NProgress.start();
