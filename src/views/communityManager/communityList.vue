@@ -4,10 +4,10 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.name" placeholder="姓名"></el-input>
+                    <el-input v-model="filters.name" placeholder="社区名称"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" v-on:click="getUsers">查询</el-button>
+                    <el-button type="primary" v-on:click="getCommunity">查询</el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="handleAdd">新增</el-button>
@@ -16,22 +16,30 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-            <el-table-column type="selection" width="55">
+        <el-table :data="community" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+            <el-table-column type="selection" style="width: 5%;">
             </el-table-column>
-            <el-table-column type="index" width="60">
+            <el-table-column type="index" style="width: 5%;">
             </el-table-column>
-            <el-table-column prop="name" label="姓名" width="120" sortable>
+            <el-table-column prop="communityName" label="社区名称" style="width: 9%;" sortable>
             </el-table-column>
-            <el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
+            <el-table-column prop="address" label="社区地址" style="width: 9%;" sortable>
             </el-table-column>
-            <el-table-column prop="age" label="年龄" width="100" sortable>
+            <el-table-column prop="manager" label="管理员" style="width: 9%;" sortable>
             </el-table-column>
-            <el-table-column prop="birth" label="生日" width="120" sortable>
+            <el-table-column prop="managerPhone" label="联系电话" style="width: 9%;" sortable>
             </el-table-column>
-            <el-table-column prop="addr" label="地址" min-width="180" sortable>
+            <el-table-column prop="onlineTimeBegin" label="开始营业时间" style="min-width: 9%;" sortable>
             </el-table-column>
-            <el-table-column label="操作" width="150">
+            <el-table-column prop="onlineTimeEnd" label="结束营业时间" style="min-width: 9%;" sortable>
+            </el-table-column>
+            <el-table-column prop="longitude" label="经度" style="width: 9%;" sortable>
+            </el-table-column>
+            <el-table-column prop="latitude" label="纬度" style="width: 9%;" sortable>
+            </el-table-column>
+            <el-table-column prop="status" label="状态" style="width: 9%;" :formatter="formatStatus" sortable>
+            </el-table-column>
+            <el-table-column label="操作" style="width: 9%;">
                 <template scope="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
@@ -42,72 +50,93 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar">
             <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-            <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
+            <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
             </el-pagination>
         </el-col>
 
         <!--编辑界面-->
         <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
-            <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="姓名" prop="name">
-                    <el-input v-model="editForm.name" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="性别">
-                    <el-radio-group v-model="editForm.sex">
-                        <el-radio class="radio" :label="1">男</el-radio>
-                        <el-radio class="radio" :label="0">女</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="年龄">
-                    <el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
-                </el-form-item>
-                <el-form-item label="生日">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
-                </el-form-item>
-                <el-form-item label="地址">
-                    <el-input type="textarea" v-model="editForm.addr"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click.native="editFormVisible = false">取消</el-button>
-                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
-            </div>
+        <el-form :model="editForm" label-width="150px" :rules="editFormRules" ref="editForm">
+            <el-form-item label="社区名称" prop="communityName">
+                <el-input v-model="editForm.communityName" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="经度" prop="longitude">
+                <el-input v-model="editForm.longitude"></el-input>
+            </el-form-item>
+            <el-form-item label="纬度" prop="latitude">
+                <el-input v-model="editForm.latitude"></el-input>
+            </el-form-item>
+            <el-form-item label="地址" prop="address">
+                <el-input type="textarea" v-model="editForm.address" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="管理员" prop="manager">
+                <el-input v-model="editForm.manager" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="联系电话" prop="managerPhone">
+                <el-input v-model.number="editForm.managerPhone" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="开始营业时间" prop="onlineTimeBegin">
+                <el-time-select v-model="editForm.onlineTimeBegin" :picker-options="{start:'00:00',step: '00:30',end: '24:00'}"></el-time-select>
+            </el-form-item>
+            <el-form-item label="结束营业时间" prop="onlineTimeEnd">
+                <el-time-select v-model="editForm.onlineTimeEnd" :picker-options="{start:'00:00',step: '00:30',end: '24:00'}"></el-time-select>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click.native="editFormVisible = false">取消</el-button>
+            <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+        </div>
         </el-dialog>
 
         <!--新增界面-->
         <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
-            <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-                <el-form-item label="姓名" prop="name">
-                    <el-input v-model="addForm.name" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="性别">
-                    <el-radio-group v-model="addForm.sex">
-                        <el-radio class="radio" :label="1">男</el-radio>
-                        <el-radio class="radio" :label="0">女</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="年龄">
-                    <el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
-                </el-form-item>
-                <el-form-item label="生日">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
-                </el-form-item>
-                <el-form-item label="地址">
-                    <el-input type="textarea" v-model="addForm.addr"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click.native="addFormVisible = false">取消</el-button>
-                <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
-            </div>
+        <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
+            <el-form-item label="社区名称" prop="communityName">
+                <el-input v-model="addForm.communityName" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="经度" prop="longitude">
+                <el-input v-model="addForm.longitude"></el-input>
+            </el-form-item>
+            <el-form-item label="纬度" prop="latitude">
+                <el-input v-model="addForm.latitude"></el-input>
+            </el-form-item>
+            <el-form-item label="地址" prop="address">
+                <el-input type="textarea" v-model="addForm.address" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="管理员" prop="manager">
+                <el-input v-model="addForm.manager" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="联系电话" prop="managerPhone">
+                <el-input v-model.number="addForm.managerPhone" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="开始营业时间" prop="onlineTimeBegin">
+                <el-time-select v-model="addForm.onlineTimeBegin" :picker-options="{start:'00:00',step: '00:30',end: '24:00'}"></el-time-select>
+            </el-form-item>
+            <el-form-item label="结束营业时间" prop="onlineTimeEnd">
+                <el-time-select v-model="addForm.onlineTimeEnd" :picker-options="{start:'00:00',step: '00:30',end: '24:00'}"></el-time-select>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click.native="addFormVisible = false">取消</el-button>
+            <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+        </div>
         </el-dialog>
     </section>
 </template>
 
 <script>
-    import util from '../../common/js/util'
-    //import NProgress from 'nprogress'
-    import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+    import { getCommunityListPage, removeCommunity, addCommunity, editCommunity, isvalidPhone } from '../../api/communityApi';
+
+    //手机号码验证
+    var validPhone=(rule, value,callback)=>{
+        if (!value){
+            callback(new Error('请输入电话号码'))
+        }else  if (!isvalidPhone(value)){
+            callback(new Error('请输入正确的11位手机号码'))
+        }else {
+            callback()
+        }
+    }
 
     export default {
         data() {
@@ -115,7 +144,7 @@
                 filters: {
                     name: ''
                 },
-                users: [],
+                community: [],
                 total: 0,
                 page: 1,
                 listLoading: false,
@@ -124,167 +153,213 @@
                 editFormVisible: false,//编辑界面是否显示
                 editLoading: false,
                 editFormRules: {
-                    name: [
-                        { required: true, message: '请输入姓名', trigger: 'blur' }
-                    ]
+                    communityName: [
+                        { required: true, message: '请输入社区名称', trigger: 'blur' }
+                    ],
+                    longitude: [
+                        { required: true, message: '请输入经度', trigger: 'blur' }
+                    ],
+                    latitude: [
+                        { required: true, message: '请输入纬度', trigger: 'blur' }
+                    ],
+                    address: [
+                        { required: true, message: '请输入地址', trigger: 'blur' }
+                    ],
+                    manager: [
+                        { required: true, message: '请输入管理员', trigger: 'blur' }
+                    ],
+                    managerPhone: [
+                        { required: true, trigger: 'blur', validator: validPhone }
+                    ],
+                    onlineTimeBegin: [
+                        { required: true, message: '请输入开始营业时间', trigger: 'blur' }
+                    ],
+                    onlineTimeEnd: [
+                        { required: true, message: '请输入结束营业时间', trigger: 'blur' }
+                    ],
                 },
                 //编辑界面数据
                 editForm: {
                     id: 0,
-                    name: '',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    addr: ''
+                    communityName: '',
+                    longitude: '',
+                    latitude: '',
+                    address: '',
+                    manager: '',
+                    managerPhone: '',
+                    onlineTimeBegin: '',
+                    onlineTimeEnd: ''
                 },
 
                 addFormVisible: false,//新增界面是否显示
                 addLoading: false,
                 addFormRules: {
-                    name: [
-                        { required: true, message: '请输入姓名', trigger: 'blur' }
+                    communityName: [
+                        { required: true, message: '请输入社区名称', trigger: 'blur' }
+                    ],
+                    longitude: [
+                        { required: true, message: '请输入经度', trigger: 'blur' }
+                    ],
+                    latitude: [
+                        { required: true, message: '请输入纬度', trigger: 'blur' }
+                    ],
+                    address: [
+                        { required: true, message: '请输入地址', trigger: 'blur' }
+                    ],
+                    manager: [
+                        { required: true, message: '请输入管理员', trigger: 'blur' }
+                    ],
+                    managerPhone: [
+                        { required: true, trigger: 'blur', validator: validPhone }
+                    ],
+                    onlineTimeBegin: [
+                        { required: true, message: '请输入开始营业时间', trigger: 'blur' }
+                    ],
+                    onlineTimeEnd: [
+                        { required: true, message: '请输入结束营业时间', trigger: 'blur' }
                     ]
                 },
                 //新增界面数据
                 addForm: {
-                    name: '',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    addr: ''
+                    communityName: '',
+                    longitude: '',
+                    latitude: '',
+                    address: '',
+                    manager: '',
+                    managerPhone: '',
+                    onlineTimeBegin: '',
+                    onlineTimeEnd: ''
                 }
 
             }
         },
         methods: {
-            //性别显示转换
-            formatSex: function (row, column) {
-                return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
+            //社区状态显示转换，1表示开启，0表示关闭
+            formatStatus: function (row, column) {
+                return row.status == 1 ? '开启' : row.status == 0 ? '关闭' : '未知';
             },
             handleCurrentChange(val) {
                 this.page = val;
-                this.getUsers();
+                this.getCommunity();
             },
-            //获取用户列表
-            getUsers() {
+            //获取社区列表
+            getCommunity() {
                 let para = {
-                    page: this.page,
-                    name: this.filters.name
+                    "page":{
+                        "current":this.page,
+                        "size":10
+                    }
                 };
                 this.listLoading = true;
-                //NProgress.start();
-                getUserListPage(para).then((res) => {
+                getCommunityListPage(para).then((res) => {
                     this.total = res.data.total;
-                    this.users = res.data.users;
+                    this.community = res.data.records;
                     this.listLoading = false;
-                    //NProgress.done();
                 });
             },
-            //删除
+            //删除社区
             handleDel: function (index, row) {
                 this.$confirm('确认删除该记录吗?', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
                     //NProgress.start();
-                    let para = { id: row.id };
-                    removeUser(para).then((res) => {
+                    let para = { ids: [row.id] };
+                    removeCommunity(para).then((res) => {
                         this.listLoading = false;
                         //NProgress.done();
                         this.$message({
                             message: '删除成功',
                             type: 'success'
                         });
-                        this.getUsers();
+                        this.getCommunity();
                     });
                 }).catch(() => {
 
                 });
             },
             //显示编辑界面
-            handleEdit: function (index, row) {
-                this.editFormVisible = true;
-                this.editForm = Object.assign({}, row);
-            },
+           handleEdit: function (index, row) {
+               this.editFormVisible = true;
+               this.editForm = Object.assign({}, row);
+           },
             //显示新增界面
-            handleAdd: function () {
-                this.addFormVisible = true;
-                this.addForm = {
-                    name: '',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    addr: ''
-                };
-            },
-            //编辑
-            editSubmit: function () {
-                this.$refs.editForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.editLoading = true;
-                            //NProgress.start();
-                            let para = Object.assign({}, this.editForm);
-                            para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                            editUser(para).then((res) => {
-                                this.editLoading = false;
-                                //NProgress.done();
-                                this.$message({
-                                    message: '提交成功',
-                                    type: 'success'
-                                });
-                                this.$refs['editForm'].resetFields();
-                                this.editFormVisible = false;
-                                this.getUsers();
-                            });
-                        });
-                    }
-                });
-            },
-            //新增
-            addSubmit: function () {
-                this.$refs.addForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.addLoading = true;
-                            //NProgress.start();
-                            let para = Object.assign({}, this.addForm);
-                            para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                            addUser(para).then((res) => {
-                                this.addLoading = false;
-                                //NProgress.done();
-                                this.$message({
-                                    message: '提交成功',
-                                    type: 'success'
-                                });
-                                this.$refs['addForm'].resetFields();
-                                this.addFormVisible = false;
-                                this.getUsers();
-                            });
-                        });
-                    }
-                });
-            },
+           handleAdd: function () {
+               this.addFormVisible = true;
+               this.addForm = {
+                   communityName: '',
+                   longitude: '',
+                   latitude: '',
+                   address: '',
+                   manager: '',
+                   managerPhone: '',
+                   onlineTimeBegin: '',
+                   onlineTimeEnd: ''
+               };
+           },
+            //编辑社区
+           editSubmit: function () {
+               this.$refs.editForm.validate((valid) => {
+                   if (valid) {
+                       this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                           this.editLoading = true;
+                           let para = Object.assign({}, this.editForm);
+                           editCommunity(para).then((res) => {
+                               this.editLoading = false;
+                               this.$message({
+                                   message: '提交成功',
+                                   type: 'success'
+                               });
+                               this.$refs['editForm'].resetFields();
+                               this.editFormVisible = false;
+                               this.getCommunity();
+                           });
+                       });
+                   }
+               });
+           },
+            //新增社区
+           addSubmit: function () {
+               this.$refs.addForm.validate((valid) => {
+                   if (valid) {
+                       this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                           this.addLoading = true;
+                           let para = Object.assign({}, this.addForm);
+                           addCommunity(para).then((res) => {
+                               this.addLoading = false;
+                               this.$message({
+                                   message: '提交成功',
+                                   type: 'success'
+                               });
+                               this.$refs['addForm'].resetFields();
+                               this.addFormVisible = false;
+                               this.getCommunity();
+                           });
+                       });
+                   }
+               });
+           },
             selsChange: function (sels) {
                 this.sels = sels;
             },
             //批量删除
             batchRemove: function () {
-                var ids = this.sels.map(item => item.id).toString();
+                var ids = [];
+                for(var i = 0;i < this.sels.length; i++){
+                    ids.push(this.sels[i].id);
+                }
                 this.$confirm('确认删除选中记录吗？', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
-                    //NProgress.start();
                     let para = { ids: ids };
-                    batchRemoveUser(para).then((res) => {
+                    removeCommunity(para).then((res) => {
                         this.listLoading = false;
-                        //NProgress.done();
                         this.$message({
                             message: '删除成功',
                             type: 'success'
                         });
-                        this.getUsers();
+                        this.getCommunity();
                     });
                 }).catch(() => {
 
@@ -292,7 +367,7 @@
             }
         },
         mounted() {
-            this.getUsers();
+            this.getCommunity();
         }
     }
 
