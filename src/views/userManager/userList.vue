@@ -2,26 +2,14 @@
     <section>
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-            姓名:&nbsp;
-            <el-input v-model="filters.name" style="width:10%"></el-input>
+            手机号码:&nbsp;
+            <el-input v-model="condition.phoneNumber" style="width:10%"></el-input>
             &nbsp;&nbsp;创建时间:&nbsp;
-            <el-date-picker type="date" placeholder="开始日期" v-model="filters.startTime" style="width:12%"></el-date-picker>
+            <el-date-picker type="date" placeholder="开始日期" v-model="condition.registBeginDate" style="width:12%"></el-date-picker>
             &nbsp;-&nbsp;
-            <el-date-picker type="date" placeholder="结束日期" v-model="filters.endTime" style="width:12%"></el-date-picker>
+            <el-date-picker type="date" placeholder="结束日期" v-model="condition.registEndDate" style="width:12%"></el-date-picker>
             <el-button type="primary" v-on:click="getUsers">查询</el-button>
             <el-button type="primary" @click="handleAdd">新增</el-button>
-
-            <!--<el-form :inline="true" :model="filters">-->
-                <!--<el-form-item>-->
-                    <!--<el-input v-model="filters.name" placeholder="姓名"></el-input>-->
-                <!--</el-form-item>-->
-                <!--<el-form-item>-->
-                    <!--<el-button type="primary" v-on:click="getUsers">查询</el-button>-->
-                <!--</el-form-item>-->
-                <!--<el-form-item>-->
-                    <!--<el-button type="primary" @click="handleAdd">新增</el-button>-->
-                <!--</el-form-item>-->
-            <!--</el-form>-->
         </el-col>
 
         <!--列表-->
@@ -30,17 +18,17 @@
             </el-table-column>
             <el-table-column type="index" width="60">
             </el-table-column>
-            <el-table-column prop="name" label="姓名" width="120" sortable>
+            <el-table-column prop="createTime" label="注册时间" width="200" sortable>
             </el-table-column>
-            <el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
+            <el-table-column prop="phoneNumber" label="手机号" width="120">
             </el-table-column>
-            <el-table-column prop="age" label="年龄" width="100" sortable>
+            <el-table-column prop="lastUseDeviceId" label="最近使用的设备" width="220" >
             </el-table-column>
-            <el-table-column prop="birth" label="生日" width="120" sortable>
+            <el-table-column prop="lastUseTime" label="最近使用的时间" width="200" sortable>
             </el-table-column>
-            <el-table-column prop="addr" label="地址" min-width="180" sortable>
+            <el-table-column prop="addr" label="使用频率高的设备" width="220" >
             </el-table-column>
-            <el-table-column label="操作" width="150">
+            <el-table-column label="操作" width="150" header-align="center" >
                 <template scope="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
@@ -57,24 +45,25 @@
 
         <!--编辑界面-->
         <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
-            <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="姓名" prop="name">
-                    <el-input v-model="editForm.name" auto-complete="off"></el-input>
+            <el-form :model="editForm" label-width="150px" :rules="editFormRules" ref="editForm">
+                <el-form-item label="手机号" prop="phoneNumber">
+                    <el-input v-model="editForm.phoneNumber" disabled="true" auto-complete="off" maxlength="11" style="width: 25%"></el-input>
                 </el-form-item>
-                <el-form-item label="性别">
+                <el-form-item label="性别" prop="sex">
                     <el-radio-group v-model="editForm.sex">
-                        <el-radio class="radio" :label="1">男</el-radio>
-                        <el-radio class="radio" :label="0">女</el-radio>
+                        <el-radio class="radio" v-model="editForm.sex" label="男">男</el-radio>
+                        <el-radio class="radio" v-model="editForm.sex" label="女">女</el-radio>
+                        <el-radio class="radio" v-model="editForm.sex" label="其他">其他</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="年龄">
-                    <el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
+                <el-form-item label="是否为持有人" prop="isHolder">
+                    <el-radio-group v-model="editForm.isHolder">
+                        <el-radio class="radio" :label="1">是</el-radio>
+                        <el-radio class="radio" :label="0">否</el-radio>
+                    </el-radio-group>
                 </el-form-item>
-                <el-form-item label="生日">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
-                </el-form-item>
-                <el-form-item label="地址">
-                    <el-input type="textarea" v-model="editForm.addr"></el-input>
+                <el-form-item label="生日" prop="birthday">
+                    <el-date-picker type="date" style="width: 25%" placeholder="选择日期" v-model="editForm.birthday" value-format="yyyy-MM-dd"></el-date-picker>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -85,24 +74,25 @@
 
         <!--新增界面-->
         <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
-            <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-                <el-form-item label="姓名" prop="name">
-                    <el-input v-model="addForm.name" auto-complete="off"></el-input>
+            <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
+                <el-form-item label="手机号" prop="phoneNumber">
+                    <el-input v-model="addForm.phoneNumber" auto-complete="off" maxlength="11" style="width: 25%"></el-input>
                 </el-form-item>
-                <el-form-item label="性别">
+                <el-form-item label="性别" prop="sex">
                     <el-radio-group v-model="addForm.sex">
-                        <el-radio class="radio" :label="1">男</el-radio>
-                        <el-radio class="radio" :label="0">女</el-radio>
+                        <el-radio class="radio" v-model="addForm.sex" label="男">男</el-radio>
+                        <el-radio class="radio" v-model="addForm.sex" label="女">女</el-radio>
+                        <el-radio class="radio" v-model="addForm.sex" label="其他">其他</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="年龄">
-                    <el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
+                <el-form-item label="是否为持有人" prop="isHolder">
+                    <el-radio-group v-model="addForm.isHolder">
+                        <el-radio class="radio" :label="1">是</el-radio>
+                        <el-radio class="radio" :label="0">否</el-radio>
+                    </el-radio-group>
                 </el-form-item>
-                <el-form-item label="生日">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
-                </el-form-item>
-                <el-form-item label="地址">
-                    <el-input type="textarea" v-model="addForm.addr"></el-input>
+                <el-form-item label="生日" prop="birthday">
+                    <el-date-picker type="date" style="width: 25%" placeholder="选择日期" v-model="addForm.birthday" value-format="yyyy-MM-dd"></el-date-picker>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -116,79 +106,97 @@
 <script>
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
-    import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+    // import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+    import { getUserListPage, addUser, editUser, removeUser } from "../../api/userApi"
 
     export default {
         data() {
             return {
-                filters: {
-                    name: ''
+                condition: {
+                    phoneNumber:'',
+                    registBeginDate:'',
+                    registEndDate:''
                 },
                 users: [],
-                total: 0,
-                page: 1,
+                size: 20,
+                current: 1,
                 listLoading: false,
                 sels: [],//列表选中列
 
                 editFormVisible: false,//编辑界面是否显示
                 editLoading: false,
                 editFormRules: {
-                    name: [
-                        { required: true, message: '请输入姓名', trigger: 'blur' }
-                    ]
+                    phoneNumber: [
+                        { required: true, message: '请输入手机号', trigger: 'blur' }
+                    ],
+                    sex: [
+                        { required: true, message: '请选择性别', trigger: 'blur' }
+                    ],
+                    birthday: [
+                        { required: true, message: '请选择生日', trigger: 'blur' }
+                    ],
+                    isHolder: [
+                        { required: true, message: '请选择是否为持有人', trigger: 'blur' }
+                    ],
                 },
                 //编辑界面数据
                 editForm: {
-                    id: 0,
-                    name: '',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    addr: ''
+                    phoneNumber: '',
+                    sex: '',
+                    birthday: '',
+                    isHolder: '',
                 },
 
                 addFormVisible: false,//新增界面是否显示
                 addLoading: false,
                 addFormRules: {
-                    name: [
-                        { required: true, message: '请输入姓名', trigger: 'blur' }
-                    ]
+                    phoneNumber: [
+                        { required: true, message: '请输入手机号', trigger: 'blur' }
+                    ],
+                    sex: [
+                        { required: true, message: '请选择性别', trigger: 'blur' }
+                    ],
+                    birthday: [
+                        { required: true, message: '请选择生日', trigger: 'blur' }
+                    ],
+                    isHolder: [
+                        { required: true, message: '请选择是否为持有人', trigger: 'blur' }
+                    ],
                 },
                 //新增界面数据
                 addForm: {
-                    name: '',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    addr: ''
+                    phoneNumber: '',
+                    sex: '',
+                    birthday: '',
+                    isHolder: '',
                 }
 
             }
         },
         methods: {
-            //性别显示转换
-            formatSex: function (row, column) {
-                return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-            },
             handleCurrentChange(val) {
-                this.page = val;
+                this.current = val;
                 this.getUsers();
             },
             //获取用户列表
             getUsers() {
                 let para = {
                     page:{
-                        size: 3,
-                        current: 1
-                    }
+                        size: this.size,
+                        current: this.current
+                    },
+                    condition: this.condition
                 };
                 this.listLoading = true;
                 //NProgress.start();
                 getUserListPage(para).then((res) => {
-                    this.total = res.data.total;
-                    this.users = res.data.users;
-                    this.listLoading = false;
-                    //NProgress.done();
+                    // console.log(res);
+                    if(res.meta.success) {
+                        this.total = res.data.total;
+                        this.users = res.data.records;
+                        this.listLoading = false;
+                        //NProgress.done();
+                    }
                 });
             },
             //删除
@@ -198,15 +206,23 @@
                 }).then(() => {
                     this.listLoading = true;
                     //NProgress.start();
-                    let para = { id: row.id };
+                    let para = { ids: [] };
+                    para.ids.push(row.id);
                     removeUser(para).then((res) => {
                         this.listLoading = false;
                         //NProgress.done();
-                        this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                        this.getUsers();
+                        if(res.meta.success) {
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            this.getUsers();
+                        } else {
+                            this.$message({
+                                message: res.meta.message,
+                                type: 'error'
+                            });
+                        }
                     });
                 }).catch(() => {
 
@@ -221,11 +237,10 @@
             handleAdd: function () {
                 this.addFormVisible = true;
                 this.addForm = {
-                    name: '',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    addr: ''
+                    phoneNumber: '',
+                    sex: '',
+                    birthday: '',
+                    isHolder: '',
                 };
             },
             //编辑
@@ -236,17 +251,24 @@
                             this.editLoading = true;
                             //NProgress.start();
                             let para = Object.assign({}, this.editForm);
-                            para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
+                            // para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             editUser(para).then((res) => {
                                 this.editLoading = false;
                                 //NProgress.done();
-                                this.$message({
-                                    message: '提交成功',
-                                    type: 'success'
-                                });
-                                this.$refs['editForm'].resetFields();
-                                this.editFormVisible = false;
-                                this.getUsers();
+                                if(res.meta.success) {
+                                    this.$message({
+                                        message: '提交成功',
+                                        type: 'success'
+                                    });
+                                    this.$refs['editForm'].resetFields();
+                                    this.editFormVisible = false;
+                                    this.getUsers();
+                                } else {
+                                    this.$message({
+                                        message: res.meta.message,
+                                        type: 'error'
+                                    });
+                                }
                             });
                         });
                     }
@@ -260,17 +282,24 @@
                             this.addLoading = true;
                             //NProgress.start();
                             let para = Object.assign({}, this.addForm);
-                            para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
+                            // para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
+                            console.log(para);
                             addUser(para).then((res) => {
                                 this.addLoading = false;
-                                //NProgress.done();
-                                this.$message({
-                                    message: '提交成功',
-                                    type: 'success'
-                                });
-                                this.$refs['addForm'].resetFields();
-                                this.addFormVisible = false;
-                                this.getUsers();
+                                if(res.meta.success) {
+                                    this.$message({
+                                        message: '提交成功',
+                                        type: 'success'
+                                    });
+                                    this.$refs['addForm'].resetFields();
+                                    this.addFormVisible = false;
+                                    this.getUsers();
+                                } else {
+                                    this.$message({
+                                        message: res.meta.message,
+                                        type: 'error'
+                                    });
+                                }
                             });
                         });
                     }
@@ -281,21 +310,32 @@
             },
             //批量删除
             batchRemove: function () {
-                var ids = this.sels.map(item => item.id).toString();
+                // var ids = this.sels.map(item => item.id).toString();
+                var ids = [];
+                for(var i = 0; i < this.sels.length; i++) {
+                    ids.push(this.sels[i].id);
+                }
                 this.$confirm('确认删除选中记录吗？', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
                     //NProgress.start();
                     let para = { ids: ids };
-                    batchRemoveUser(para).then((res) => {
+                    removeUser(para).then((res) => {
                         this.listLoading = false;
                         //NProgress.done();
-                        this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                        this.getUsers();
+                        if(res.meta.success) {
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            this.getUsers();
+                        } else {
+                            this.$message({
+                                message: res.meta.message,
+                                type: 'error'
+                            });
+                        }
                     });
                 }).catch(() => {
 

@@ -6,7 +6,7 @@ export const requestLogin = params => { return axios.post(`${base}/login`, param
 
 export const getUserList = params => { return axios.get(`${base}/user/list`, { params: params }); };
 
-export const getUserListPage = params => { return axios.post(`/api/bg/admin/community/list`, { params: params }, {
+export const getUserListPage = params => { return axios.post(`/api/bg/admin/community/list`, params, {
     headers: {
         'X-BG-TOKEN': 1
     }
