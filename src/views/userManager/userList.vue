@@ -5,9 +5,9 @@
             手机号码:&nbsp;
             <el-input v-model="condition.phoneNumber" style="width:10%"></el-input>
             &nbsp;&nbsp;创建时间:&nbsp;
-            <el-date-picker type="date" placeholder="开始日期" v-model="condition.registBeginDate" style="width:12%"></el-date-picker>
+            <el-date-picker type="date" placeholder="开始日期" v-model="condition.registBeginDate" value-format="yyyy-MM-dd" style="width:12%"></el-date-picker>
             &nbsp;-&nbsp;
-            <el-date-picker type="date" placeholder="结束日期" v-model="condition.registEndDate" style="width:12%"></el-date-picker>
+            <el-date-picker type="date" placeholder="结束日期" v-model="condition.registEndDate" value-format="yyyy-MM-dd" style="width:12%"></el-date-picker>
             <el-button type="primary" v-on:click="getUsers">查询</el-button>
             <el-button type="primary" @click="handleAdd">新增</el-button>
         </el-col>
@@ -187,6 +187,7 @@
                     },
                     condition: this.condition
                 };
+                para.condition = util.filterParams(para.condition);
                 this.listLoading = true;
                 //NProgress.start();
                 getUserListPage(para).then((res) => {

@@ -20,10 +20,11 @@ export default {
     filterParams: function(para) {
         let newPara = {};
         for(let key in para) {
-            if(para[key] == "" || para[key] == null) {
-                //TODO
+            if(para[key] != "" && para[key] != null) {
+                newPara[key] = para[key];
             }
         }
+        return newPara;
     },
 
     formatDate: {
