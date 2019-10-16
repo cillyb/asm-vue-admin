@@ -17,29 +17,29 @@
 
         <!--列表-->
         <el-table :data="community" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-            <el-table-column type="selection" style="width: 5%;">
+            <el-table-column type="selection" width="50">
             </el-table-column>
-            <el-table-column type="index" style="width: 5%;">
+            <el-table-column type="index" width="50">
             </el-table-column>
-            <el-table-column prop="communityName" label="社区名称" style="width: 9%;" sortable>
+            <el-table-column prop="communityName" label="社区名称" width="100" sortable>
             </el-table-column>
-            <el-table-column prop="address" label="社区地址" style="width: 9%;" sortable>
+            <el-table-column prop="address" label="社区地址" width="120" sortable>
             </el-table-column>
-            <el-table-column prop="manager" label="管理员" style="width: 9%;" sortable>
+            <el-table-column prop="manager" label="管理员" width="100" sortable>
             </el-table-column>
-            <el-table-column prop="managerPhone" label="联系电话" style="width: 9%;" sortable>
+            <el-table-column prop="managerPhone" label="联系电话" width="120" sortable>
             </el-table-column>
-            <el-table-column prop="onlineTimeBegin" label="开始营业时间" style="min-width: 9%;" sortable>
+            <el-table-column prop="onlineTimeBegin" label="开始营业时间" width="150" sortable>
             </el-table-column>
-            <el-table-column prop="onlineTimeEnd" label="结束营业时间" style="min-width: 9%;" sortable>
+            <el-table-column prop="onlineTimeEnd" label="结束营业时间" width="150" sortable>
             </el-table-column>
-            <el-table-column prop="longitude" label="经度" style="width: 9%;" sortable>
+            <el-table-column prop="longitude" label="经度" width="100" sortable>
             </el-table-column>
-            <el-table-column prop="latitude" label="纬度" style="width: 9%;" sortable>
+            <el-table-column prop="latitude" label="纬度" width="100" sortable>
             </el-table-column>
-            <el-table-column prop="status" label="状态" style="width: 9%;" :formatter="formatStatus" sortable>
+            <el-table-column prop="status" label="状态" width="80" :formatter="formatStatus" sortable>
             </el-table-column>
-            <el-table-column label="操作" style="width: 9%;">
+            <el-table-column label="操作" width="150">
                 <template scope="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
@@ -268,10 +268,17 @@
                     removeCommunity(para).then((res) => {
                         this.listLoading = false;
                         //NProgress.done();
-                        this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
+                        if(res.meta.success){
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
                         this.getCommunity();
                     });
                 }).catch(() => {
@@ -306,10 +313,17 @@
                            let para = Object.assign({}, this.editForm);
                            editCommunity(para).then((res) => {
                                this.editLoading = false;
-                               this.$message({
-                                   message: '提交成功',
-                                   type: 'success'
-                               });
+                               if(res.meta.success){
+                                   this.$message({
+                                       message: '编辑成功',
+                                       type: 'success'
+                                   });
+                               }else{
+                                   this.$message({
+                                       message:res.meta.message,
+                                       type: 'error'
+                                   });
+                               }
                                this.$refs['editForm'].resetFields();
                                this.editFormVisible = false;
                                this.getCommunity();
@@ -327,10 +341,17 @@
                            let para = Object.assign({}, this.addForm);
                            addCommunity(para).then((res) => {
                                this.addLoading = false;
-                               this.$message({
-                                   message: '提交成功',
-                                   type: 'success'
-                               });
+                               if(res.meta.success){
+                                   this.$message({
+                                       message: '新增成功',
+                                       type: 'success'
+                                   });
+                               }else{
+                                   this.$message({
+                                       message:res.meta.message,
+                                       type: 'error'
+                                   });
+                               }
                                this.$refs['addForm'].resetFields();
                                this.addFormVisible = false;
                                this.getCommunity();
@@ -355,10 +376,17 @@
                     let para = { ids: ids };
                     removeCommunity(para).then((res) => {
                         this.listLoading = false;
-                        this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
+                        if(res.meta.success){
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
                         this.getCommunity();
                     });
                 }).catch(() => {
