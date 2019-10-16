@@ -1,5 +1,32 @@
 <template>
     <section>
+        <div class="app-container">
+            <el-row :gutter="20">
+                <!--部门数据-->
+                <el-col :span="4" :xs="24" style="width: 15%; ">
+                    <div class="head-container" style="margin-top: 10px;">
+                        设备类型
+                    </div>
+                    <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+                    <div class="toolbar">
+                        <el-button type="primary" size="mini" v-on:click="">新增</el-button>
+                        <el-button type="primary" size="mini" v-on:click="">修改</el-button>
+                        <el-button type="primary" size="mini" v-on:click="">删除</el-button>
+                    </div>
+                    <div class="head-container" style="height: 100%;">
+                        <el-tree
+                                node-key="id"
+                                :data="data"
+                                :props="defaultProps"
+                                highlight-current
+                                :expand-on-click-node="false"
+                                default-expand-all
+                                @node-click="handleNodeClick">
+
+                        </el-tree>
+                    </div>
+                </el-col>
+                <el-col :span="20" :xs="24">
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
@@ -16,20 +43,30 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+        <el-table :data="devices" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column type="index" width="60">
             </el-table-column>
-            <el-table-column prop="name" label="姓名" width="120" sortable>
+            <el-table-column prop="assetName" label="设备名称" width="100" sortable>
             </el-table-column>
-            <el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
+            <el-table-column prop="deviceNo" label="设备编号" width="120" sortable>
             </el-table-column>
-            <el-table-column prop="age" label="年龄" width="100" sortable>
+            <el-table-column prop="typeId" label="分类" width="100" sortable>
             </el-table-column>
-            <el-table-column prop="birth" label="生日" width="120" sortable>
+            <el-table-column prop="provideEndTime" label="截止提供时间" width="120" sortable>
             </el-table-column>
-            <el-table-column prop="addr" label="地址" min-width="180" sortable>
+            <el-table-column prop="firstCost" label="成本价格" min-width="180" sortable>
+            </el-table-column>
+            <el-table-column prop="" label="租赁价格" min-width="180" sortable>
+            </el-table-column>
+            <el-table-column prop="" label="分利比" min-width="180" sortable>
+            </el-table-column>
+            <el-table-column prop="" label="所属社区" min-width="180" sortable>
+            </el-table-column>
+            <el-table-column prop="status" label="设备状态" min-width="180" sortable>
+            </el-table-column>
+            <el-table-column prop="" label="设备二维码" min-width="180" sortable>
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">
@@ -45,7 +82,8 @@
             <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
             </el-pagination>
         </el-col>
-
+            </el-col>
+            </el-row>
         <!--编辑界面-->
         <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
@@ -77,14 +115,19 @@
         <!--新增界面-->
         <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
             <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-                <el-form-item label="姓名" prop="name">
+                <el-form-item label="设备名称" prop="name">
                     <el-input v-model="addForm.name" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="性别">
-                    <el-radio-group v-model="addForm.sex">
-                        <el-radio class="radio" :label="1">男</el-radio>
-                        <el-radio class="radio" :label="0">女</el-radio>
-                    </el-radio-group>
+                <el-form-item label="分类">
+                    <el-select v-model="addForm.typeId" placeholder="请选择">
+<!--                        <el-option-->
+<!--&lt;!&ndash;                                TODO 不分页的普通列表&ndash;&gt;-->
+<!--                                v-for="item in typeOptions"-->
+<!--                                :key="item.value"-->
+<!--                                :label="item.label"-->
+<!--                                :value="item.value">-->
+<!--                        </el-option>-->
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="年龄">
                     <el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
@@ -101,6 +144,7 @@
                 <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
             </div>
         </el-dialog>
+        </div>
     </section>
 </template>
 
@@ -108,16 +152,28 @@
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
     import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+    import { getTypeTree, getDevices, removeDevice } from '../../api/deviceApi'
 
     export default {
         data() {
             return {
+                condition:{
+                    "typeId":''
+                },
+                //treeData
+                data:{},
+                defaultProps:{
+                    children: 'fork',
+                    label: 'typeName'
+                },
+
                 filters: {
                     name: ''
                 },
-                users: [],
+                devices: [],
                 total: 0,
-                page: 1,
+                size:20,
+                current: 1,
                 listLoading: false,
                 sels: [],//列表选中列
 
@@ -157,6 +213,35 @@
             }
         },
         methods: {
+            //获取树形设备类型
+            getTypeTree() {
+                let para = {
+                };
+                getTypeTree(para).then((res) => {
+                    // console.log(res);
+                    if(res.meta.success) {
+                        this.data = res.data;
+                        if(this.data.length != 0) {
+                            console.log(this.data[0].id);
+                            this.currentNodekey = this.data[0].id;
+                            this.$refs.tree.setCheckedNodes(this.data[0]);
+                        }
+                        // console.log(this.data);
+                    } else {
+                        this.$message({
+                            message: res.meta.message,
+                            type: 'error'
+                        });
+                    }
+                });
+            },
+
+            handleNodeClick(data){
+                console.log(data.id);
+                this.condition.typeId = data.id;
+                this.getDevices();
+            },
+
             //性别显示转换
             formatSex: function (row, column) {
                 return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
@@ -166,18 +251,24 @@
                 this.getUsers();
             },
             //获取用户列表
-            getUsers() {
+            getDevices() {
                 let para = {
-                    page: this.page,
-                    name: this.filters.name
+                    page:{
+                        size: this.size,
+                        current: this.current
+                    },
+                    condition: util.filterParams(this.condition)
                 };
                 this.listLoading = true;
                 //NProgress.start();
-                getUserListPage(para).then((res) => {
-                    this.total = res.data.total;
-                    this.users = res.data.users;
-                    this.listLoading = false;
-                    //NProgress.done();
+                getDevices(para).then((res) => {
+                    // console.log(res);
+                    if(res.meta.success) {
+                        this.total = res.data.total;
+                        this.devices = res.data.records;
+                        this.listLoading = false;
+                        //NProgress.done();
+                    }
                 });
             },
             //删除
@@ -187,15 +278,23 @@
                 }).then(() => {
                     this.listLoading = true;
                     //NProgress.start();
-                    let para = { id: row.id };
-                    removeUser(para).then((res) => {
+                    let para = { ids: [] };
+                    para.ids.push(row.id);
+                    removeDevice(para).then((res) => {
                         this.listLoading = false;
                         //NProgress.done();
-                        this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                        this.getUsers();
+                        if(res.meta.success) {
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            this.getDevices();
+                        } else {
+                            this.$message({
+                                message: res.meta.message,
+                                type: 'error'
+                            });
+                        }
                     });
                 }).catch(() => {
 
@@ -270,21 +369,32 @@
             },
             //批量删除
             batchRemove: function () {
-                var ids = this.sels.map(item => item.id).toString();
+                // var ids = this.sels.map(item => item.id).toString();
+                var ids = [];
+                for(var i = 0; i < this.sels.length; i++) {
+                    ids.push(this.sels[i].id);
+                }
                 this.$confirm('确认删除选中记录吗？', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
                     //NProgress.start();
                     let para = { ids: ids };
-                    batchRemoveUser(para).then((res) => {
+                    removeDevice(para).then((res) => {
                         this.listLoading = false;
                         //NProgress.done();
-                        this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                        this.getUsers();
+                        if(res.meta.success) {
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            this.getDevices();
+                        } else {
+                            this.$message({
+                                message: res.meta.message,
+                                type: 'error'
+                            });
+                        }
                     });
                 }).catch(() => {
 
@@ -292,12 +402,12 @@
             }
         },
         mounted() {
-            this.getUsers();
+            this.getDevices();
+            this.getTypeTree();
         }
     }
 
 </script>
 
 <style scoped>
-
 </style>

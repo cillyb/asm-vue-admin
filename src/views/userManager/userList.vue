@@ -3,8 +3,8 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             手机号码:&nbsp;
-            <el-input v-model="condition.phoneNumber" style="width:10%"></el-input>
-            &nbsp;&nbsp;创建时间:&nbsp;
+            <el-input v-model="condition.phoneNumber" style="width:10%" maxlength="11"></el-input>
+            &nbsp;&nbsp;注册时间:&nbsp;
             <el-date-picker type="date" placeholder="开始日期" v-model="condition.registBeginDate" value-format="yyyy-MM-dd" style="width:12%"></el-date-picker>
             &nbsp;-&nbsp;
             <el-date-picker type="date" placeholder="结束日期" v-model="condition.registEndDate" value-format="yyyy-MM-dd" style="width:12%"></el-date-picker>
@@ -13,22 +13,22 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-            <el-table-column type="selection" width="55">
+        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" fit="true" style="width: 100%;">
+            <el-table-column type="selection" >
             </el-table-column>
-            <el-table-column type="index" width="60">
+            <el-table-column type="index" >
             </el-table-column>
-            <el-table-column prop="createTime" label="注册时间" width="200" sortable>
+            <el-table-column prop="createTime" label="注册时间"  sortable>
             </el-table-column>
-            <el-table-column prop="phoneNumber" label="手机号" width="120">
+            <el-table-column prop="phoneNumber" label="手机号" >
             </el-table-column>
-            <el-table-column prop="lastUseDeviceId" label="最近使用的设备" width="220" >
+            <el-table-column prop="lastUseDeviceId" label="最近使用的设备"  >
             </el-table-column>
-            <el-table-column prop="lastUseTime" label="最近使用的时间" width="200" sortable>
+            <el-table-column prop="lastUseTime" label="最近使用的时间" sortable>
             </el-table-column>
-            <el-table-column prop="addr" label="使用频率高的设备" width="220" >
+            <el-table-column prop="addr" label="使用频率高的设备" >
             </el-table-column>
-            <el-table-column label="操作" width="150" header-align="center" >
+            <el-table-column label="操作"  header-align="center" align="center">
                 <template scope="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
@@ -118,6 +118,7 @@
                     registEndDate:''
                 },
                 users: [],
+                total:0,
                 size: 20,
                 current: 1,
                 listLoading: false,

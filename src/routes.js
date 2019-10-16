@@ -82,7 +82,7 @@ let routes = [
         name: '设置管理',
         iconCls: 'el-icon-menu',
         children: [
-            { path: '/deviceTypeSetting', component: deviceTypeSetting, name: '设备类型设置' },
+            // { path: '/deviceTypeSetting', component: deviceTypeSetting, name: '设备类型设置' },
             { path: '/appointmentTimeSetting', component: appointmentTimeSetting, name: '预约时间设置' },
             { path: '/priceSetting', component: priceSetting, name: '价格设置' },
             { path: '/shareholdingSetting', component: shareholdingSetting, name: '分利设置' },
