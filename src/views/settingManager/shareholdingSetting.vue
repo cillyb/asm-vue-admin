@@ -17,21 +17,31 @@
 
         <!--列表-->
         <el-table :data="shareholding" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-            <el-table-column type="selection" style="width: 5%;">
+            <el-table-column type="selection" width="50">
             </el-table-column>
-            <el-table-column type="index" style="width: 5%;">
+            <el-table-column type="index" width="50">
             </el-table-column>
-            <el-table-column prop="id" label="模板id" style="width: 20%;" sortable>
+            <el-table-column prop="id" label="模板id" width="280" sortable>
             </el-table-column>
-            <el-table-column prop="modelName" label="模板名称" style="width: 20%;" sortable>
+            <el-table-column prop="modelName" label="模板名称" width="160" sortable>
             </el-table-column>
-            <el-table-column prop="shareholdingPercent" label="分利百分比" style="width: 10%;" sortable>
+            <el-table-column prop="shareholdingPercent" label="分利百分比" width="150" sortable>
             </el-table-column>
-            <el-table-column prop="createTime" label="创建时间" style="width: 20%;" sortable>
+            <el-table-column prop="createTime" label="创建时间" width="180" sortable>
             </el-table-column>
-            <el-table-column prop="status" label="状态" style="width: 10%;" sortable>
+            <el-table-column prop="status" label="状态" width="100">
+                <template scope="scope">
+                    <el-switch
+                            v-model="scope.row.status"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949"
+                            :active-value="1"
+                            :inactive-value="0"
+                            @change=changeSwitch(scope.row)>
+                    </el-switch>
+                </template>
             </el-table-column>
-            <el-table-column label="操作" style="width: 10%;">
+            <el-table-column label="操作" width="150">
                 <template scope="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
@@ -117,6 +127,7 @@
                 },
                 //编辑界面数据
                 editForm: {
+                    id: 0,
                     modelName: '',
                     shareholdingPercent: ''
                 },
@@ -139,6 +150,10 @@
             }
         },
         methods: {
+            //switch按钮点击触发事件，日后方便对分利状态进行修改
+            changeSwitch(row){
+                console.log(row.status);
+            },
             handleCurrentChange(val) {
                 this.page = val;
                 this.getShareholding();
@@ -167,10 +182,17 @@
                     let para = { ids: [row.id] };
                     removeShareholding(para).then((res) => {
                         this.listLoading = false;
-                        this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
+                        if(res.meta.success){
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
                         this.getShareholding();
                     });
                 }).catch(() => {
@@ -199,10 +221,17 @@
                             let para = Object.assign({}, this.editForm);
                             editShareholding(para).then((res) => {
                                 this.editLoading = false;
-                                this.$message({
-                                    message: '提交成功',
-                                    type: 'success'
-                                });
+                                if(res.meta.success){
+                                    this.$message({
+                                        message: '编辑成功',
+                                        type: 'success'
+                                    });
+                                }else{
+                                    this.$message({
+                                        message:res.meta.message,
+                                        type: 'error'
+                                    });
+                                }
                                 this.$refs['editForm'].resetFields();
                                 this.editFormVisible = false;
                                 this.getShareholding();
@@ -220,10 +249,17 @@
                             let para = Object.assign({}, this.addForm);
                             addShareholding(para).then((res) => {
                                 this.addLoading = false;
-                                this.$message({
-                                    message: '提交成功',
-                                    type: 'success'
-                                });
+                                if(res.meta.success){
+                                    this.$message({
+                                        message: '新增成功',
+                                        type: 'success'
+                                    });
+                                }else{
+                                    this.$message({
+                                        message:res.meta.message,
+                                        type: 'error'
+                                    });
+                                }
                                 this.$refs['addForm'].resetFields();
                                 this.addFormVisible = false;
                                 this.getShareholding();
@@ -248,10 +284,17 @@
                     let para = { ids: ids };
                     removeShareholding(para).then((res) => {
                         this.listLoading = false;
-                        this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
+                        if(res.meta.success){
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
                         this.getShareholding();
                     });
                 }).catch(() => {

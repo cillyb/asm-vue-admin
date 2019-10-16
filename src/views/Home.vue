@@ -146,6 +146,7 @@
 		top: 0px;
 		bottom: 0px;
 		width: 100%;
+		height: 150%;
 		.header {
 			height: 60px;
 			line-height: 60px;
@@ -242,7 +243,7 @@
 			.menu-expanded{
 				flex:0 0 230px;
 				width: 230px;
-				padding-top: 100px;
+				padding-top: 50px;
 			}
 			.content-container {
 				// background: #f1f2f7;
