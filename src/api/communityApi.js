@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //获取社区列表
 export const getCommunityListPage = params => {
-    return axios.post(`/api/bg/admin/community/list`, params, {
+    return axios.post(`/api/bg/view/community-view/list`, params, {
         headers: {
             'Content-Type': 'application/json',
             'X-BG-TOKEN': 1
