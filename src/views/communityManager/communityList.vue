@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.name" placeholder="社区名称"></el-input>
+                    <el-input v-model="filters.communityName" placeholder="社区名称"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="getCommunity">查询</el-button>
@@ -81,6 +81,14 @@
             <el-form-item label="结束营业时间" prop="onlineTimeEnd">
                 <el-time-select v-model="editForm.onlineTimeEnd" :picker-options="{start:'00:00',step: '00:30',end: '24:00'}"></el-time-select>
             </el-form-item>
+            <el-form-item label="不营业时间" prop="noBusinessDates">
+                <el-date-picker
+                        type="dates"
+                        v-model="editForm.noBusinessDates"
+                        placeholder="选择一个或多个日期"
+                        value-format="yyyy-MM-dd">
+                </el-date-picker>
+            </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click.native="editFormVisible = false">取消</el-button>
@@ -126,6 +134,7 @@
 
 <script>
     import { getCommunityListPage, removeCommunity, addCommunity, editCommunity, isvalidPhone } from '../../api/communityApi';
+    import util from '../../common/js/util'
 
     //手机号码验证
     var validPhone=(rule, value,callback)=>{
@@ -142,7 +151,7 @@
         data() {
             return {
                 filters: {
-                    name: ''
+                    communityName: ''
                 },
                 community: [],
                 total: 0,
@@ -181,6 +190,7 @@
                 //编辑界面数据
                 editForm: {
                     id: 0,
+                    noBusinessDates: '',
                     communityName: '',
                     longitude: '',
                     latitude: '',
@@ -248,8 +258,10 @@
                     "page":{
                         "current":this.page,
                         "size":10
-                    }
+                    },
+                    "condition": this.filters
                 };
+                para.condition = util.filterParams(para.condition);
                 this.listLoading = true;
                 getCommunityListPage(para).then((res) => {
                     this.total = res.data.total;
@@ -311,6 +323,13 @@
                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
                            this.editLoading = true;
                            let para = Object.assign({}, this.editForm);
+                           var communityNoBusinessSetList = [];
+                           if(para.noBusinessDates!=null){
+                               for(var i=0;i<para.noBusinessDates.length;i++){
+                                   communityNoBusinessSetList.push({"noBusinessDate":para.noBusinessDates[i]});
+                               }
+                           }
+                           para.communityNoBusinessSetList = communityNoBusinessSetList;
                            editCommunity(para).then((res) => {
                                this.editLoading = false;
                                if(res.meta.success){

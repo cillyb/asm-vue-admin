@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.name" placeholder="分利模板名称"></el-input>
+                    <el-input v-model="filters.modelName" placeholder="分利模板名称"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="getShareholding">查询</el-button>
@@ -91,6 +91,8 @@
 </template>
 
 <script>
+    import util from '../../common/js/util'
+
     import { getShareholdingListPage, removeShareholding, addShareholding, editShareholding, isvalidSharing } from '../../api/settingApi';
 
     var validSharing=(rule, value,callback)=>{
@@ -107,7 +109,7 @@
         data() {
             return {
                 filters: {
-                    name: ''
+                    modelName: ''
                 },
                 shareholding: [],
                 total: 0,
@@ -161,11 +163,13 @@
             //获取分利列表
             getShareholding() {
                 let para = {
-                    "page":{
-                        "current":this.page,
-                        "size":10
-                    }
+                    page:{
+                        current:this.page,
+                        size:10
+                    },
+                    condition: this.filters
                 };
+                para.condition = util.filterParams(para.condition);
                 this.listLoading = true;
                 getShareholdingListPage(para).then((res) => {
                     this.total = res.data.total;

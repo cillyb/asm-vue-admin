@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.name" placeholder="模板名称"></el-input>
+                    <el-input v-model="filters.modelName" placeholder="模板名称"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="getTimeModel">查询</el-button>
@@ -105,13 +105,14 @@
 <script>
     import { getTimeModelListPage, removeTimeModel, addTimeModel, editTimeModel } from '../../api/settingApi';
     import ElInputNumber from "../../../node_modules/element-ui/packages/input-number/src/input-number.vue";
+    import util from '../../common/js/util'
 
     export default {
         components: {ElInputNumber},
         data() {
             return {
                 filters: {
-                    name: ''
+                    modelName: ''
                 },
                 timeModel: [],
                 total: 0,
@@ -185,8 +186,10 @@
                     "page":{
                         "current":this.page,
                         "size":10
-                    }
+                    },
+                    condition: this.filters
                 };
+                para.condition = util.filterParams(para.condition);
                 this.listLoading = true;
                 getTimeModelListPage(para).then((res) => {
                     this.total = res.data.total;
