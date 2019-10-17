@@ -32,7 +32,7 @@
 
         <!--工具条-->
         <el-col :span="24" class="toolbar">
-            <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
+            <el-pagination background layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
             </el-pagination>
         </el-col>
 
