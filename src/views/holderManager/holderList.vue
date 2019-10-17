@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.name" placeholder="手机号/id"></el-input>
+                    <el-input v-model="filters.phoneNumber" placeholder="手机号"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="getHolder">查询</el-button>
@@ -41,12 +41,15 @@
 
 <script>
     import { getHolderListPage } from '../../api/holderApi';
+    import util from '../../common/js/util';
 
     export default {
         data() {
             return {
                 filters: {
-                    name: ''
+                    phoneNumber: '',
+                    registBeginDate:"2017-07-27",
+                    registEndDate: "2020-08-29",
                 },
                 holder: [],
                 total: 0,
@@ -69,11 +72,9 @@
                         "current":this.page,
                         "size":10
                     },
-                    "condition": {
-                        "registBeginDate":"2017-07-27",
-                        "registEndDate": "2020-08-29"
-                    }
+                    "condition": this.filters
                 };
+                para.condition = util.filterParams(para.condition);
                 this.listLoading = true;
                 getHolderListPage(para).then((res) => {
                     this.total = res.data.total;

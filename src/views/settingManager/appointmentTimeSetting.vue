@@ -23,9 +23,9 @@
             </el-table-column>
             <el-table-column prop="modelName" label="模板名称" sortable>
             </el-table-column>
-            <el-table-column prop="availableDays" label="预约天数" sortable>
+            <el-table-column prop="availableDays" label="预约天数"  :formatter="formatDay" sortable>
             </el-table-column>
-            <el-table-column prop="timeDevideInterval" label="预约设备时长" sortable>
+            <el-table-column prop="timeDevideInterval" label="预约设备时长" :formatter="formatTime" sortable>
             </el-table-column>
             <el-table-column prop="remark" label="备注" sortable>
             </el-table-column>
@@ -103,9 +103,29 @@
 </template>
 
 <script>
-    import { getTimeModelListPage, removeTimeModel, addTimeModel, editTimeModel } from '../../api/settingApi';
+    import { getTimeModelListPage, removeTimeModel, addTimeModel, editTimeModel, isvalidDay, isvalidTime } from '../../api/settingApi';
     import ElInputNumber from "../../../node_modules/element-ui/packages/input-number/src/input-number.vue";
     import util from '../../common/js/util'
+
+    var validDay=(rule, value,callback)=>{
+        if (value === ''){
+            callback(new Error('请输入预约天数'))
+        }else  if (!isvalidDay(value)){
+            callback(new Error('请输入正确的预约天数'))
+        }else {
+            callback()
+        }
+    };
+
+    var validTime=(rule, value,callback)=>{
+        if (value === ''){
+            callback(new Error('请输入预约设备时长'))
+        }else  if (!isvalidTime(value)){
+            callback(new Error('请输入正确的预约设备时长'))
+        }else {
+            callback()
+        }
+    };
 
     export default {
         components: {ElInputNumber},
@@ -127,10 +147,10 @@
                         { required: true, message: '请输入模板名称', trigger: 'blur' }
                     ],
                     availableDays: [
-                        { required: true, message: '请输入预约天数', trigger: 'blur' }
+                        { required: true, validator: validDay }
                     ],
                     timeDevideInterval: [
-                        { required: true, message: '请输入预约设备时长', trigger: 'blur' }
+                        { required: true, validator: validTime }
                     ],
                     remark: [
                         { required: true, message: '请输入备注', trigger: 'blur' }
@@ -152,10 +172,10 @@
                         { required: true, message: '请输入模板名称', trigger: 'blur' }
                     ],
                     availableDays: [
-                        { required: true, message: '请输入预约天数', trigger: 'blur' }
+                        { required: true, validator: validDay }
                     ],
                     timeDevideInterval: [
-                        { required: true, message: '请输入预约设备时长', trigger: 'blur' }
+                        { required: true, validator: validTime }
                     ],
                     remark: [
                         { required: true, message: '请输入备注', trigger: 'blur' }
@@ -176,6 +196,17 @@
             changeSwitch(row){
                 console.log(row.status);
             },
+
+            //天数显示格式转化
+            formatDay: function (row, column) {
+                return row.availableDays+"天";
+            },
+
+            //时长显示格式转化
+            formatTime: function (row, column) {
+                return row.timeDevideInterval+"分钟";
+            },
+
             handleCurrentChange(val) {
                 this.page = val;
                 this.getTimeModel();
