@@ -17,19 +17,19 @@
 
         <!--列表-->
         <el-table :data="shareholding" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-            <el-table-column type="selection" width="50">
+            <el-table-column type="selection">
             </el-table-column>
-            <el-table-column type="index" width="50">
+            <el-table-column type="index">
             </el-table-column>
-            <el-table-column prop="id" label="模板id" width="280" sortable>
+            <el-table-column prop="id" label="模板id" sortable>
             </el-table-column>
-            <el-table-column prop="modelName" label="模板名称" width="160" sortable>
+            <el-table-column prop="modelName" label="模板名称" sortable>
             </el-table-column>
-            <el-table-column prop="shareholdingPercent" label="分利百分比" width="150" sortable>
+            <el-table-column prop="shareholdingPercent" label="分利百分比" sortable>
             </el-table-column>
-            <el-table-column prop="createTime" label="创建时间" width="180" sortable>
+            <el-table-column prop="createTime" label="创建时间" sortable>
             </el-table-column>
-            <el-table-column prop="status" label="状态" width="100">
+            <el-table-column prop="status" label="状态">
                 <template scope="scope">
                     <el-switch
                             v-model="scope.row.status"
@@ -41,7 +41,7 @@
                     </el-switch>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="150">
+            <el-table-column label="操作">
                 <template scope="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>

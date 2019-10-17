@@ -17,19 +17,19 @@
 
         <!--列表-->
         <el-table :data="timeModel" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-            <el-table-column type="selection" width="50">
+            <el-table-column type="selection">
             </el-table-column>
-            <el-table-column type="index" width="50">
+            <el-table-column type="index">
             </el-table-column>
-            <el-table-column prop="modelName" label="模板名称" width="150" sortable>
+            <el-table-column prop="modelName" label="模板名称" sortable>
             </el-table-column>
-            <el-table-column prop="availableDays" label="预约天数" width="120" sortable>
+            <el-table-column prop="availableDays" label="预约天数" sortable>
             </el-table-column>
-            <el-table-column prop="timeDevideInterval" label="预约设备时长" width="120" sortable>
+            <el-table-column prop="timeDevideInterval" label="预约设备时长" sortable>
             </el-table-column>
-            <el-table-column prop="remark" label="备注" width="200" sortable>
+            <el-table-column prop="remark" label="备注" sortable>
             </el-table-column>
-            <el-table-column prop="status" label="状态" width="100">
+            <el-table-column prop="status" label="状态">
                 <template scope="scope">
                     <el-switch
                             v-model="scope.row.status"

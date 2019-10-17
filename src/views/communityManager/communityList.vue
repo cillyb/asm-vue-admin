@@ -21,25 +21,25 @@
             </el-table-column>
             <el-table-column type="index" width="50">
             </el-table-column>
-            <el-table-column prop="communityName" label="社区名称" width="100" sortable>
+            <el-table-column prop="communityName" label="社区名称" sortable>
             </el-table-column>
-            <el-table-column prop="address" label="社区地址" width="120" sortable>
+            <el-table-column prop="address" label="社区地址" sortable>
             </el-table-column>
-            <el-table-column prop="manager" label="管理员" width="100" sortable>
+            <el-table-column prop="manager" label="管理员" sortable>
             </el-table-column>
-            <el-table-column prop="managerPhone" label="联系电话" width="120" sortable>
+            <el-table-column prop="managerPhone" label="联系电话" sortable>
             </el-table-column>
-            <el-table-column prop="onlineTimeBegin" label="开始营业时间" width="150" sortable>
+            <el-table-column prop="onlineTimeBegin" label="开始营业时间" sortable>
             </el-table-column>
-            <el-table-column prop="onlineTimeEnd" label="结束营业时间" width="150" sortable>
+            <el-table-column prop="onlineTimeEnd" label="结束营业时间" sortable>
             </el-table-column>
-            <el-table-column prop="longitude" label="经度" width="100" sortable>
+            <el-table-column prop="longitude" label="经度" sortable>
             </el-table-column>
-            <el-table-column prop="latitude" label="纬度" width="100" sortable>
+            <el-table-column prop="latitude" label="纬度" sortable>
             </el-table-column>
-            <el-table-column prop="status" label="状态" width="80" :formatter="formatStatus" sortable>
+            <el-table-column prop="status" label="状态" :formatter="formatStatus" sortable>
             </el-table-column>
-            <el-table-column label="操作" width="150">
+            <el-table-column label="操作">
                 <template scope="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
