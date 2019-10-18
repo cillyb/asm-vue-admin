@@ -60,7 +60,7 @@
                                 <el-input v-model="filters.name" placeholder="姓名"></el-input>
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="primary" v-on:click="TODO">查询</el-button>
+                                <el-button type="primary" v-on:click="">查询</el-button>
                             </el-form-item>
                             <el-form-item>
                                 <el-button type="primary" @click="handleAdd">新增</el-button>
@@ -112,35 +112,8 @@
                     </el-col>
                 </el-col>
             </el-row>
-            <!--编辑界面-->
-            <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
-                <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                    <el-form-item label="姓名" prop="name">
-                        <el-input v-model="editForm.name" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="性别">
-                        <el-radio-group v-model="editForm.sex">
-                            <el-radio class="radio" :label="1">男</el-radio>
-                            <el-radio class="radio" :label="0">女</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <el-form-item label="年龄">
-                        <el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
-                    </el-form-item>
-                    <el-form-item label="生日">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="地址">
-                        <el-input type="textarea" v-model="editForm.addr"></el-input>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click.native="editFormVisible = false">取消</el-button>
-                    <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
-                </div>
-            </el-dialog>
 
-            <!--新增界面-->
+            <!--新增界面+编辑界面-->
             <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
                 <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
                     <el-form-item label="设备名称" prop="assetName">
@@ -196,26 +169,29 @@
                             <el-radio class="radio" :label="1">是</el-radio>
                         </el-radio-group>
                         <el-form-item v-if="addForm.isAppuserHold == 1" label="持有人: ">
-                            <span v-model="addForm.appuserId">{{ addForm.holderName }}</span>
+                            <span v-model="addForm.appuserId">{{ addForm.userName }}</span>
                             <el-button @click="addChoiceHolder">选择</el-button>
                         </el-form-item>
                         <el-form-item v-if="addForm.isAppuserHold == 1" label="分利方案: " >
-                            <span v-model="addForm.shareholdingPercentModelId">{{ addForm.shareName }}</span>
+                            <span v-model="addForm.shareholdingPercentModelId">{{ addForm.shareholdingModelName }}</span>
                             <el-button @click="addChoiceShare">选择</el-button>
                         </el-form-item>
                     </el-form-item>
                     <el-form-item label="预约方案">
-                        <span v-model="addForm.appointmentModelId">{{ addForm.appointName }}</span>
+                        <span v-model="addForm.appointmentModelId">{{ addForm.appointModelName }}</span>
                         <el-button @click="addChoiceAppoint">选择</el-button>
                     </el-form-item>
                     <el-form-item label="价格方案">
-                        <span v-model="addForm.priceModelId">{{ addForm.priceName }}</span>
+                        <span v-model="addForm.priceModelId">{{ addForm.priceModelName }}</span>
                         <el-button @click="addChoicePrice">选择</el-button>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click.native="addFormVisible = false">取消</el-button>
-                    <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+<!--                    TODO 区分开新增和编辑 -->
+                    <el-button v-if="op == 'add'" type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+                    <el-button v-if="op == 'edit'" type="primary" @click.native="addSubmit" :loading="addLoading">修改</el-button>
+
                 </div>
             </el-dialog>
 
@@ -389,6 +365,9 @@
     export default {
         data() {
             return {
+                //区分是新增还是编辑操作
+                op:'add',
+
                 //实体列表
                 devices: [],
                 communitys: [],
@@ -493,6 +472,11 @@
                     appointmentModelId: '',
                     communityId: '',
                     appuserId: '',
+                    userName: '',
+                    shareholdingModelName: '',
+                    appointModelName: '',
+                    priceModelName: '',
+
                 }
 
             }
@@ -567,7 +551,7 @@
                     });
                 } else {
                     this.addForm.appointmentModelId = this.selsAppoint.id;
-                    this.addForm.appointName = this.selsAppoint.modelName;
+                    this.addForm.appointModelName = this.selsAppoint.modelName;
                     this.showAppointList = false;
                 }
             },
@@ -610,7 +594,7 @@
                     });
                 } else {
                     this.addForm.priceModelId = this.selsPrice.id;
-                    this.addForm.priceName = this.selsPrice.modelName;
+                    this.addForm.priceModelName = this.selsPrice.modelName;
                     this.showPriceList = false;
                 }
             },
@@ -656,7 +640,7 @@
                     });
                 } else {
                     this.addForm.appuserId = this.selsHolder.id;
-                    this.addForm.holderName = this.selsHolder.userName;
+                    this.addForm.userName = this.selsHolder.userName;
                     this.showHolderList = false;
                 }
             },
@@ -703,7 +687,7 @@
                     });
                 } else {
                     this.addForm.shareholdingPercentModelId = this.selsShare.id;
-                    this.addForm.shareName = this.selsShare.modelName;
+                    this.addForm.shareholdingModelName = this.selsShare.modelName;
                     this.showShareList = false;
                 }
             },
@@ -733,7 +717,7 @@
                 this.editTypeForm.editTypeName = this.$refs.treeBox.getCurrentNode().typeName;
                 this.editTypeVisible = true;
             },
-            //删除类型\
+            //删除类型
 
             removeType() {
                 this.$confirm('确认删除该类型吗?', '提示', {
@@ -943,11 +927,29 @@
             },
             //显示编辑界面
             handleEdit: function (index, row) {
-                this.editFormVisible = true;
-                this.editForm = Object.assign({}, row);
+                this.op = "edit";
+                this.addFormVisible = true;
+                //获取树形分类
+                let para = {};
+                getTypeTree(para).then((res) => {
+                    if (res.meta.success) {
+                        this.optionsType = res.data;
+                    } else {
+                        this.$message({
+                            message: res.meta.message,
+                            type: 'error'
+                        });
+                    }
+                });
+                //TODO
+                console.log(row);
+                this.addForm = Object.assign({}, row);
+                // this.editFormVisible = true;
+                // this.editForm = Object.assign({}, row);
             },
             //显示新增界面
             handleAdd: function () {
+                this.op = "add";
                 this.addFormVisible = true;
                 //获取树形分类
                 let para = {};
