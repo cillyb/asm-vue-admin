@@ -47,3 +47,11 @@ export const removeTypeName = params => {
         }
     }).then(res => res.data);
 };
+
+export const addDevice = params => {
+    return axios.post(`/api/bg/assets/asset/add`, params, {
+        headers: {
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+};
