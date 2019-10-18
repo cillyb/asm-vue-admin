@@ -91,8 +91,6 @@
                         </el-table-column>
                         <el-table-column prop="communityName" label="所属社区" min-width="100" sortable>
                         </el-table-column>
-                        <el-table-column prop="status" label="设备状态" min-width="80" sortable>
-                        </el-table-column>
                         <!--            <el-table-column prop="" label="设备二维码" min-width="100">-->
                         <!--            </el-table-column>-->
                         <el-table-column label="操作" width="150" header-align="center" align="center">
@@ -107,7 +105,8 @@
                     <!--工具条-->
                     <el-col :span="24" class="toolbar">
                         <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-                        <el-pagination background layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="20"
+                        <el-pagination background layout="total, prev, pager, next"
+                                       @current-change="handleCurrentChange" :page-size="size"
                                        :total="total" style="float:right;">
                         </el-pagination>
                     </el-col>
@@ -144,10 +143,10 @@
             <!--新增界面-->
             <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
                 <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
-                    <el-form-item label="设备名称" prop="name">
-                        <el-input v-model="addForm.name" auto-complete="off" style="width: 25%;"></el-input>
+                    <el-form-item label="设备名称" prop="assetName">
+                        <el-input v-model="addForm.assetName" auto-complete="off" style="width: 25%;"></el-input>
                     </el-form-item>
-                    <el-form-item label="分类">
+                    <el-form-item label="分类" prop="typeId">
                         <el-cascader
                                 filterable
                                 style="width: 25%;"
@@ -157,8 +156,13 @@
                                 :props="{ expandTrigger: 'hover', value: 'id', label: 'typeName', children: 'fork'}"
                                 @change="handleChange"></el-cascader>
                     </el-form-item>
-                    <el-form-item label="开始提供时间">
+                    <el-form-item label="所属社区" prop="communityId">
+                        <span v-model="addForm.communityId">{{ addForm.communityName }}</span>
+                        <el-button @click="addChoiceCommunity">选择</el-button>
+                    </el-form-item>
+                    <el-form-item label="开始提供时间" prop="provideStartTime">
                         <el-date-picker
+                                value-format="yyyy-MM-dd HH:mm:ss"
                                 style="width: 25%;"
                                 v-model="addForm.provideStartTime"
                                 type="datetime"
@@ -166,8 +170,9 @@
                                 default-time="12:00:00">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="截止提供时间">
+                    <el-form-item label="截止提供时间" prop="provideEndTime">
                         <el-date-picker
+                                value-format="yyyy-MM-dd HH:mm:ss"
                                 style="width: 25%;"
                                 v-model="addForm.provideEndTime"
                                 type="datetime"
@@ -175,27 +180,37 @@
                                 default-time="12:00:00">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="成本价格">
-                        <el-input v-model="addForm.firstCost" type="number" auto-complete="off"
+                    <el-form-item label="成本价格" prop="firstCost">
+                        <el-input v-model="addForm.firstCost" type="number" auto-complete="off" min="0"
                                   style="width: 25%;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="是否可以预约">
+                        <el-radio-group v-model="addForm.isCanBook">
+                            <el-radio class="radio" :label="0">否</el-radio>
+                            <el-radio class="radio" :label="1">是</el-radio>
+                        </el-radio-group>
                     </el-form-item>
                     <el-form-item label="是否有持有人">
                         <el-radio-group v-model="addForm.isAppuserHold">
                             <el-radio class="radio" :label="0">否</el-radio>
                             <el-radio class="radio" :label="1">是</el-radio>
                         </el-radio-group>
-                        <el-form-item v-if="addForm.isAppuserHold == 1" label="选择持有人">
-                            <el-button>选择</el-button>
+                        <el-form-item v-if="addForm.isAppuserHold == 1" label="持有人: ">
+                            <span v-model="addForm.appuserId">{{ addForm.holderName }}</span>
+                            <el-button @click="addChoiceHolder">选择</el-button>
                         </el-form-item>
-                        <el-form-item v-if="addForm.isAppuserHold == 1" label="分利方案" :visible="addForm.isAppuserHold">
-                            <el-button>选择</el-button>
+                        <el-form-item v-if="addForm.isAppuserHold == 1" label="分利方案: " >
+                            <span v-model="addForm.shareholdingPercentModelId">{{ addForm.shareName }}</span>
+                            <el-button @click="addChoiceShare">选择</el-button>
                         </el-form-item>
                     </el-form-item>
                     <el-form-item label="预约方案">
-                        <el-button>选择</el-button>
+                        <span v-model="addForm.appointmentModelId">{{ addForm.appointName }}</span>
+                        <el-button @click="addChoiceAppoint">选择</el-button>
                     </el-form-item>
                     <el-form-item label="价格方案">
-                        <el-button>选择</el-button>
+                        <span v-model="addForm.priceModelId">{{ addForm.priceName }}</span>
+                        <el-button @click="addChoicePrice">选择</el-button>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -203,6 +218,153 @@
                     <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
                 </div>
             </el-dialog>
+
+            <!--            社区选择-->
+            <el-dialog title="社区选择" :visible.sync="showCommunityList" width="50%" :close-on-click-modal="false">
+                <!--列表-->
+                <el-table :data="communitys" highlight-current-row v-loading="listLoading"
+                          @current-change="selsCommunityChange" style="width: 100%;">
+                    <el-table-column type="index">
+                    </el-table-column>
+                    <el-table-column prop="communityName" label="社区名称" sortable>
+                    </el-table-column>
+                    <el-table-column prop="address" label="社区地址" sortable>
+                    </el-table-column>
+                    <el-table-column prop="manager" label="管理员" sortable>
+                    </el-table-column>
+                    <el-table-column prop="managerPhone" label="联系电话" sortable>
+                    </el-table-column>
+                </el-table>
+                <!--工具条-->
+                <el-col :span="24" class="toolbar">
+                    <el-pagination background layout="total, prev, pager, next"
+                                   @current-change="handlCommunityCurrentChange" :page-size="size"
+                                   :total="otherTotal" style="float:right;">
+                    </el-pagination>
+                </el-col>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click.native="showCommunityList = false">取消</el-button>
+                    <el-button type="primary" @click.native="choiceCommunity" :loading="addLoading">选择</el-button>
+                </div>
+            </el-dialog>
+
+
+            <!--            预约选择-->
+            <el-dialog title="预约模板选择" :visible.sync="showAppointList" width="50%" :close-on-click-modal="false">
+                <!--列表-->
+                <el-table :data="appoints" highlight-current-row v-loading="listLoading"
+                          @current-change="selsAppointChange" style="width: 100%;">
+                    <el-table-column type="index">
+                    </el-table-column>
+                    <el-table-column prop="modelName" label="模板名称" sortable>
+                    </el-table-column>
+                    <el-table-column prop="availableDays" label="预约天数" sortable>
+                    </el-table-column>
+                    <el-table-column prop="timeDevideInterval" label="预约时长" sortable>
+                    </el-table-column>
+                    <el-table-column prop="remark" label="备注" sortable>
+                    </el-table-column>
+                </el-table>
+                <!--工具条-->
+                <el-col :span="24" class="toolbar">
+                    <el-pagination background layout="total, prev, pager, next"
+                                   @current-change="handlAppointCurrentChange" :page-size="size"
+                                   :total="otherTotal" style="float:right;">
+                    </el-pagination>
+                </el-col>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click.native="showAppointList = false">取消</el-button>
+                    <el-button type="primary" @click.native="choiceAppoint" :loading="addLoading">选择</el-button>
+                </div>
+            </el-dialog>
+
+            <!--            价格选择-->
+            <el-dialog title="价格模板选择" :visible.sync="showPriceList" width="50%" :close-on-click-modal="false">
+                <!--列表-->
+                <el-table :data="prices" highlight-current-row v-loading="listLoading"
+                          @current-change="selsPriceChange" style="width: 100%;">
+                    <el-table-column type="index">
+                    </el-table-column>
+                    <el-table-column prop="modelName" label="模板名称" sortable>
+                    </el-table-column>
+                    <el-table-column prop="price" label="价格" sortable>
+                    </el-table-column>
+                    <el-table-column prop="unitCount" label="时长" sortable>
+                    </el-table-column>
+                    <el-table-column prop="unitName" label="单位" sortable>
+                    </el-table-column>
+                    <el-table-column prop="remark" label="备注" sortable>
+                    </el-table-column>
+                </el-table>
+                <!--工具条-->
+                <el-col :span="24" class="toolbar">
+                    <el-pagination background layout="total, prev, pager, next"
+                                   @current-change="handlPriceCurrentChange" :page-size="size"
+                                   :total="otherTotal" style="float:right;">
+                    </el-pagination>
+                </el-col>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click.native="showPriceList = false">取消</el-button>
+                    <el-button type="primary" @click.native="choicePrice" :loading="addLoading">选择</el-button>
+                </div>
+            </el-dialog>
+
+            <!--            持有人选择-->
+            <el-dialog title="持有人选择" :visible.sync="showHolderList" width="50%" :close-on-click-modal="false">
+                <!--列表-->
+                <el-table :data="holders" highlight-current-row v-loading="listLoading"
+                          @current-change="selsHolderChange" style="width: 100%;">
+                    <el-table-column type="index">
+                    </el-table-column>
+                    <el-table-column prop="userName" label="用户名" sortable>
+                    </el-table-column>
+                    <el-table-column prop="phoneNumber" label="手机号" sortable>
+                    </el-table-column>
+                    <el-table-column prop="sex" label="性别" sortable>
+                    </el-table-column>
+                    <el-table-column prop="createTime" label="注册时间" sortable>
+                    </el-table-column>
+                </el-table>
+                <!--工具条-->
+                <el-col :span="24" class="toolbar">
+                    <el-pagination background layout="total, prev, pager, next"
+                                   @current-change="handlHolderCurrentChange" :page-size="size"
+                                   :total="otherTotal" style="float:right;">
+                    </el-pagination>
+                </el-col>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click.native="showHolderList = false">取消</el-button>
+                    <el-button type="primary" @click.native="choiceHolder" :loading="addLoading">选择</el-button>
+                </div>
+            </el-dialog>
+
+            <!--            分利选择-->
+            <el-dialog title="分利选择" :visible.sync="showShareList" width="50%" :close-on-click-modal="false">
+                <!--列表-->
+                <el-table :data="shares" highlight-current-row v-loading="listLoading"
+                          @current-change="selsShareChange" style="width: 100%;">
+                    <el-table-column type="index">
+                    </el-table-column>
+                    <el-table-column prop="modelName" label="模板名称" sortable>
+                    </el-table-column>
+                    <el-table-column prop="shareholdingPercent" label="分利百分比" sortable>
+                    </el-table-column>
+                    <el-table-column prop="createTime" label="创建时间" sortable>
+                    </el-table-column>
+                </el-table>
+                <!--工具条-->
+                <el-col :span="24" class="toolbar">
+                    <el-pagination background layout="total, prev, pager, next"
+                                   @current-change="handlShareCurrentChange" :page-size="size"
+                                   :total="otherTotal" style="float:right;">
+                    </el-pagination>
+                </el-col>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click.native="showShareList = false">取消</el-button>
+                    <el-button type="primary" @click.native="choiceShare" :loading="addLoading">选择</el-button>
+                </div>
+            </el-dialog>
+
         </div>
     </section>
 </template>
@@ -211,11 +373,43 @@
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
     import {getUserListPage, removeUser, batchRemoveUser, editUser, addUser} from '../../api/api';
-    import {getTypeTree, getDevices, removeDevice, updateTypeName, addTypeName, removeTypeName} from '../../api/deviceApi'
+    import {
+        getTypeTree,
+        getDevices,
+        removeDevice,
+        updateTypeName,
+        addTypeName,
+        removeTypeName,
+        addDevice
+    } from '../../api/deviceApi'
+    import {getCommunityListPage} from '../../api/communityApi'
+    import {getTimeModelListPage, getPriceModelListPage, getShareholdingListPage} from '../../api/settingApi'
+    import {getHolderListPage} from '../../api/holderApi'
 
     export default {
         data() {
             return {
+                //实体列表
+                devices: [],
+                communitys: [],
+                prices:[],
+                holders:[],
+                shares:[],
+
+                //选中得
+                selsCommunity: '',
+                selsAppoint: '',
+                selsPrice:'',
+                selsHolder:'',
+                selsShare:'',
+
+                showCommunityList: false,
+                showAppointList: false,
+                showPriceList: false,
+                showHolderList: false,
+                showShareList: false,
+
+
                 currentNode: '',
                 optionsType: {},
                 condition: {
@@ -238,24 +432,18 @@
                 editTypeForm: {
                     editTypeName: ''
                 },
-                // addTypeRules: {
-                //     addTypeName: [
-                //         {required: true, message: '请输入类型名', trigger: 'blur'}
-                //     ]
-                // },
-                // editTypeRules: {
-                //     editTypeName: [
-                //         {required: true, message: '请输入类型名', trigger: 'blur'}
-                //     ]
-                // },
 
                 filters: {
                     name: ''
                 },
-                devices: [],
+
                 total: 0,
-                size: 20,
+                size: 10,
                 current: 1,
+                //其他列表分页参数
+                otherTotal: 0,
+                otherCurrent: 1,
+
                 listLoading: false,
                 sels: [],//列表选中列
 
@@ -267,28 +455,275 @@
                     ]
                 },
                 //编辑界面数据
-                editForm: {
-                    id: 0,
-                    name: '',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    addr: ''
-                },
+                editForm: {},
 
                 addFormVisible: false,//新增界面是否显示
                 addLoading: false,
                 addFormRules: {
-                    name: [
+                    assetName: [
                         {required: true, message: '请输入姓名', trigger: 'blur'}
-                    ]
+                    ],
+                    typeId: [
+                        {required: true, message: '请选择分类', trigger: 'blur'}
+                    ],
+                    communityId: [
+                        {required: true, message: '请选择所属社区', trigger: 'blur'}
+                    ],
+                    provideStartTime: [
+                        {required: true, message: '请输入开始提供时间', trigger: 'blur'}
+                    ],
+                    provideEndTime: [
+                        {required: true, message: '请输入截止提供时间', trigger: 'blur'}
+                    ],
+                    firstCost: [
+                        {required: true, message: '请输入成本价格', trigger: 'blur'}
+                    ],
                 },
                 //新增界面数据
-                addForm: {}
+                addForm: {
+                    assetName: '',
+                    typeId: '',
+                    provideStartTime: '',
+                    provideEndTime: '',
+                    firstCost: '',
+                    isCanBook:0,
+                    isAppuserHold: '',
+                    shareholdingPercentModelId: '',
+                    priceModelId: '',
+                    appointmentModelId: '',
+                    communityId: '',
+                    appuserId: '',
+                }
 
             }
         },
         methods: {
+
+            //------------------------------------------------
+            //获取社区
+            getCommunity() {
+                let para = {
+                    "page": {
+                        "current": this.otherCurrent,
+                        "size": this.size
+                    }
+                };
+                this.listLoading = true;
+                getCommunityListPage(para).then((res) => {
+                    this.otherTotal = res.data.total;
+                    this.communitys = res.data.records;
+                    this.listLoading = false;
+                });
+            },
+            //点击选择
+            choiceCommunity() {
+                if (this.selsCommunity == '' || this.selsCommunity == null) {
+                    this.$message({
+                        message: '请选择社区',
+                        type: 'info'
+                    });
+                } else {
+                    this.addForm.communityId = this.selsCommunity.id;
+                    this.addForm.communityName = this.selsCommunity.communityName;
+                    this.showCommunityList = false;
+                }
+            },
+            //
+            selsCommunityChange(val) {
+                this.selsCommunity = val;
+            },
+            //点击选择社区
+            addChoiceCommunity() {
+                this.otherCurrent = 1;
+                this.getCommunity();
+                this.selsCommunity = '';
+                this.showCommunityList = true;
+                // this.addForm.communityId = 321;
+            },
+
+            //------------------------------------------------
+            //获取社区
+            getAppoint() {
+                let para = {
+                    "page": {
+                        "current": this.otherCurrent,
+                        "size": this.size
+                    }
+                };
+                this.listLoading = true;
+                getTimeModelListPage(para).then((res) => {
+                    this.otherTotal = res.data.total;
+                    this.appoints = res.data.records;
+                    this.listLoading = false;
+                });
+            },
+            //点击选择
+            choiceAppoint() {
+                console.log(this.selsAppoint);
+                if (this.selsAppoint == '' || this.selsAppoint == null) {
+                    this.$message({
+                        message: '请选择预约模板',
+                        type: 'info'
+                    });
+                } else {
+                    this.addForm.appointmentModelId = this.selsAppoint.id;
+                    this.addForm.appointName = this.selsAppoint.modelName;
+                    this.showAppointList = false;
+                }
+            },
+            //
+            selsAppointChange(val) {
+                console.log(val);
+                this.selsAppoint = val;
+            },
+            //点击选择预约方案
+            addChoiceAppoint() {
+                this.otherCurrent = 1;
+                this.getAppoint();
+                this.selsAppoint = '';
+                this.showAppointList = true;
+            },
+
+            //------------------------------------------------
+            //获取价格方案
+            getPrice() {
+                let para = {
+                    "page": {
+                        "current": this.otherCurrent,
+                        "size": this.size
+                    }
+                };
+                this.listLoading = true;
+                getPriceModelListPage(para).then((res) => {
+                    this.otherTotal = res.data.total;
+                    this.prices = res.data.records;
+                    this.listLoading = false;
+                });
+            },
+            //点击选择
+            choicePrice() {
+                // console.log(this.selsAppoint);
+                if (this.selsPrice == '' || this.selsPrice == null) {
+                    this.$message({
+                        message: '请选择价格模板',
+                        type: 'info'
+                    });
+                } else {
+                    this.addForm.priceModelId = this.selsPrice.id;
+                    this.addForm.priceName = this.selsPrice.modelName;
+                    this.showPriceList = false;
+                }
+            },
+            //
+            selsPriceChange(val) {
+                // console.log(val);
+                this.selsPrice = val;
+            },
+            //点击选择价格方案
+            addChoicePrice() {
+                this.otherCurrent = 1;
+                this.getPrice();
+                this.selsPrice = '';
+                this.showPriceList = true;
+            },
+
+            //------------------------------------------------
+            //获取持有人
+            getHolder() {
+                let para = {
+                    "page": {
+                        "current": this.otherCurrent,
+                        "size": this.size
+                    },
+                    "condition":{
+
+                    }
+                };
+                this.listLoading = true;
+                getHolderListPage(para).then((res) => {
+                    this.otherTotal = res.data.total;
+                    this.holders = res.data.records;
+                    this.listLoading = false;
+                });
+            },
+            //点击选择
+            choiceHolder() {
+                // console.log(this.selsAppoint);
+                if (this.selsHolder == '' || this.selsHolder == null) {
+                    this.$message({
+                        message: '请选择持有人',
+                        type: 'info'
+                    });
+                } else {
+                    this.addForm.appuserId = this.selsHolder.id;
+                    this.addForm.holderName = this.selsHolder.userName;
+                    this.showHolderList = false;
+                }
+            },
+            //
+            selsHolderChange(val) {
+                // console.log(val);
+                this.selsHolder = val;
+            },
+            //点击选择持有人
+            addChoiceHolder() {
+                this.otherCurrent = 1;
+                this.getHolder();
+                this.selsHolder = '';
+                this.showHolderList = true;
+            },
+
+
+            //------------------------------------------------
+            //获取分利模板
+            getShare() {
+                let para = {
+                    "page": {
+                        "current": this.otherCurrent,
+                        "size": this.size
+                    },
+                    "condition":{
+
+                    }
+                };
+                this.listLoading = true;
+                getShareholdingListPage(para).then((res) => {
+                    this.otherTotal = res.data.total;
+                    this.shares = res.data.records;
+                    this.listLoading = false;
+                });
+            },
+            //点击选择
+            choiceShare() {
+                // console.log(this.selsAppoint);
+                if (this.selsShare == '' || this.selsShare == null) {
+                    this.$message({
+                        message: '请选择分利模板',
+                        type: 'info'
+                    });
+                } else {
+                    this.addForm.shareholdingPercentModelId = this.selsShare.id;
+                    this.addForm.shareName = this.selsShare.modelName;
+                    this.showShareList = false;
+                }
+            },
+            //
+            selsShareChange(val) {
+                // console.log(val);
+                this.selsShare = val;
+            },
+            //点击选择分利方案
+            addChoiceShare() {
+                this.otherCurrent = 1;
+                this.getShare();
+                this.selsShare = '';
+                this.showShareList = true;
+            },
+
+            //------------------------------------------------
+
+
+
             //类型的增删改查
             addType() {
                 this.addTypeForm.addTypeName = '';
@@ -298,7 +733,8 @@
                 this.editTypeForm.editTypeName = this.$refs.treeBox.getCurrentNode().typeName;
                 this.editTypeVisible = true;
             },
-            //删除类型
+            //删除类型\
+
             removeType() {
                 this.$confirm('确认删除该类型吗?', '提示', {
                     type: 'warning'
@@ -434,9 +870,26 @@
                 return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
             },
             handleCurrentChange(val) {
-                this.page = val;
-                this.getUsers();
+                this.current = val;
+                this.getDevices();
             },
+            handlCommunityCurrentChange(val) {
+                this.otherCurrent = val;
+                this.getCommunity();
+            },
+            handlAppointCurrentChange(val) {
+                this.otherCurrent = val;
+                this.getAppoint();
+            },
+            handlPriceCurrentChange(val) {
+                this.otherCurrent = val;
+                this.getPrice();
+            },
+            handlHolderCurrentChange(val) {
+                this.otherCurrent = val;
+                this.getHolder();
+            },
+
             //获取用户列表
             getDevices() {
                 let para = {
@@ -511,6 +964,7 @@
                 //TODO
                 this.addForm = {
                     isAppuserHold: 0,
+                    isCanBook: 0,
                 };
             },
             //编辑
@@ -539,23 +993,39 @@
             },
             //新增
             addSubmit: function () {
+                let para = Object.assign({}, this.addForm);
+                if (para.typeId != null && para.typeId.length > 0) {
+                    para.typeId = para.typeId.pop();
+                }
+                if(para.isAppuserHold == 0) {
+                    para.appuserId = null;
+                    para.shareholdingPercentModelId = null;
+                }
+                // para = util.filterParams(para);
+                // console.log(para);
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.addLoading = true;
                             //NProgress.start();
-                            let para = Object.assign({}, this.addForm);
-                            para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                            addUser(para).then((res) => {
+                            // let para = Object.assign({}, this.addForm);
+                            addDevice(para).then((res) => {
                                 this.addLoading = false;
-                                //NProgress.done();
-                                this.$message({
-                                    message: '提交成功',
-                                    type: 'success'
-                                });
-                                this.$refs['addForm'].resetFields();
-                                this.addFormVisible = false;
-                                this.getUsers();
+                                if(res.meta.success) {
+                                    //NProgress.done();
+                                    this.$message({
+                                        message: '新增成功',
+                                        type: 'success'
+                                    });
+                                    this.$refs['addForm'].resetFields();
+                                    this.addFormVisible = false;
+                                    this.getDevices();
+                                } else {
+                                    this.$message({
+                                        message: res.meta.message,
+                                        type: 'error'
+                                    });
+                                }
                             });
                         });
                     }
