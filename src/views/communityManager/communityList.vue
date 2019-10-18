@@ -37,12 +37,29 @@
             </el-table-column>
             <el-table-column prop="latitude" label="纬度" sortable>
             </el-table-column>
-            <el-table-column prop="status" label="状态" :formatter="formatStatus" sortable>
-            </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column prop="status" label="状态">
                 <template scope="scope">
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+                    <el-switch
+                            v-model="scope.row.status"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949"
+                            :active-value="1"
+                            :inactive-value="0"
+                            @change=changeSwitch(scope.row)>
+                    </el-switch>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" width="150">
+                <template scope="scope">
+                    <el-dropdown trigger="click">
+                        <el-button size="medium" type="primary">
+                            更多操作<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item @click.native="handleEdit(scope.$index, scope.row)">编辑</el-dropdown-item>
+                            <el-dropdown-item @click.native="handleDel(scope.$index, scope.row)">删除</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
                 </template>
             </el-table-column>
         </el-table>
@@ -244,6 +261,12 @@
             }
         },
         methods: {
+
+            //switch按钮点击触发事件，日后方便对社区状态进行修改
+            changeSwitch(row){
+                console.log(row.status);
+            },
+
             //社区状态显示转换，1表示开启，0表示关闭
             formatStatus: function (row, column) {
                 return row.status == 1 ? '开启' : row.status == 0 ? '关闭' : '未知';

@@ -39,7 +39,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '',
-        iconCls: 'el-icon-menu',
+        iconCls: 'iconfont icon-shouye',
         leaf: true,//只有一个节点
         children: [
             { path: '/Index', component: Index, name: '首页' }
@@ -49,7 +49,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '用户管理',
-        iconCls: 'el-icon-menu',
+        iconCls: 'iconfont icon-yonghu',
         children: [
             { path: '/userList', component: userList, name: '用户列表' },
             { path: '/userLevel', component: userLevel, name: '用户等级' }
@@ -59,7 +59,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '持有人管理',
-        iconCls: 'el-icon-menu',
+        iconCls: 'iconfont icon-yonghuguanli',
         children: [
             { path: '/holderList', component: holderList, name: '持有人列表' },
             { path: '/holderLevel', component: holderLevel, name: '持有人等级' },
@@ -71,7 +71,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '社区管理',
-        iconCls: 'el-icon-menu',
+        iconCls: 'iconfont icon-jiudian',
         children: [
             { path: '/communityList', component: communityList, name: '社区列表' }
         ]
@@ -80,7 +80,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '设置管理',
-        iconCls: 'el-icon-menu',
+        iconCls: 'iconfont icon-shezhi',
         children: [
             // { path: '/deviceTypeSetting', component: deviceTypeSetting, name: '设备类型设置' },
             { path: '/appointmentTimeSetting', component: appointmentTimeSetting, name: '预约时间设置' },
@@ -93,7 +93,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '设备管理',
-        iconCls: 'el-icon-menu',
+        iconCls: 'iconfont icon-shebeiguanli',
         children: [
             { path: '/deviceList', component: deviceList, name: '设备列表' }
         ]
@@ -102,7 +102,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '监控管理',
-        iconCls: 'el-icon-menu',
+        iconCls: 'iconfont icon-jiankong',
         children: [
             { path: '/monitorList', component: monitorList, name: '监控列表' }
         ]
@@ -111,7 +111,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '交易管理',
-        iconCls: 'el-icon-menu',
+        iconCls: 'iconfont icon-jiaoyishuju',
         children: [
             { path: '/orderManager', component: orderManager, name: '订单管理' },
             { path: '/refundManager', component: refundManager, name: '退款管理' }
@@ -121,7 +121,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '统计管理',
-        iconCls: 'el-icon-menu',
+        iconCls: 'iconfont icon-tongji',
         children: [
             { path: '/statisticalGraph', component: statisticalGraph, name: '统计图表' }
         ]

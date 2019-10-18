@@ -1,0 +1,72 @@
+{
+  "id": "1464704",
+  "name": "ASM",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "693622",
+      "name": "设备管理",
+      "font_class": "shebeiguanli",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "1130589",
+      "name": "酒店",
+      "font_class": "jiudian",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "4676490",
+      "name": "用户管理",
+      "font_class": "yonghuguanli",
+      "unicode": "e70c",
+      "unicode_decimal": 59148
+    },
+    {
+      "icon_id": "6842460",
+      "name": "首页",
+      "font_class": "shouye",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "7274127",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "7556175",
+      "name": "用户",
+      "font_class": "yonghu",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "9143207",
+      "name": "交易数据",
+      "font_class": "jiaoyishuju",
+      "unicode": "e7e8",
+      "unicode_decimal": 59368
+    },
+    {
+      "icon_id": "10278488",
+      "name": "监控",
+      "font_class": "jiankong",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "10520233",
+      "name": "统计",
+      "font_class": "tongji",
+      "unicode": "e89e",
+      "unicode_decimal": 59550
+    }
+  ]
+}
