@@ -103,7 +103,7 @@ export const getPriceModelListPage = params => {
 };
 //删除价格模板
 export const removePriceModel = params => {
-    return axios.post(`/api/bg/assets/appoint-model/delete`, params, {
+    return axios.post(`/api/bg/assets/price-model/delete`, params, {
         headers: {
             'Content-Type': 'application/json',
             'X-BG-TOKEN': 1
