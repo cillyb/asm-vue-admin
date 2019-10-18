@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const getUserListPage = params => {
-    return axios.post(`/api/bg/users/app-user/list`, params, {
+    return axios.post(`/api/bg/view/app-user-view/list`, params, {
         headers: {
             'X-BG-TOKEN': 1
         }
