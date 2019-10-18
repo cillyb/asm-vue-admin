@@ -14,11 +14,13 @@
 
         <!--列表-->
         <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" fit="true" style="width: 100%;">
-            <el-table-column type="selection" >
-            </el-table-column>
+<!--            <el-table-column type="selection" >-->
+<!--            </el-table-column>-->
             <el-table-column type="index" >
             </el-table-column>
             <el-table-column prop="createTime" label="注册时间"  sortable>
+            </el-table-column>
+            <el-table-column prop="userName" label="用户名" >
             </el-table-column>
             <el-table-column prop="phoneNumber" label="手机号" >
             </el-table-column>
@@ -38,7 +40,7 @@
 
         <!--工具条-->
         <el-col :span="24" class="toolbar">
-            <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
+<!--            <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>-->
             <el-pagination background layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
             </el-pagination>
         </el-col>
@@ -48,6 +50,9 @@
             <el-form :model="editForm" label-width="150px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="手机号" prop="phoneNumber">
                     <el-input v-model="editForm.phoneNumber" disabled="true" auto-complete="off" maxlength="11" style="width: 25%"></el-input>
+                </el-form-item>
+                <el-form-item label="用户名" prop="userName">
+                    <el-input v-model="editForm.userName" auto-complete="off" maxlength="10" style="width: 25%"></el-input>
                 </el-form-item>
                 <el-form-item label="性别" prop="sex">
                     <el-radio-group v-model="editForm.sex">
@@ -77,6 +82,9 @@
             <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
                 <el-form-item label="手机号" prop="phoneNumber">
                     <el-input v-model="addForm.phoneNumber" auto-complete="off" maxlength="11" style="width: 25%"></el-input>
+                </el-form-item>
+                <el-form-item label="用户名" prop="userName">
+                    <el-input v-model="addForm.userName" auto-complete="off" maxlength="10" style="width: 25%"></el-input>
                 </el-form-item>
                 <el-form-item label="性别" prop="sex">
                     <el-radio-group v-model="addForm.sex">
@@ -146,6 +154,7 @@
                     sex: '',
                     birthday: '',
                     isHolder: '',
+                    userName:'',
                 },
 
                 addFormVisible: false,//新增界面是否显示
@@ -170,6 +179,7 @@
                     sex: '',
                     birthday: '',
                     isHolder: '',
+                    userName:'',
                 }
 
             }
@@ -243,6 +253,7 @@
                     sex: '',
                     birthday: '',
                     isHolder: '',
+                    userName: '',
                 };
             },
             //编辑

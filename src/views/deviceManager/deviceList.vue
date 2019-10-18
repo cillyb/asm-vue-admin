@@ -107,7 +107,7 @@
                     <!--工具条-->
                     <el-col :span="24" class="toolbar">
                         <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-                        <el-pagination background layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="20"
+                        <el-pagination background layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="size"
                                        :total="total" style="float:right;">
                         </el-pagination>
                     </el-col>
@@ -144,10 +144,10 @@
             <!--新增界面-->
             <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
                 <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
-                    <el-form-item label="设备名称" prop="name">
-                        <el-input v-model="addForm.name" auto-complete="off" style="width: 25%;"></el-input>
+                    <el-form-item label="设备名称" prop="assetName">
+                        <el-input v-model="addForm.assetName" auto-complete="off" style="width: 25%;"></el-input>
                     </el-form-item>
-                    <el-form-item label="分类">
+                    <el-form-item label="分类" prop="typeId">
                         <el-cascader
                                 filterable
                                 style="width: 25%;"
@@ -157,7 +157,11 @@
                                 :props="{ expandTrigger: 'hover', value: 'id', label: 'typeName', children: 'fork'}"
                                 @change="handleChange"></el-cascader>
                     </el-form-item>
-                    <el-form-item label="开始提供时间">
+                    <el-form-item label="所属社区" prop="communityId">
+                        <span v-model="addForm.communityId">{{ addForm.communityName }}</span>
+                        <el-button @click="addChoiceCommunity">选择</el-button>
+                    </el-form-item>
+                    <el-form-item label="开始提供时间" prop="provideStartTime">
                         <el-date-picker
                                 style="width: 25%;"
                                 v-model="addForm.provideStartTime"
@@ -166,7 +170,7 @@
                                 default-time="12:00:00">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="截止提供时间">
+                    <el-form-item label="截止提供时间"  prop="provideEndTime">
                         <el-date-picker
                                 style="width: 25%;"
                                 v-model="addForm.provideEndTime"
@@ -175,8 +179,8 @@
                                 default-time="12:00:00">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="成本价格">
-                        <el-input v-model="addForm.firstCost" type="number" auto-complete="off"
+                    <el-form-item label="成本价格" prop="firstCost">
+                        <el-input v-model="addForm.firstCost" type="number" auto-complete="off" min="0"
                                   style="width: 25%;"></el-input>
                     </el-form-item>
                     <el-form-item label="是否有持有人">
@@ -184,23 +188,54 @@
                             <el-radio class="radio" :label="0">否</el-radio>
                             <el-radio class="radio" :label="1">是</el-radio>
                         </el-radio-group>
-                        <el-form-item v-if="addForm.isAppuserHold == 1" label="选择持有人">
-                            <el-button>选择</el-button>
+                        <el-form-item v-if="addForm.isAppuserHold == 1" label="持有人: ">
+                            <span v-model="addForm.appuserId">{{ addTypeVisible }}</span>
+                            <el-button @click="addChoiceHolder">选择</el-button>
                         </el-form-item>
-                        <el-form-item v-if="addForm.isAppuserHold == 1" label="分利方案" :visible="addForm.isAppuserHold">
+                        <el-form-item v-if="addForm.isAppuserHold == 1" label="分利方案: " :visible="addForm.isAppuserHold">
+                            <span v-model="addForm.shareholdingPercentModelId">{{ addTypeVisible }}</span>
                             <el-button>选择</el-button>
                         </el-form-item>
                     </el-form-item>
                     <el-form-item label="预约方案">
+                        <span v-model="addForm.appointmentModelId">{{ addTypeVisible }}</span>
                         <el-button>选择</el-button>
                     </el-form-item>
                     <el-form-item label="价格方案">
+                        <span v-model="addForm.priceModelId">{{ addTypeVisible }}</span>
                         <el-button>选择</el-button>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click.native="addFormVisible = false">取消</el-button>
                     <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+                </div>
+            </el-dialog>
+
+            <el-dialog title="社区选择" :visible.sync="shouCommunityList" width="50%" :close-on-click-modal="false">
+                <!--列表-->
+                <el-table :data="communitys" highlight-current-row v-loading="listLoading"
+                          @current-change="selsCommunityChange" style="width: 100%;" ref="communityTable">
+                    <el-table-column type="index" >
+                    </el-table-column>
+                    <el-table-column prop="communityName" label="社区名称" sortable>
+                    </el-table-column>
+                    <el-table-column prop="address" label="社区地址" sortable>
+                    </el-table-column>
+                    <el-table-column prop="manager" label="管理员" sortable>
+                    </el-table-column>
+                    <el-table-column prop="managerPhone" label="联系电话" sortable>
+                    </el-table-column>
+                </el-table>
+                <!--工具条-->
+                <el-col :span="24" class="toolbar">
+                    <el-pagination background layout="total, prev, pager, next" @current-change="handlCommunityCurrentChange" :page-size="size"
+                                   :total="communityTotal" style="float:right;">
+                    </el-pagination>
+                </el-col>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click.native="shouCommunityList = false">取消</el-button>
+                    <el-button type="primary" @click.native="choiceCommunity" :loading="addLoading">选择</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -212,10 +247,17 @@
     //import NProgress from 'nprogress'
     import {getUserListPage, removeUser, batchRemoveUser, editUser, addUser} from '../../api/api';
     import {getTypeTree, getDevices, removeDevice, updateTypeName, addTypeName, removeTypeName} from '../../api/deviceApi'
+    import {getCommunityListPage} from '../../api/communityApi'
 
     export default {
         data() {
             return {
+                //选中得
+                selsCommunity:'',
+
+                shouCommunityList:false,
+
+
                 currentNode: '',
                 optionsType: {},
                 condition: {
@@ -253,9 +295,14 @@
                     name: ''
                 },
                 devices: [],
+                communitys:[],
                 total: 0,
-                size: 20,
+                size: 10,
                 current: 1,
+                //其他列表分页参数
+                communityTotal:0,
+                communityCurrent:1,
+
                 listLoading: false,
                 sels: [],//列表选中列
 
@@ -268,27 +315,111 @@
                 },
                 //编辑界面数据
                 editForm: {
-                    id: 0,
-                    name: '',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    addr: ''
+
                 },
 
                 addFormVisible: false,//新增界面是否显示
                 addLoading: false,
                 addFormRules: {
-                    name: [
+                    typeName: [
                         {required: true, message: '请输入姓名', trigger: 'blur'}
-                    ]
+                    ],
+                    typeId: [
+                        {required: true, message: '请选择分类', trigger: 'blur'}
+                    ],
+                    communityId: [
+                        {required: true, message: '请选择所属社区', trigger: 'blur'}
+                    ],
+                    provideStartTime: [
+                        {required: true, message: '请输入开始提供时间', trigger: 'blur'}
+                    ],
+                    provideEndTime: [
+                        {required: true, message: '请输入截止提供时间', trigger: 'blur'}
+                    ],
+                    firstCost: [
+                        {required: true, message: '请输入成本价格', trigger: 'blur'}
+                    ],
                 },
                 //新增界面数据
-                addForm: {}
+                addForm: {
+                    assetName:'',
+                    typeId:'',
+                    provideStartTime:'',
+                    provideEndTime:'',
+                    firstCost:'',
+                    isAppuserHold:'',
+                    shareholdingPercentModelId:'',
+                    priceModelId:'',
+                    appointmentModelId:'',
+                    communityId:'',
+                    appuserId:'',
+                }
 
             }
         },
         methods: {
+
+
+            //获取社区
+            getCommunity(){
+                let para = {
+                    "page":{
+                        "current":this.communityCurrent,
+                        "size": this.size
+                    }
+                };
+                this.listLoading = true;
+                getCommunityListPage(para).then((res) => {
+                    this.communityTotal = res.data.total;
+                    this.communitys = res.data.records;
+                    this.listLoading = false;
+                });
+            },
+            //点击选择
+            choiceCommunity(){
+                if(this.selsCommunity == '') {
+                    this.$message({
+                        message: '请选择社区',
+                        type: 'info'
+                    });
+                } else {
+                    this.addForm.communityId = this.selsCommunity.id;
+                    this.addForm.communityName = this.selsCommunity.communityName;
+                    this.shouCommunityList = false;
+                }
+            },
+            //
+            selsCommunityChange(val){
+                console.log(val);
+                this.selsCommunity = val;
+            },
+            //点击选择社区
+            addChoiceCommunity(){
+                this.getCommunity();
+                this.selsCommunity = '';
+                this.shouCommunityList = true;
+                // this.addForm.communityId = 321;
+            },
+
+
+            //点击选择持有人
+            addChoiceHolder(){
+                this.addForm.appuserId = 321;
+            },
+            //点击选择分利方案
+            addChoice(){
+                this.addForm.shareholdingPercentModelId = 321;
+            },
+            //点击选择预约方案
+            addChoice(){
+                this.addForm.appointmentModelId = 321;
+            },
+            //点击选择价格方案
+            addChoice(){
+                this.addForm.priceModelId = 321;
+            },
+
+
             //类型的增删改查
             addType() {
                 this.addTypeForm.addTypeName = '';
@@ -298,7 +429,8 @@
                 this.editTypeForm.editTypeName = this.$refs.treeBox.getCurrentNode().typeName;
                 this.editTypeVisible = true;
             },
-            //删除类型
+            //删除类型\
+
             removeType() {
                 this.$confirm('确认删除该类型吗?', '提示', {
                     type: 'warning'
@@ -434,9 +566,14 @@
                 return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
             },
             handleCurrentChange(val) {
-                this.page = val;
-                this.getUsers();
+                this.current = val;
+                this.getDevices();
             },
+            handlCommunityCurrentChange(val) {
+                this.communityCurrent = val;
+                this.getCommunity();
+            },
+
             //获取用户列表
             getDevices() {
                 let para = {
@@ -539,27 +676,33 @@
             },
             //新增
             addSubmit: function () {
-                this.$refs.addForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.addLoading = true;
-                            //NProgress.start();
-                            let para = Object.assign({}, this.addForm);
-                            para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                            addUser(para).then((res) => {
-                                this.addLoading = false;
-                                //NProgress.done();
-                                this.$message({
-                                    message: '提交成功',
-                                    type: 'success'
-                                });
-                                this.$refs['addForm'].resetFields();
-                                this.addFormVisible = false;
-                                this.getUsers();
-                            });
-                        });
-                    }
-                });
+                let para = Object.assign({}, this.addForm);
+                if(para.typeId.length > 0) {
+                    para.typeId = para.typeId.pop();
+                }
+
+                console.log(para);
+                // this.$refs.addForm.validate((valid) => {
+                //     if (valid) {
+                //         this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                //             this.addLoading = true;
+                //             //NProgress.start();
+                //             let para = Object.assign({}, this.addForm);
+                //             para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
+                //             addUser(para).then((res) => {
+                //                 this.addLoading = false;
+                //                 //NProgress.done();
+                //                 this.$message({
+                //                     message: '提交成功',
+                //                     type: 'success'
+                //                 });
+                //                 this.$refs['addForm'].resetFields();
+                //                 this.addFormVisible = false;
+                //                 this.getUsers();
+                //             });
+                //         });
+                //     }
+                // });
             },
             selsChange: function (sels) {
                 this.sels = sels;
