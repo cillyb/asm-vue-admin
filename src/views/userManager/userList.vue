@@ -8,7 +8,7 @@
             <el-date-picker type="date" placeholder="开始日期" v-model="condition.registBeginDate" value-format="yyyy-MM-dd" style="width:12%"></el-date-picker>
             &nbsp;-&nbsp;
             <el-date-picker type="date" placeholder="结束日期" v-model="condition.registEndDate" value-format="yyyy-MM-dd" style="width:12%"></el-date-picker>
-            <el-button type="primary" v-on:click="getUsers">查询</el-button>
+            <el-button type="primary" v-on:click="handleQuery">查询</el-button>
             <el-button type="primary" @click="handleAdd">新增</el-button>
         </el-col>
 
@@ -48,7 +48,7 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar">
 <!--            <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>-->
-            <el-pagination background layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
+            <el-pagination background layout="total, sizes, prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 50, 100, 200, 300, 400]" :page-size="size" :total="total" style="float:right;">
             </el-pagination>
         </el-col>
 
@@ -134,7 +134,7 @@
                 },
                 users: [],
                 total:0,
-                size: 20,
+                size: 10,
                 current: 1,
                 listLoading: false,
                 sels: [],//列表选中列
@@ -192,6 +192,16 @@
             }
         },
         methods: {
+            handleSizeChange(val) {
+                this.size = val;
+                this.getUsers();
+            },
+
+            handleQuery(){
+                this.current = 1;
+                this.getUsers();
+            },
+
             handleCurrentChange(val) {
                 this.current = val;
                 this.getUsers();

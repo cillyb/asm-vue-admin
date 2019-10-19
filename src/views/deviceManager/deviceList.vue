@@ -57,7 +57,15 @@
                     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
                         设备名称:<el-input v-model="condition.assetName" style="width: 10%;"></el-input>
                         所属社区:<el-input v-model="condition.communityId" style="width: 10%;"></el-input>
-                        <el-button type="primary" v-on:click="">查询</el-button>
+                        <el-select v-model="condition.isAppuserHold" clearable placeholder="是否有持有人">
+                            <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                        <el-button type="primary" v-on:click="handleQuery">查询</el-button>
                         <el-button type="primary" @click="handleAdd">新增</el-button>
                     </el-col>
 
@@ -104,9 +112,8 @@
                     <!--工具条-->
                     <el-col :span="24" class="toolbar">
                         <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-                        <el-pagination background layout="total, prev, pager, next"
-                                       @current-change="handleCurrentChange" :page-size="size"
-                                       :total="total" style="float:right;">
+                        <el-pagination background layout="total, sizes, prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 50, 100, 200, 300, 400]" :page-size="size" :total="total" style="float:right;">
+
                         </el-pagination>
                     </el-col>
                 </el-col>
@@ -365,6 +372,16 @@
     export default {
         data() {
             return {
+                options:[
+                    {
+                        value: 1,
+                        label:'有持有人'
+                    },
+                    {
+                        value: -1,
+                        label:'无持有人'
+                    },
+                ],
                 //区分是新增还是编辑操作
                 op:'add',
 
@@ -485,7 +502,16 @@
             }
         },
         methods: {
+            handleSizeChange(val) {
+                this.size = val;
+                this.getDevices();
+            },
 
+            handleQuery(){
+                // console.log(this.condition);
+                this.current = 1;
+                this.getDevices();
+            },
             //------------------------------------------------
             //获取社区
             getCommunity() {
@@ -529,7 +555,7 @@
             },
 
             //------------------------------------------------
-            //获取社区
+            //获取预约
             getAppoint() {
                 let para = {
                     "page": {
@@ -879,12 +905,17 @@
 
             //获取用户列表
             getDevices() {
+                //防止条件isAppuserHold = 0被过滤掉
+                let newCondition =  util.filterParams(this.condition);
+                if(this.condition.isAppuserHold == -1) {
+                    newCondition.isAppuserHold = 0;
+                }
                 let para = {
                     page: {
                         size: this.size,
                         current: this.current
                     },
-                    condition: util.filterParams(this.condition)
+                    condition: newCondition
                 };
                 console.log("getDevices: " + this.condition.typeId);
                 this.listLoading = true;
