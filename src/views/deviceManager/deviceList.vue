@@ -55,17 +55,10 @@
                 <el-col :span="20" :xs="24">
                     <!--工具条-->
                     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-                        <el-form :inline="true" :model="filters">
-                            <el-form-item>
-                                <el-input v-model="filters.name" placeholder="姓名"></el-input>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button type="primary" v-on:click="">查询</el-button>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button type="primary" @click="handleAdd">新增</el-button>
-                            </el-form-item>
-                        </el-form>
+                        设备名称:<el-input v-model="condition.assetName" style="width: 10%;"></el-input>
+                        所属社区:<el-input v-model="condition.communityId" style="width: 10%;"></el-input>
+                        <el-button type="primary" v-on:click="">查询</el-button>
+                        <el-button type="primary" @click="handleAdd">新增</el-button>
                     </el-col>
 
                     <!--列表-->
@@ -114,7 +107,7 @@
             </el-row>
 
             <!--新增界面+编辑界面-->
-            <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
+            <el-dialog :title="op == 'add' ? '新增' : '编辑'" :visible.sync="addFormVisible" :close-on-click-modal="false">
                 <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
                     <el-form-item label="设备名称" prop="assetName">
                         <el-input v-model="addForm.assetName" auto-complete="off" style="width: 25%;"></el-input>
@@ -188,9 +181,8 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click.native="addFormVisible = false">取消</el-button>
-<!--                    TODO 区分开新增和编辑 -->
                     <el-button v-if="op == 'add'" type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
-                    <el-button v-if="op == 'edit'" type="primary" @click.native="addSubmit" :loading="addLoading">修改</el-button>
+                    <el-button v-if="op == 'edit'" type="primary" @click.native="editSubmit" :loading="addLoading">修改</el-button>
 
                 </div>
             </el-dialog>
@@ -356,7 +348,9 @@
         updateTypeName,
         addTypeName,
         removeTypeName,
-        addDevice
+        addDevice,
+        updateDevice,
+        getTypeTreeRoute
     } from '../../api/deviceApi'
     import {getCommunityListPage} from '../../api/communityApi'
     import {getTimeModelListPage, getPriceModelListPage, getShareholdingListPage} from '../../api/settingApi'
@@ -392,7 +386,10 @@
                 currentNode: '',
                 optionsType: {},
                 condition: {
-                    "typeId": ''
+                    typeId: '',
+                    isAppuserHold:'',
+                    assetName: '',
+                    communityId: '',
                 },
                 //treeData
                 data: {},
@@ -928,12 +925,12 @@
             //显示编辑界面
             handleEdit: function (index, row) {
                 this.op = "edit";
-                this.addFormVisible = true;
                 //获取树形分类
                 let para = {};
                 getTypeTree(para).then((res) => {
                     if (res.meta.success) {
                         this.optionsType = res.data;
+                        console.log(this.optionsType);
                     } else {
                         this.$message({
                             message: res.meta.message,
@@ -941,11 +938,31 @@
                         });
                     }
                 });
-                //TODO
-                console.log(row);
-                this.addForm = Object.assign({}, row);
+                //typeId设置不正确
+                //TODO -修改是否有持有人 设置为否 仍有分利ID和持有人id
+                para.id = row.typeId;
+                getTypeTreeRoute(para).then((res) => {
+                    if (res.meta.success) {
+                        row.typeId = [];
+                        var len = res.data.length;
+                        for(var i = 1; i < len; i++) {
+                            row.typeId.push(res.data[len-i-1]);
+                        };
+                        console.log("getTypeRoute : " + row);
+                        this.addForm = Object.assign({}, row);
+                        console.log("addFrom:");
+                        console.log(this.addForm);
+                        this.addFormVisible = true;
+                    } else {
+                        this.$message({
+                            message: res.meta.message,
+                            type: 'error'
+                        });
+                    }
+                });
                 // this.editFormVisible = true;
                 // this.editForm = Object.assign({}, row);
+                //获取分类的路径
             },
             //显示新增界面
             handleAdd: function () {
@@ -971,23 +988,39 @@
             },
             //编辑
             editSubmit: function () {
-                this.$refs.editForm.validate((valid) => {
+                let para = Object.assign({}, this.addForm);
+                if (para.typeId != null && para.typeId.length > 0) {
+                    para.typeId = para.typeId.pop();
+                }
+                if(para.isAppuserHold == 0) {
+                    para.appuserId = null;
+                    para.shareholdingPercentModelId = null;
+                }
+                // para = util.filterParams(para);
+                // console.log(para);
+                this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.editLoading = true;
+                            this.addLoading = true;
                             //NProgress.start();
-                            let para = Object.assign({}, this.editForm);
-                            para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                            editUser(para).then((res) => {
-                                this.editLoading = false;
-                                //NProgress.done();
-                                this.$message({
-                                    message: '提交成功',
-                                    type: 'success'
-                                });
-                                this.$refs['editForm'].resetFields();
-                                this.editFormVisible = false;
-                                this.getUsers();
+                            // let para = Object.assign({}, this.addForm);
+                            updateDevice(para).then((res) => {
+                                this.addLoading = false;
+                                if(res.meta.success) {
+                                    //NProgress.done();
+                                    this.$message({
+                                        message: '修改成功',
+                                        type: 'success'
+                                    });
+                                    this.$refs['addForm'].resetFields();
+                                    this.addFormVisible = false;
+                                    this.getDevices();
+                                } else {
+                                    this.$message({
+                                        message: res.meta.message,
+                                        type: 'error'
+                                    });
+                                }
                             });
                         });
                     }

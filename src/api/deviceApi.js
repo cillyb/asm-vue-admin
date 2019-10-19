@@ -55,3 +55,19 @@ export const addDevice = params => {
         }
     }).then(res => res.data);
 };
+
+export const updateDevice = params => {
+    return axios.post(`/api/bg/assets/asset/update`, params, {
+        headers: {
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+};
+
+export const getTypeTreeRoute = params => {
+    return axios.post(`/api/bg/assets/asset-type/getAssetTreeRoute`, params, {
+        headers: {
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+};

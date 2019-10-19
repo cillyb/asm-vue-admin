@@ -67,7 +67,7 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar">
             <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-            <el-pagination background layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
+            <el-pagination background layout="total, sizes, prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 50, 100, 200, 300, 400]" :page-size="size" :total="total" style="float:right;">
             </el-pagination>
         </el-col>
 
@@ -173,6 +173,7 @@
                 community: [],
                 total: 0,
                 page: 1,
+                size: 10,
                 listLoading: false,
                 sels: [],//列表选中列
 
@@ -262,6 +263,10 @@
         },
         methods: {
 
+            handleSizeChange(val) {
+                this.size = val;
+                this.getCommunity();
+            },
             //switch按钮点击触发事件，日后方便对社区状态进行修改
             changeSwitch(row){
                 console.log(row.status);
@@ -280,7 +285,7 @@
                 let para = {
                     "page":{
                         "current":this.page,
-                        "size":10
+                        "size":this.size
                     },
                     "condition": this.filters
                 };
