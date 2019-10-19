@@ -43,8 +43,15 @@
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+                    <el-dropdown trigger="click">
+                        <el-button size="medium" type="primary">
+                            更多操作<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item @click.native="handleEdit(scope.$index, scope.row)">编辑</el-dropdown-item>
+                            <el-dropdown-item @click.native="handleDel(scope.$index, scope.row)">删除</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
                 </template>
             </el-table-column>
         </el-table>
