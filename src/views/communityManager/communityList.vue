@@ -7,7 +7,7 @@
                     <el-input v-model="filters.communityName" placeholder="社区名称"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" v-on:click="getCommunity">查询</el-button>
+                    <el-button type="primary" v-on:click="handleQuery">查询</el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="handleAdd">新增</el-button>
@@ -267,6 +267,11 @@
                 this.size = val;
                 this.getCommunity();
             },
+            handleQuery(){
+                this.current = 1;
+                this.getCommunity();
+            },
+
             //switch按钮点击触发事件，日后方便对社区状态进行修改
             changeSwitch(row){
                 console.log(row.status);

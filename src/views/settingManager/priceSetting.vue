@@ -7,7 +7,7 @@
                     <el-input v-model="filters.modelName" placeholder="价格模板名称"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" v-on:click="getPriceModel">查询</el-button>
+                    <el-button type="primary" v-on:click="handleQuery">查询</el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="handleAdd">新增</el-button>
@@ -63,7 +63,7 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar">
             <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-            <el-pagination background layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
+            <el-pagination background layout="total, sizes, prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 50, 100, 200, 300, 400]" :page-size="size" :total="total" style="float:right;">
             </el-pagination>
         </el-col>
 
@@ -141,6 +141,7 @@
                 shareholding: [],
                 total: 0,
                 page: 1,
+                size: 10,
                 listLoading: false,
                 sels: [],//列表选中列
 
@@ -186,6 +187,15 @@
             }
         },
         methods: {
+
+            handleSizeChange(val) {
+                this.size = val;
+                this.getPriceModel();
+            },
+            handleQuery(){
+                this.current = 1;
+                this.getPriceModel();
+            },
             //switch按钮点击触发事件，日后方便对分利状态进行修改
             changeSwitch(row){
                 console.log(row.status);

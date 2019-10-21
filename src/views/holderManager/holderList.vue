@@ -7,7 +7,7 @@
                     <el-input v-model="filters.phoneNumber" placeholder="手机号"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" v-on:click="getHolder">查询</el-button>
+                    <el-button type="primary" v-on:click="handleQuery">查询</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -32,7 +32,7 @@
 
         <!--工具条-->
         <el-col :span="24" class="toolbar">
-            <el-pagination background layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
+            <el-pagination background layout="total, sizes, prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 50, 100, 200, 300, 400]" :page-size="size" :total="total" style="float:right;">
             </el-pagination>
         </el-col>
 
@@ -54,10 +54,19 @@
                 holder: [],
                 total: 0,
                 page: 1,
+                size: 10,
                 listLoading: false,
             }
         },
         methods: {
+            handleSizeChange(val) {
+                this.size = val;
+                this.getHolder();
+            },
+            handleQuery(){
+                this.current = 1;
+                this.getHolder();
+            },
             handleCurrentChange(val) {
                 this.page = val;
                 this.getHolder();
