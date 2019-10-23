@@ -215,7 +215,7 @@
                 let para = {
                     page:{
                         current:this.page,
-                        size:10
+                        size:this.size
                     },
                     condition: this.filters
                 };

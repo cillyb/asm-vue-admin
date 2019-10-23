@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.phoneNumber" placeholder="手机号"></el-input>
+                    <el-input v-model="filters.userName" placeholder="用户名"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="handleQuery">查询</el-button>
@@ -13,10 +13,18 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="holder" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+        <el-table :data="holder"
+                  highlight-current-row
+                  v-loading="listLoading"
+                  @selection-change="selsChange"
+                  row-key="id"
+                  lazy
+                  :load="load"
+                  :tree-props="{children: 'children', hasChildren: 'hasAsset'}"
+                  style="width: 100%;">
             <el-table-column type="index" style="width: 10%;">
             </el-table-column>
-            <el-table-column prop="id" label="持有人id" style="width: 15%;" sortable>
+            <el-table-column prop="userName" label="名称" style="width: 15%;" sortable>
             </el-table-column>
             <el-table-column prop="phoneNumber" label="手机号码" style="width: 15%;" sortable>
             </el-table-column>
@@ -41,15 +49,14 @@
 
 <script>
     import { getHolderListPage } from '../../api/holderApi';
+    import { getDevices } from '../../api/deviceApi'
     import util from '../../common/js/util';
 
     export default {
         data() {
             return {
                 filters: {
-                    phoneNumber: '',
-                    registBeginDate:"2017-07-27",
-                    registEndDate: "2020-08-29",
+                    userName:''
                 },
                 holder: [],
                 total: 0,
@@ -59,6 +66,24 @@
             }
         },
         methods: {
+            load(tree, treeNode, resolve) {
+                setTimeout(() => {
+                    resolve([
+                        {
+                            id: 31,
+                            date: '2016-05-01',
+                            name: '王小虎',
+                            address: '上海市普陀区金沙江路 1519 弄'
+                        }, {
+                            id: 32,
+                            date: '2016-05-01',
+                            name: '王小虎',
+                            address: '上海市普陀区金沙江路 1519 弄'
+                        }
+                    ])
+                }, 1000)
+            },
+
             handleSizeChange(val) {
                 this.size = val;
                 this.getHolder();
@@ -79,7 +104,7 @@
                 let para = {
                     "page":{
                         "current":this.page,
-                        "size":10
+                        "size":this.size
                     },
                     "condition": this.filters
                 };
@@ -88,6 +113,14 @@
                 getHolderListPage(para).then((res) => {
                     this.total = res.data.total;
                     this.holder = res.data.records;
+                    for(let i = 0; i < this.holder.length; i++) {
+                        if(this.holder[i].hasAsset == 0) {
+                            this.holder[i].hasAsset = false;
+                        } else {
+                            this.holder[i].hasAsset = true;
+                        }
+                    }
+                    console.log(this.holder);
                     this.listLoading = false;
                 });
             },

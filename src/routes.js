@@ -20,6 +20,7 @@ import monitorList from './views/monitorManager/monitorList.vue'
 import orderManager from './views/businessManager/orderManager.vue'
 import refundManager from './views/businessManager/refundManager.vue'
 import statisticalGraph from './views/statisticsManager/statisticalGraph.vue'
+import logList from './views/monitorManager/logList.vue'
 
 let routes = [
     {
@@ -104,7 +105,9 @@ let routes = [
         name: '监控管理',
         iconCls: 'iconfont icon-jiankong',
         children: [
-            { path: '/monitorList', component: monitorList, name: '监控列表' }
+            { path: '/monitorList', component: monitorList, name: '监控列表' },
+            { path: '/logList', component: logList, name: '日志列表' }
+
         ]
     },
     {
