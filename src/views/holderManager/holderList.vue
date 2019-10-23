@@ -26,9 +26,15 @@
             </el-table-column>
             <el-table-column prop="userName" label="名称" style="width: 15%;" sortable>
             </el-table-column>
+<!--            <el-table-column prop="assetName" label="设备名称" style="width: 15%;" sortable>-->
+<!--            </el-table-column>-->
             <el-table-column prop="phoneNumber" label="手机号码" style="width: 15%;" sortable>
             </el-table-column>
+            <el-table-column prop="typeName" label="设备类型" style="width: 15%;" sortable>
+            </el-table-column>
             <el-table-column prop="sex" label="性别" style="width: 10%;" sortable>
+            </el-table-column>
+            <el-table-column prop="shareholdingPercent" label="分利比" style="width: 15%;" sortable>
             </el-table-column>
             <el-table-column prop="birthday" label="生日" style="width: 10%;" sortable>
             </el-table-column>
@@ -67,21 +73,39 @@
         },
         methods: {
             load(tree, treeNode, resolve) {
-                setTimeout(() => {
-                    resolve([
-                        {
-                            id: 31,
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        }, {
-                            id: 32,
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
+                let para = {
+                    page: {
+                        size: 10000,
+                        current: 1
+                    },
+                    condition: {
+                        appuserId:tree.id
+                    }
+                };
+                getDevices(para).then((res) => {
+                    // console.log(res);
+                    if (res.meta.success) {
+                        let asset = res.data.records;
+                        for(let i = 0; i < asset.length; i++) {
+                            asset[i].phoneNumber = null;
+                            asset[i].userName = asset[i].assetName;
                         }
-                    ])
-                }, 1000)
+                        resolve(asset);
+                    }
+                });
+                // resolve([
+                //     {
+                //         id: 31,
+                //         date: '2016-05-01',
+                //         name: '王小虎',
+                //         address: '上海市普陀区金沙江路 1519 弄'
+                //     }, {
+                //         id: 32,
+                //         date: '2016-05-01',
+                //         name: '王小虎',
+                //         address: '上海市普陀区金沙江路 1519 弄'
+                //     }
+                // ])
             },
 
             handleSizeChange(val) {
