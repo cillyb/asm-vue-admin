@@ -100,7 +100,7 @@
 <script>
     import util from '../../common/js/util'
 
-    import { getShareholdingListPage, removeShareholding, addShareholding, editShareholding, isvalidSharing } from '../../api/settingApi';
+    import { getShareholdingListPage, removeShareholding, addShareholding, editShareholding, isvalidSharing, openShareholding, closeShareholding } from '../../api/settingApi';
 
     var validSharing=(rule, value,callback)=>{
         if (value === ''){
@@ -171,7 +171,38 @@
             },
             //switch按钮点击触发事件，日后方便对分利状态进行修改
             changeSwitch(row){
-                console.log(row.status);
+                let para = {
+                    ids: [row.id]
+                }
+                if(row.status == 1){
+                    openShareholding(para).then(res => {
+                        if(res.meta.success){
+                            this.$message({
+                                message: '分利模板已开启',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+                }else{
+                    closeShareholding(para).then(res => {
+                        if(res.meta.success){
+                            this.$message({
+                                message: '分利模板已关闭',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+                }
             },
 
             //百分比显示格式转化

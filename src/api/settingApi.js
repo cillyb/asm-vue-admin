@@ -136,3 +136,69 @@ export function isvalidPrice(number) {
 export function isvalidUnitCount(number) {
     return number % 1 === 0 && number > 0;
 }
+
+
+
+//预约模板状态-开启
+export const openTimeModel = params =>{
+    return axios.post(`/api/bg/assets/appoint-model/enable`, params, {
+        headers :{
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+}
+
+//预约模板状态-关闭
+export const closeTimeModel = params =>{
+    return axios.post(`/api/bg/assets/appoint-model/disable`, params, {
+        headers :{
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+}
+
+
+
+//价格模板状态-开启
+export const openPriceModel = params =>{
+    return axios.post(`/api/bg/assets/price-model/enable`, params, {
+        headers :{
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+}
+
+//价格模板状态-关闭
+export const closePriceModel = params =>{
+    return axios.post(`/api/bg/assets/price-model/disable`, params, {
+        headers :{
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+}
+
+
+
+//分利模板状态-开启
+export const openShareholding = params =>{
+    return axios.post(`/api/bg/assets/shareholding-model/enable`, params, {
+        headers :{
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+}
+
+//分利模板状态-关闭
+export const closeShareholding = params =>{
+    return axios.post(`/api/bg/assets/shareholding-model/disable`, params, {
+        headers :{
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+}

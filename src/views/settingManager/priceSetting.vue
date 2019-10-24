@@ -110,7 +110,7 @@
 <script>
     import util from '../../common/js/util'
 
-    import { getPriceModelListPage, removePriceModel, addPriceModel, editPriceModel, isvalidPrice, isvalidUnitCount } from '../../api/settingApi';
+    import { getPriceModelListPage, removePriceModel, addPriceModel, editPriceModel, isvalidPrice, isvalidUnitCount, openPriceModel, closePriceModel } from '../../api/settingApi';
 
     var validPrice=(rule, value,callback)=>{
         if (value === ''){
@@ -198,7 +198,38 @@
             },
             //switch按钮点击触发事件，日后方便对分利状态进行修改
             changeSwitch(row){
-                console.log(row.status);
+                let para = {
+                    ids: [row.id]
+                }
+                if(row.status == 1){
+                    openPriceModel(para).then(res => {
+                        if(res.meta.success){
+                            this.$message({
+                                message: '价格模板已开启',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+                }else{
+                    closePriceModel(para).then(res => {
+                        if(res.meta.success){
+                            this.$message({
+                                message: '价格模板已关闭',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+                }
             },
 
             //百分比显示格式转化

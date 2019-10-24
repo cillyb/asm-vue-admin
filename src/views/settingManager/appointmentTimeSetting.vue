@@ -110,7 +110,7 @@
 </template>
 
 <script>
-    import { getTimeModelListPage, removeTimeModel, addTimeModel, editTimeModel, isvalidDay, isvalidTime } from '../../api/settingApi';
+    import { getTimeModelListPage, removeTimeModel, addTimeModel, editTimeModel, isvalidDay, isvalidTime, openTimeModel, closeTimeModel } from '../../api/settingApi';
     import ElInputNumber from "../../../node_modules/element-ui/packages/input-number/src/input-number.vue";
     import util from '../../common/js/util'
 
@@ -211,7 +211,38 @@
             },
             //switch按钮点击触发事件，日后方便对分利状态进行修改
             changeSwitch(row){
-                console.log(row.status);
+                let para = {
+                    ids: [row.id]
+                }
+                if(row.status == 1){
+                    openTimeModel(para).then(res => {
+                        if(res.meta.success){
+                            this.$message({
+                                message: '预约模板已开启',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+                }else{
+                    closeTimeModel(para).then(res => {
+                        if(res.meta.success){
+                            this.$message({
+                                message: '预约模板已关闭',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+                }
             },
 
             //天数显示格式转化

@@ -150,7 +150,7 @@
 </template>
 
 <script>
-    import { getCommunityListPage, removeCommunity, addCommunity, editCommunity, isvalidPhone } from '../../api/communityApi';
+    import { getCommunityListPage, removeCommunity, addCommunity, editCommunity, isvalidPhone, openCommunity, closeCommunity } from '../../api/communityApi';
     import util from '../../common/js/util'
 
     //手机号码验证
@@ -274,7 +274,38 @@
 
             //switch按钮点击触发事件，日后方便对社区状态进行修改
             changeSwitch(row){
-                console.log(row.status);
+                let para = {
+                    ids: [row.id]
+                }
+                if(row.status == 1){
+                    openCommunity(para).then(res => {
+                        if(res.meta.success){
+                            this.$message({
+                                message: '社区已开启',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+                }else{
+                    closeCommunity(para).then(res => {
+                        if(res.meta.success){
+                            this.$message({
+                                message: '社区已关闭',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+                }
             },
 
             //社区状态显示转换，1表示开启，0表示关闭

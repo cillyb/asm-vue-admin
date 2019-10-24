@@ -45,3 +45,23 @@ export function isvalidPhone(str) {
     const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
     return reg.test(str)
 }
+
+//社区状态-开启
+export const openCommunity = params =>{
+    return axios.post(`/api/bg/admin/community/enable`, params, {
+        headers :{
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+}
+
+//社区状态-关闭
+export const closeCommunity = params =>{
+    return axios.post(`/api/bg/admin/community/disable`, params, {
+        headers :{
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+}
