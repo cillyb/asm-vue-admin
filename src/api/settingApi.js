@@ -202,3 +202,25 @@ export const closeShareholding = params =>{
         }
     }).then(res => res.data);
 }
+
+
+
+//获取交易设置
+export const getOrderSettingListPage = params =>{
+    return axios.post(`/api/bg/settings/orders-setting/getOrderSetting`, params, {
+        headers :{
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+}
+
+//修改交易设置
+export const editOrderSetting = params =>{
+    return axios.post(`/api/bg/settings/orders-setting/update`, params, {
+        headers :{
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+}
