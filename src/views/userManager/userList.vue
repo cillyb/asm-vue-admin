@@ -30,6 +30,18 @@
             </el-table-column>
             <el-table-column prop="addr" label="使用频率高的设备" >
             </el-table-column>
+            <el-table-column prop="status" label="状态" >
+                <template scope="scope">
+                    <el-switch
+                            v-model="scope.row.status"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949"
+                            :active-value="1"
+                            :inactive-value="0"
+                            @change=changeSwitch(scope.row)>
+                    </el-switch>
+                </template>
+            </el-table-column>
             <el-table-column label="操作"  header-align="center" align="center">
                 <template scope="scope">
                     <el-dropdown trigger="click">
@@ -120,9 +132,7 @@
 
 <script>
     import util from '../../common/js/util'
-    //import NProgress from 'nprogress'
-    // import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
-    import { getUserListPage, addUser, editUser, removeUser } from "../../api/userApi"
+    import { getUserListPage, addUser, editUser, removeUser, openUser, closeUser } from "../../api/userApi"
 
     export default {
         data() {
@@ -200,6 +210,42 @@
             handleQuery(){
                 this.current = 1;
                 this.getUsers();
+            },
+
+            //switch按钮点击触发事件，日后方便对社区状态进行修改
+            changeSwitch(row){
+                let para = {
+                    ids: [row.id]
+                }
+                if(row.status == 1){
+                    openUser(para).then(res => {
+                        if(res.meta.success){
+                            this.$message({
+                                message: '用户被激活',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+                }else{
+                    closeUser(para).then(res => {
+                        if(res.meta.success){
+                            this.$message({
+                                message: '用户被拉入黑名单',
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message:res.meta.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+                }
             },
 
             handleCurrentChange(val) {
