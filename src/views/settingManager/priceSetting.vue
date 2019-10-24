@@ -196,7 +196,7 @@
                 this.current = 1;
                 this.getPriceModel();
             },
-            //switch按钮点击触发事件，日后方便对分利状态进行修改
+            //switch按钮点击触发事件，日后方便对价格状态进行修改
             changeSwitch(row){
                 let para = {
                     ids: [row.id]
