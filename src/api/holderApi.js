@@ -9,3 +9,13 @@ export const getHolderListPage = params => {
         }
     }).then(res => res.data);
 };
+
+export const getHolderCapitalFlow = params => {
+    return axios.post(`/api/bg/view/capitalflow-view/getHolderCapitalFlow`, params, {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+};
+
