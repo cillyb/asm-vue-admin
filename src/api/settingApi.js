@@ -42,6 +42,10 @@ export const editShareholding = params => {
 export function isvalidSharing(number) {
     return !(number < 0 || number > 100);
 }
+//验证每月结算日
+export function isvalidDate(number) {
+    return !(number < 1 || number > 28);
+}
 
 
 
