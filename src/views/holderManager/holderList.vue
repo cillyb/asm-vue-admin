@@ -34,7 +34,7 @@
             </el-table-column>
             <el-table-column prop="sex" label="性别" style="width: 10%;" sortable>
             </el-table-column>
-            <el-table-column prop="shareholdingPercent" label="分利比" style="width: 15%;" sortable>
+            <el-table-column prop="shareholdingPercent" label="分利比" :formatter="formatPercent" style="width: 15%;" sortable>
             </el-table-column>
             <el-table-column prop="birthday" label="生日" style="width: 10%;" sortable>
             </el-table-column>
@@ -72,6 +72,13 @@
             }
         },
         methods: {
+            //百分比显示格式转化
+            formatPercent: function (row, column) {
+                if(row.shareholdingPercent != null) {
+                    return row.shareholdingPercent+"%";
+                }
+            },
+
             load(tree, treeNode, resolve) {
                 let para = {
                     page: {

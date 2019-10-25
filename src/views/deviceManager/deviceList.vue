@@ -88,7 +88,7 @@
                         </el-table-column>
                         <el-table-column prop="" label="租赁价格" min-width="100">
                         </el-table-column>
-                        <el-table-column prop="shareholdingPercent" label="分利比" min-width="100" sortable>
+                        <el-table-column prop="shareholdingPercent" label="分利比" :formatter="formatPercent" min-width="100" sortable>
                         </el-table-column>
                         <el-table-column prop="communityName" label="所属社区" min-width="100" sortable>
                         </el-table-column>
@@ -502,6 +502,14 @@
             }
         },
         methods: {
+
+            //百分比显示格式转化
+            formatPercent: function (row, column) {
+                if(row.shareholdingPercent != null) {
+                    return row.shareholdingPercent+"%";
+                }
+            },
+
             handleSizeChange(val) {
                 this.size = val;
                 this.getDevices();

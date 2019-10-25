@@ -22,13 +22,13 @@
             </el-table-column>
             <el-table-column prop="deviceNo" label="设备编号" style="width: 15%;" sortable>
             </el-table-column>
-            <el-table-column prop="shareholdingPercent" label="分利比" style="width: 15%;" sortable>
+            <el-table-column prop="shareholdingPercent" label="分利比" :formatter="formatPercent" style="width: 15%;" sortable>
             </el-table-column>
             <el-table-column prop="orderId" label="订单编号" style="width: 15%;" sortable>
             </el-table-column>
             <el-table-column prop="capitalFlowType" label="流水类型" style="width: 10%;" sortable>
             </el-table-column>
-            <el-table-column prop="accountDate" label="结账日(每月x号)" style="width: 15%;" sortable>
+            <el-table-column prop="accountDate" label="结账日" :formatter="formatDate" style="width: 15%;" sortable>
             </el-table-column>
             <el-table-column prop="accountDateBenefit" label="该单收益" style="width: 10%;" sortable>
             </el-table-column>
@@ -68,6 +68,17 @@
             }
         },
         methods: {
+
+            //百分比显示格式转化
+            formatPercent: function (row, column) {
+                if(row.shareholdingPercent != null) {
+                    return row.shareholdingPercent+"%";
+                }
+            },
+            //每月结算日格式转化
+            formatDate: function (row, colum) {
+                return "每月"+row.accountDate+"号";
+            },
 
             handleSizeChange(val) {
                 this.size = val;

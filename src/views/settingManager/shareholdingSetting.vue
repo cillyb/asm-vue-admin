@@ -233,7 +233,9 @@
 
             //百分比显示格式转化
             formatPercent: function (row, column) {
-                return row.shareholdingPercent+"%";
+                if(row.shareholdingPercent != null) {
+                    return row.shareholdingPercent+"%";
+                }
             },
             //每月结算日格式转化
             formatDate: function (row, colum) {
