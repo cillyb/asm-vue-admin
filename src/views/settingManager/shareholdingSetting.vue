@@ -27,6 +27,8 @@
             </el-table-column>
             <el-table-column prop="shareholdingPercent" label="分利百分比" :formatter="formatPercent" sortable>
             </el-table-column>
+            <el-table-column prop="accountDate" label="每月结算日" :formatter="formatDate" sortable>
+            </el-table-column>
             <el-table-column prop="createTime" label="创建时间" sortable>
             </el-table-column>
             <el-table-column prop="status" label="状态">
@@ -72,6 +74,9 @@
                 <el-form-item label="分利百分比" prop="shareholdingPercent">
                     <el-input v-model.number="editForm.shareholdingPercent"></el-input>
                 </el-form-item>
+                <el-form-item label="每月结算日" prop="accountDate">
+                    <el-input v-model.number="editForm.accountDate"></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click.native="editFormVisible = false">取消</el-button>
@@ -88,6 +93,9 @@
                 <el-form-item label="分利百分比" prop="shareholdingPercent">
                     <el-input v-model.number="addForm.shareholdingPercent"></el-input>
                 </el-form-item>
+                <el-form-item label="每月结算日" prop="accountDate">
+                    <el-input v-model.number="addForm.accountDate"></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click.native="addFormVisible = false">取消</el-button>
@@ -100,13 +108,23 @@
 <script>
     import util from '../../common/js/util'
 
-    import { getShareholdingListPage, removeShareholding, addShareholding, editShareholding, isvalidSharing, openShareholding, closeShareholding } from '../../api/settingApi';
+    import { getShareholdingListPage, removeShareholding, addShareholding, editShareholding, isvalidSharing, openShareholding, closeShareholding, isvalidDate } from '../../api/settingApi';
 
     var validSharing=(rule, value,callback)=>{
         if (value === ''){
             callback(new Error('请输入分利'))
         }else  if (!isvalidSharing(value)){
             callback(new Error('请输入正确的分利'))
+        }else {
+            callback()
+        }
+    };
+
+    var validDate=(rule, value,callback)=>{
+        if (value === ''){
+            callback(new Error('请输入结算日'))
+        }else  if (!isvalidDate(value)){
+            callback(new Error('结算日必须处于1到28号之间'))
         }else {
             callback()
         }
@@ -133,13 +151,17 @@
                     ],
                     shareholdingPercent: [
                         { required: true, trigger: 'blur', validator: validSharing }
+                    ],
+                    accountDate: [
+                        { required: true, trigger: 'blur', validator: validDate }
                     ]
                 },
                 //编辑界面数据
                 editForm: {
                     id: 0,
                     modelName: '',
-                    shareholdingPercent: ''
+                    shareholdingPercent: '',
+                    accountDate: ''
                 },
 
                 addFormVisible: false,//新增界面是否显示
@@ -150,12 +172,16 @@
                     ],
                     shareholdingPercent: [
                         { required: true, trigger: 'blur', validator: validSharing}
+                    ],
+                    accountDate: [
+                        { required: true, trigger: 'blur', validator: validDate}
                     ]
                 },
                 //新增界面数据
                 addForm: {
                     modelName: '',
-                    shareholdingPercent: ''
+                    shareholdingPercent: '',
+                    accountDate: ''
                 }
             }
         },
@@ -208,6 +234,10 @@
             //百分比显示格式转化
             formatPercent: function (row, column) {
                 return row.shareholdingPercent+"%";
+            },
+            //每月结算日格式转化
+            formatDate: function (row, colum) {
+                return "每月"+row.accountDate+"号";
             },
 
             handleCurrentChange(val) {
