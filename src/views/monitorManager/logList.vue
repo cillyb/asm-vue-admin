@@ -77,6 +77,7 @@
             },
             //获取用户列表
             getLogs() {
+                console.log("getLogs");
                 let para = {
                     page:{
                         size: this.size,

@@ -49,3 +49,12 @@ export const closeIsCanBook = params =>{
         }
     }).then(res => res.data);
 }
+
+export const getLogs = params =>{
+    return axios.post(`/api/bg/view/log-view/list`, params, {
+        headers :{
+            'Content-Type': 'application/json',
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+}
