@@ -92,6 +92,11 @@
                         </el-table-column>
                         <el-table-column prop="communityName" label="所属社区" min-width="100" sortable>
                         </el-table-column>
+                        <el-table-column prop="" label="二维码"  >
+                            <template slot-scope="scope">
+                                <el-button @click="showImg(scope.row)" type="text" size="small">查看</el-button>
+                            </template>
+                        </el-table-column>
                         <!--            <el-table-column prop="" label="设备二维码" min-width="100">-->
                         <!--            </el-table-column>-->
                         <el-table-column label="操作" width="150" header-align="center" align="center">
@@ -118,6 +123,11 @@
                     </el-col>
                 </el-col>
             </el-row>
+
+            <!--二维码查看-->
+            <el-dialog :title="erweimaTitle" :visible.sync="showErweimaVisible"  width="25%">
+                <img :src="erweimaUrl" height="100%" width="100%">
+            </el-dialog>
 
             <!--新增界面+编辑界面-->
             <el-dialog :title="op == 'add' ? '新增' : '编辑'" :visible.sync="addFormVisible" :close-on-click-modal="false">
@@ -363,7 +373,7 @@
         removeTypeName,
         addDevice,
         updateDevice,
-        getTypeTreeRoute
+        getTypeTreeRoute, getAssetErweimaUrl
     } from '../../api/deviceApi'
     import {getCommunityListPage} from '../../api/communityApi'
     import {getTimeModelListPage, getPriceModelListPage, getShareholdingListPage} from '../../api/settingApi'
@@ -405,6 +415,10 @@
                 showHolderList: false,
                 showShareList: false,
 
+                //二维码
+                showErweimaVisible: false,
+                erweimaTitle: '',
+                erweimaUrl: '',
 
                 currentNode: '',
                 optionsType: {},
@@ -508,6 +522,27 @@
                 if(row.shareholdingPercent != null) {
                     return row.shareholdingPercent+"%";
                 }
+            },
+
+            //显示二维码
+            showImg(row) {
+                this.showErweimaVisible = true;
+                this.erweimaTitle = row.assetName;
+                let para = {
+                    id: row.id
+                };
+                getAssetErweimaUrl(para).then((res) => {
+                    if (res.meta.success) {
+                        this.erweimaUrl = res.data.qrCodeUrl;
+                        console.log(this.erweimaUrl);
+                    } else {
+                        this.$message({
+                            message: res.meta.message,
+                            type: 'error'
+                        });
+                    }
+                });
+                // console.log(row)
             },
 
             handleSizeChange(val) {

@@ -71,3 +71,13 @@ export const getTypeTreeRoute = params => {
         }
     }).then(res => res.data);
 };
+
+export const getAssetErweimaUrl = params => {
+    return axios.post(`/api/bg/assets/asset/showAssetErweimaUrl`, params, {
+        headers: {
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+};
+
+
