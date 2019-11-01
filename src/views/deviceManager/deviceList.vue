@@ -86,7 +86,10 @@
                         </el-table-column>
                         <el-table-column prop="firstCost" label="成本价格" min-width="100" sortable>
                         </el-table-column>
-                        <el-table-column prop="" label="租赁价格" min-width="100">
+                        <el-table-column prop="" label="租赁价格">
+                            <template slot-scope="scope">
+                                <el-button @click="showPrice(scope.row)" type="text" size="small">查看</el-button>
+                            </template>
                         </el-table-column>
                         <el-table-column prop="shareholdingPercent" label="分利比" :formatter="formatPercent" min-width="100" sortable>
                         </el-table-column>
@@ -124,6 +127,13 @@
                 </el-col>
             </el-row>
 
+            <!--租赁价格查看-->
+            <el-dialog :title="priceTitle" :visible.sync="showPriceVisible"  width="25%">
+                <div style="text-align: center; font-size: large">
+                    {{ price }}元 / {{ unitCount }} {{ unitName }}
+                </div>
+            </el-dialog>
+
             <!--二维码查看-->
             <el-dialog :title="erweimaTitle" :visible.sync="showErweimaVisible"  width="25%">
                 <img :src="erweimaUrl" height="100%" width="100%">
@@ -137,6 +147,7 @@
                     </el-form-item>
                     <el-form-item label="分类" prop="typeId">
                         <el-cascader
+                                clearable
                                 filterable
                                 style="width: 25%;"
                                 v-model="addForm.typeId"
@@ -415,6 +426,14 @@
                 showHolderList: false,
                 showShareList: false,
 
+
+                //价格
+                showPriceVisible:false,
+                priceTitle:'',
+                price:'',
+                unitCount:'',
+                unitName:'',
+
                 //二维码
                 showErweimaVisible: false,
                 erweimaTitle: '',
@@ -522,6 +541,35 @@
                 if(row.shareholdingPercent != null) {
                     return row.shareholdingPercent+"%";
                 }
+            },
+
+            //显示价格
+            showPrice(row) {
+                this.showPriceVisible = true;
+                this.priceTitle = row.assetName+"的价格";
+                let para = {
+                    page:{
+                        current:1,
+                        size:10
+                    },
+                    condition: {
+                        id:row.priceModelId
+                    }
+                };
+                para.condition = util.filterParams(para.condition);
+                getPriceModelListPage(para).then((res) => {
+                    if(res.meta.success) {
+                        this.price = res.data.records[0].price;
+                        this.unitCount = res.data.records[0].unitCount;
+                        this.unitName = res.data.records[0].unitName;
+                        console.log(row.assetName + " " + price + " " + unitCount + " " + unitName);
+                    } else {
+                        this.$message({
+                            message: res.meta.message,
+                            type: 'error'
+                        });
+                    }
+                });
             },
 
             //显示二维码
@@ -1019,8 +1067,10 @@
                     }
                 });
                 //typeId设置不正确
-                //TODO -修改是否有持有人 设置为否 仍有分利ID和持有人id
                 para.id = row.typeId;
+                if (para.id != null && para.id.length > 0) {
+                    para.id = para.id[para.id.length-1];
+                }
                 getTypeTreeRoute(para).then((res) => {
                     if (res.meta.success) {
                         row.typeId = [];
@@ -1060,7 +1110,6 @@
                         });
                     }
                 });
-                //TODO
                 this.addForm = {
                     isAppuserHold: 0,
                     isCanBook: 0,
