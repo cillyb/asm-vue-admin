@@ -17,6 +17,16 @@ export default {
         r = null;
         return context == null || context == "" || context == "undefined" ? "" : context;
     },
+    filterParams: function(para) {
+        let newPara = {};
+        for(let key in para) {
+            if(para[key] != "" && para[key] != null) {
+                newPara[key] = para[key];
+            }
+        }
+        return newPara;
+    },
+
     formatDate: {
 
 
