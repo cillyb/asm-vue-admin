@@ -383,62 +383,79 @@
             //编辑社区
            editSubmit: function () {
                this.$refs.editForm.validate((valid) => {
-                   if (valid) {
-                       this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                           this.editLoading = true;
-                           let para = Object.assign({}, this.editForm);
-                           var communityNoBusinessSetList = [];
-                           if(para.noBusinessDates!=null){
-                               for(var i=0;i<para.noBusinessDates.length;i++){
-                                   communityNoBusinessSetList.push({"noBusinessDate":para.noBusinessDates[i]});
+                   var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+                   if(regPos.test(this.editForm.longitude) && regPos.test(this.editForm.latitude)){
+                       if (valid) {
+                           this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                               this.editLoading = true;
+                               let para = Object.assign({}, this.editForm);
+                               var communityNoBusinessSetList = [];
+                               if(para.noBusinessDates!=null){
+                                   for(var i=0;i<para.noBusinessDates.length;i++){
+                                       communityNoBusinessSetList.push({"noBusinessDate":para.noBusinessDates[i]});
+                                   }
                                }
-                           }
-                           para.communityNoBusinessSetList = communityNoBusinessSetList;
-                           editCommunity(para).then((res) => {
-                               this.editLoading = false;
-                               if(res.meta.success){
-                                   this.$message({
-                                       message: '编辑成功',
-                                       type: 'success'
-                                   });
-                               }else{
-                                   this.$message({
-                                       message:res.meta.message,
-                                       type: 'error'
-                                   });
-                               }
-                               this.$refs['editForm'].resetFields();
-                               this.editFormVisible = false;
-                               this.getCommunity();
+                               para.communityNoBusinessSetList = communityNoBusinessSetList;
+                               editCommunity(para).then((res) => {
+                                   this.editLoading = false;
+                                   if(res.meta.success){
+                                       this.$message({
+                                           message: '编辑成功',
+                                           type: 'success'
+                                       });
+                                   }else{
+                                       this.$message({
+                                           message:res.meta.message,
+                                           type: 'error'
+                                       });
+                                   }
+                                   this.$refs['editForm'].resetFields();
+                                   this.editFormVisible = false;
+                                   this.getCommunity();
+                               });
                            });
+                       }
+                   }else{
+                       this.$message({
+                           message:"输入正确的经纬度",
+                           type: 'error'
                        });
                    }
+
                });
            },
             //新增社区
            addSubmit: function () {
                this.$refs.addForm.validate((valid) => {
-                   if (valid) {
-                       this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                           this.addLoading = true;
-                           let para = Object.assign({}, this.addForm);
-                           addCommunity(para).then((res) => {
-                               this.addLoading = false;
-                               if(res.meta.success){
-                                   this.$message({
-                                       message: '新增成功',
-                                       type: 'success'
-                                   });
-                               }else{
-                                   this.$message({
-                                       message:res.meta.message,
-                                       type: 'error'
-                                   });
-                               }
-                               this.$refs['addForm'].resetFields();
-                               this.addFormVisible = false;
-                               this.getCommunity();
+                   var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+                   if(regPos.test(this.addForm.longitude) && regPos.test(this.addForm.latitude)) {
+                       if (valid) {
+                           this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                               this.addLoading = true;
+                               let para = Object.assign({}, this.addForm);
+                               addCommunity(para).then((res) => {
+                                   this.addLoading = false;
+                                   if (res.meta.success) {
+                                       this.$message({
+                                           message: '新增成功',
+                                           type: 'success'
+                                       });
+                                   } else {
+                                       this.$message({
+                                           message: res.meta.message,
+                                           type: 'error'
+                                       });
+                                   }
+                                   this.$refs['addForm'].resetFields();
+                                   this.addFormVisible = false;
+                                   this.getCommunity();
+                               });
                            });
+                       }
+                   }else{
+                       this.$message({
+                           message:"输入正确的经纬度",
+                           type: 'error'
                        });
                    }
                });

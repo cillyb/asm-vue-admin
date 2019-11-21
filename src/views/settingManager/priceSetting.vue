@@ -92,8 +92,8 @@
                 <el-form-item label="模板名称" prop="modelName">
                     <el-input v-model="addForm.modelName" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="时长" prop="unitCount">
-                    <el-input-number v-model="addForm.unitCount" auto-complete="off" placeholder="请输入分钟时长"></el-input-number>
+                <el-form-item label="时长（单位是分）" prop="unitCount">
+                    <el-input-number v-model="addForm.unitCount" auto-complete="off"></el-input-number>
                 </el-form-item>
                 <el-form-item label="价格" prop="price">
                     <el-input v-model="addForm.price" auto-complete="off" placeholder="单位是元"></el-input>

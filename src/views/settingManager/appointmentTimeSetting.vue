@@ -320,56 +320,70 @@
             //编辑预约模型
             editSubmit: function () {
                 this.$refs.editForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.editLoading = true;
-                            let para = Object.assign({}, this.editForm);
-                            editTimeModel(para).then((res) => {
-                                this.editLoading = false;
-                                if(res.meta.success){
-                                    this.$message({
-                                        message: '编辑成功',
-                                        type: 'success'
-                                    });
-                                }else{
-                                    this.$message({
-                                        message:res.meta.message,
-                                        type: 'error'
-                                    });
-                                }
-                                this.$refs['editForm'].resetFields();
-                                this.editFormVisible = false;
-                                this.getTimeModel();
-                            });
+                    if(this.editForm.timeDevideInterval > this.editForm.availableDays*60){
+                        this.$message({
+                            message:"预约设备时长超过了预约天数对应的时长",
+                            type: 'error'
                         });
+                    }else{
+                        if (valid) {
+                            this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                                this.editLoading = true;
+                                let para = Object.assign({}, this.editForm);
+                                editTimeModel(para).then((res) => {
+                                    this.editLoading = false;
+                                    if(res.meta.success){
+                                        this.$message({
+                                            message: '编辑成功',
+                                            type: 'success'
+                                        });
+                                    }else{
+                                        this.$message({
+                                            message:res.meta.message,
+                                            type: 'error'
+                                        });
+                                    }
+                                    this.$refs['editForm'].resetFields();
+                                    this.editFormVisible = false;
+                                    this.getTimeModel();
+                                });
+                            });
+                        }
                     }
                 });
             },
             //新增预约模型
             addSubmit: function () {
                 this.$refs.addForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.addLoading = true;
-                            let para = Object.assign({}, this.addForm);
-                            addTimeModel(para).then((res) => {
-                                this.addLoading = false;
-                                if(res.meta.success){
-                                    this.$message({
-                                        message: '新增成功',
-                                        type: 'success'
-                                    });
-                                }else{
-                                    this.$message({
-                                        message:res.meta.message,
-                                        type: 'error'
-                                    });
-                                }
-                                this.$refs['addForm'].resetFields();
-                                this.addFormVisible = false;
-                                this.getTimeModel();
-                            });
+                    if(this.addForm.timeDevideInterval > this.addForm.availableDays*60){
+                        this.$message({
+                            message:"预约设备时长超过了预约天数对应的时长",
+                            type: 'error'
                         });
+                    }else{
+                        if (valid) {
+                            this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                                this.addLoading = true;
+                                let para = Object.assign({}, this.addForm);
+                                addTimeModel(para).then((res) => {
+                                    this.addLoading = false;
+                                    if(res.meta.success){
+                                        this.$message({
+                                            message: '新增成功',
+                                            type: 'success'
+                                        });
+                                    }else{
+                                        this.$message({
+                                            message:res.meta.message,
+                                            type: 'error'
+                                        });
+                                    }
+                                    this.$refs['addForm'].resetFields();
+                                    this.addFormVisible = false;
+                                    this.getTimeModel();
+                                });
+                            });
+                        }
                     }
                 });
             },
