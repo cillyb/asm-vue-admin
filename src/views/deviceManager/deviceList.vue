@@ -3,7 +3,7 @@
         <div class="app-container">
             <el-row :gutter="20">
                 <!--部门数据-->
-                <el-col :span="4" :xs="24" style="width: 15%; ">
+                <el-col :span="4" :xs="24" style="width: 240px ">
                     <div class="head-container" style="margin-top: 10px;">
                         设备类型
                     </div>
@@ -52,7 +52,7 @@
                         <el-button type="primary" @click.native="editTypeSubmit" :loading="editLoading">提交</el-button>
                     </div>
                 </el-dialog>
-                <el-col :span="20" :xs="24">
+                <el-col :span="20" :xs="24" :sm="22" :md="20" :lg="18" :xl="18">
                     <!--工具条-->
                     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
                         设备名称:<el-input v-model="condition.assetName" style="width: 10%;"></el-input>
