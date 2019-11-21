@@ -36,16 +36,16 @@ let routes = [
         hidden: true
     },
     //{ path: '/main', component: Main },
-    {
-        path: '/',
-        component: Home,
-        name: '',
-        iconCls: 'iconfont icon-shouye',
-        leaf: true,//只有一个节点
-        children: [
-            { path: '/Index', component: Index, name: '首页' }
-        ]
-    },
+    // {
+    //     path: '/',
+    //     component: Home,
+    //     name: '',
+    //     iconCls: 'iconfont icon-shouye',
+    //     leaf: true,//只有一个节点
+    //     children: [
+    //         { path: '/Index', component: Index, name: '首页' }
+    //     ]
+    // },
     {
         path: '/',
         component: Home,
@@ -53,7 +53,7 @@ let routes = [
         iconCls: 'iconfont icon-yonghu',
         children: [
             { path: '/userList', component: userList, name: '用户列表' },
-            { path: '/userLevel', component: userLevel, name: '用户等级' }
+            // { path: '/userLevel', component: userLevel, name: '用户等级' }
         ]
     },
     {
@@ -63,7 +63,7 @@ let routes = [
         iconCls: 'iconfont icon-yonghuguanli',
         children: [
             { path: '/holderList', component: holderList, name: '持有人列表' },
-            { path: '/holderLevel', component: holderLevel, name: '持有人等级' },
+            // { path: '/holderLevel', component: holderLevel, name: '持有人等级' },
             { path: '/holderFundsFlow', component: holderFundsFlow, name: '持有人资金流水' }
 
         ]
@@ -120,15 +120,15 @@ let routes = [
             { path: '/refundManager', component: refundManager, name: '退款管理' }
         ]
     },
-    {
-        path: '/',
-        component: Home,
-        name: '统计管理',
-        iconCls: 'iconfont icon-tongji',
-        children: [
-            { path: '/statisticalGraph', component: statisticalGraph, name: '统计图表' }
-        ]
-    },
+    // {
+    //     path: '/',
+    //     component: Home,
+    //     name: '统计管理',
+    //     iconCls: 'iconfont icon-tongji',
+    //     children: [
+    //         { path: '/statisticalGraph', component: statisticalGraph, name: '统计图表' }
+    //     ]
+    // },
     {
         path: '*',
         hidden: true,

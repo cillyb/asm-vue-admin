@@ -13,8 +13,8 @@
 				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>我的消息</el-dropdown-item>
-						<el-dropdown-item>设置</el-dropdown-item>
+						<el-dropdown-item @click.native="clickMyMessage">我的消息</el-dropdown-item>
+						<el-dropdown-item @click.native="clickSetting">设置</el-dropdown-item>
 						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -103,6 +103,22 @@
 			},
 			handleselect: function (a, b) {
 			},
+
+			//点击我的消息
+			clickMyMessage(){
+				console.log("clickMyMessage");
+				this.$message({
+					message: "二期开发",
+					type: 'error'
+				});
+			},
+			//点击设置
+			clickSetting(){
+				this.$message({
+					message: "二期开发",
+					type: 'error'
+				});
+			},
 			//退出登录
 			logout: function () {
 				var _this = this;
@@ -127,11 +143,14 @@
 		},
 		mounted() {
 			var user = sessionStorage.getItem('user');
-			if (user) {
-				user = JSON.parse(user);
-				this.sysUserName = user.name || '';
-				this.sysUserAvatar = user.avatar || '';
-			}
+			//TODO获取用户头像和昵称
+			this.sysUserName = "admin";
+			this.sysUserAvatar = "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1574302814&di=126db98b0d310b2e8a948e15600c2625&src=http://hbimg.b0.upaiyun.com/69ad7a731f43d4b8729f1a2fbe65c43801ca0f033250-EV1vMf_fw658";
+			// if (user) {
+			// 	user = JSON.parse(user);
+			// 	this.sysUserName = user.name || '';
+			// 	this.sysUserAvatar = user.avatar || '';
+			// }
 
 		}
 	}

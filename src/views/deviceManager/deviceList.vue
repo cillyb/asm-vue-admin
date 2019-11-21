@@ -412,6 +412,7 @@
                 prices:[],
                 holders:[],
                 shares:[],
+                appoints:[],
 
                 //选中得
                 selsCommunity: '',
@@ -535,6 +536,15 @@
             }
         },
         methods: {
+            //cascader社区选择
+            handleChange(value) {
+                var tmp = value;
+                if (Array.isArray(tmp) && tmp != null && tmp.length > 0) {
+                    tmp = tmp[tmp.length-1];
+                }
+                // console.log(tmp);
+                this.addForm.typeId = tmp;
+            },
 
             //百分比显示格式转化
             formatPercent: function (row, column) {
@@ -993,6 +1003,10 @@
                 this.otherCurrent = val;
                 this.getHolder();
             },
+            handlShareCurrentChange(val) {
+                this.otherCurrent = val;
+                this.getShare();
+            },
 
             //获取用户列表
             getDevices() {
@@ -1066,11 +1080,13 @@
                         });
                     }
                 });
+                // console.log(row.typeId + " " + row.typeId.length + " " + Array.isArray(row.typeId));
                 //typeId设置不正确
                 para.id = row.typeId;
-                if (para.id != null && para.id.length > 0) {
+                if (Array.isArray(para.id) && para.id != null && para.id.length > 0) {
                     para.id = para.id[para.id.length-1];
                 }
+                console.log(para.id);
                 getTypeTreeRoute(para).then((res) => {
                     if (res.meta.success) {
                         row.typeId = [];
@@ -1157,19 +1173,22 @@
             },
             //新增
             addSubmit: function () {
-                let para = Object.assign({}, this.addForm);
-                if (para.typeId != null && para.typeId.length > 0) {
-                    para.typeId = para.typeId.pop();
-                }
-                if(para.isAppuserHold == 0) {
-                    para.appuserId = null;
-                    para.shareholdingPercentModelId = null;
-                }
                 // para = util.filterParams(para);
                 // console.log(para);
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
+
+                            let para = Object.assign({}, this.addForm);
+                            if (Array.isArray(para.typeId) && para.typeId != null && para.typeId.length > 0) {
+                                para.typeId = para.typeId.pop();
+                            }
+                            if(para.isAppuserHold == 0) {
+                                para.appuserId = null;
+                                para.shareholdingPercentModelId = null;
+                            }
+                            // console.log(this.addForm);
+                            // console.log(para);
                             this.addLoading = true;
                             //NProgress.start();
                             // let para = Object.assign({}, this.addForm);

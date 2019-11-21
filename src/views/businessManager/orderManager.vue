@@ -16,7 +16,7 @@
         <el-table :data="order" highlight-current-row v-loading="listLoading" style="width: 100%;">
             <el-table-column type="index">
             </el-table-column>
-            <el-table-column prop="id" label="订单编号" sortable>
+            <el-table-column prop="orderNo" label="订单编号" sortable>
             </el-table-column>
             <el-table-column prop="phoneNumber" label="使用人手机" sortable>
             </el-table-column>

@@ -262,6 +262,15 @@
                     condition: this.condition
                 };
                 para.condition = util.filterParams(para.condition);
+                if(para.condition.registBeginDate != null && para.condition.registEndDate != null) {
+                    if(para.condition.registBeginDate > para.condition.registEndDate) {
+                        this.$message({
+                            message: '开始时间不能晚于结束时间',
+                            type: 'error'
+                        });
+                        return ;
+                    }
+                }
                 this.listLoading = true;
                 //NProgress.start();
                 getUserListPage(para).then((res) => {

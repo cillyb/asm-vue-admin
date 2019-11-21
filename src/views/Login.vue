@@ -47,16 +47,17 @@
             requestLogin(param).then((res) => {
               console.log(res);
               this.logining = false;
-              let token = res.data.token;
               let code = res.meta.code;
+              // console.log(code);
               if (code !== "10000") {
                 this.$message({
-                  message: "登录失败",
+                  message: "用户名或密码错误",
                   type: 'error'
                 });
               } else {
+                let token = res.data.token;
                 sessionStorage.setItem('user', token);
-                this.$router.push({ path: '/Index' });
+                this.$router.push({ path: '/userList' });
               }
             });
           } else {
