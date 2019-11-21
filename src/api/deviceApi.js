@@ -16,6 +16,14 @@ export const getDevices = params => {
     }).then(res => res.data);
 };
 
+export const getHolderDevices = params => {
+    return axios.post(`/api/bg/view/app-user-assetbenefit/list`, params, {
+        headers: {
+            'X-BG-TOKEN': 1
+        }
+    }).then(res => res.data);
+};
+
 export const removeDevice = params => {
     return axios.post(`/api/bg/assets/asset/delete`, params, {
         headers: {

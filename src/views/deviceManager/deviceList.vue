@@ -662,6 +662,9 @@
                     "page": {
                         "current": this.otherCurrent,
                         "size": this.size
+                    },
+                    "condition":{
+                        "status": 1
                     }
                 };
                 this.listLoading = true;
@@ -705,6 +708,9 @@
                     "page": {
                         "current": this.otherCurrent,
                         "size": this.size
+                    },
+                    "condition":{
+                        "status": 1
                     }
                 };
                 this.listLoading = true;

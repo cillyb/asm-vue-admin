@@ -155,12 +155,12 @@
                     phoneNumber: [
                         { required: true, message: '请输入手机号', trigger: 'blur' }
                     ],
-                    sex: [
-                        { required: true, message: '请选择性别', trigger: 'blur' }
-                    ],
-                    birthday: [
-                        { required: true, message: '请选择生日', trigger: 'blur' }
-                    ],
+                    // sex: [
+                    //     { required: true, message: '请选择性别', trigger: 'blur' }
+                    // ],
+                    // birthday: [
+                    //     { required: true, message: '请选择生日', trigger: 'blur' }
+                    // ],
                     isHolder: [
                         { required: true, message: '请选择是否为持有人', trigger: 'blur' }
                     ],
@@ -180,12 +180,12 @@
                     phoneNumber: [
                         { required: true, message: '请输入手机号', trigger: 'blur' }
                     ],
-                    sex: [
-                        { required: true, message: '请选择性别', trigger: 'blur' }
-                    ],
-                    birthday: [
-                        { required: true, message: '请选择生日', trigger: 'blur' }
-                    ],
+                    // sex: [
+                    //     { required: true, message: '请选择性别', trigger: 'blur' }
+                    // ],
+                    // birthday: [
+                    //     { required: true, message: '请选择生日', trigger: 'blur' }
+                    // ],
                     isHolder: [
                         { required: true, message: '请选择是否为持有人', trigger: 'blur' }
                     ],

@@ -64,7 +64,7 @@ let routes = [
         children: [
             { path: '/holderList', component: holderList, name: '持有人列表' },
             // { path: '/holderLevel', component: holderLevel, name: '持有人等级' },
-            { path: '/holderFundsFlow', component: holderFundsFlow, name: '持有人资金流水' }
+            { path: '/holderFundsFlow', component: holderFundsFlow, name: '资金流水' }
 
         ]
     },
