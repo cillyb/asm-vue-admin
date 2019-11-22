@@ -75,7 +75,7 @@
         </el-dialog>
 
         <!--新增界面-->
-        <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
+        <el-dialog title="新增" :visible.sync="addFormVisible" @close="addCancel" :close-on-click-modal="false">
             <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
                 <el-form-item label="姓名" prop="name">
                     <el-input v-model="addForm.name" auto-complete="off"></el-input>
@@ -245,7 +245,7 @@
             addSubmit: function () {
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.addLoading = true;
                             //NProgress.start();
                             let para = Object.assign({}, this.addForm);
@@ -261,7 +261,7 @@
                                 this.addFormVisible = false;
                                 this.getUsers();
                             });
-                        });
+                        // });
                     }
                 });
             },

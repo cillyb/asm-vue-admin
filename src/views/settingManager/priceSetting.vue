@@ -21,8 +21,8 @@
             </el-table-column>
             <el-table-column type="index">
             </el-table-column>
-            <el-table-column prop="id" label="模板id" sortable>
-            </el-table-column>
+            <!--<el-table-column prop="id" label="模板id" sortable>-->
+            <!--</el-table-column>-->
             <el-table-column prop="modelName" label="模板名称" sortable>
             </el-table-column>
             <el-table-column prop="price" label="价格" :formatter="formatPrice" sortable>
@@ -87,7 +87,7 @@
         </el-dialog>
 
         <!--新增界面-->
-        <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
+        <el-dialog title="新增" :visible.sync="addFormVisible" @close="addCancel" :close-on-click-modal="false">
             <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
                 <el-form-item label="模板名称" prop="modelName">
                     <el-input v-model="addForm.modelName" auto-complete="off"></el-input>
@@ -100,7 +100,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click.native="addFormVisible = false">取消</el-button>
+                <el-button @click.native="addCancel">取消</el-button>
                 <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
             </div>
         </el-dialog>
@@ -331,7 +331,7 @@
             addSubmit: function () {
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.addLoading = true;
                             let para = Object.assign({}, this.addForm);
                             para.priceUnitId = "4623c111cecd9a19251304b2db184468";
@@ -352,9 +352,13 @@
                                 this.addFormVisible = false;
                                 this.getPriceModel();
                             });
-                        });
+                        // });
                     }
                 });
+            },
+            addCancel: function(){
+                this.$refs.addForm.resetFields();
+                this.addFormVisible = false;
             },
             selsChange: function (sels) {
                 this.sels = sels;

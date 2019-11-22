@@ -162,22 +162,20 @@
                     </el-form-item>
                     <el-form-item label="开始提供时间" prop="provideStartTime">
                         <el-date-picker
-                                value-format="yyyy-MM-dd HH:mm:ss"
+                                value-format="yyyy-MM-dd"
                                 style="width: 25%;"
                                 v-model="addForm.provideStartTime"
-                                type="datetime"
-                                placeholder="选择日期时间"
-                                default-time="12:00:00">
+                                placeholder="选择日期"
+                        >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="截止提供时间" prop="provideEndTime">
                         <el-date-picker
-                                value-format="yyyy-MM-dd HH:mm:ss"
+                                value-format="yyyy-MM-dd"
                                 style="width: 25%;"
                                 v-model="addForm.provideEndTime"
-                                type="datetime"
-                                placeholder="选择日期时间"
-                                default-time="12:00:00">
+                                placeholder="选择日期"
+                                >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="成本价格" prop="firstCost">
@@ -214,7 +212,7 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click.native="addFormVisible = false">取消</el-button>
+                    <el-button @click.native="addCancel">取消</el-button>
                     <el-button v-if="op == 'add'" type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
                     <el-button v-if="op == 'edit'" type="primary" @click.native="editSubmit" :loading="addLoading">修改</el-button>
 
@@ -515,7 +513,7 @@
                 //新增界面数据
                 addForm: {
                     assetName: '',
-                    typeId: '',
+                    typeId: [],
                     provideStartTime: '',
                     provideEndTime: '',
                     firstCost: '',
@@ -538,6 +536,8 @@
         methods: {
             //cascader社区选择
             handleChange(value) {
+                console.log(value);
+                console.log("社区选择发生变化")
                 var tmp = value;
                 if (Array.isArray(tmp) && tmp != null && tmp.length > 0) {
                     tmp = tmp[tmp.length-1];
@@ -620,6 +620,9 @@
                     "page": {
                         "current": this.otherCurrent,
                         "size": this.size
+                    },
+                    "condition":{
+                        "status": 1
                     }
                 };
                 this.listLoading = true;
@@ -803,7 +806,7 @@
                         "size": this.size
                     },
                     "condition":{
-
+                        "status": 1
                     }
                 };
                 this.listLoading = true;
@@ -1072,6 +1075,7 @@
             },
             //显示编辑界面
             handleEdit: function (index, row) {
+                console.log(row);
                 this.op = "edit";
                 //获取树形分类
                 let para = {};
@@ -1095,12 +1099,19 @@
                 console.log(para.id);
                 getTypeTreeRoute(para).then((res) => {
                     if (res.meta.success) {
-                        row.typeId = [];
+                        var list = [];
                         var len = res.data.length;
                         for(var i = 1; i < len; i++) {
-                            row.typeId.push(res.data[len-i-1]);
+                            list.push(res.data[len-i-1]);
+                            console.log(list);
                         };
-                        console.log("getTypeRoute : " + row);
+                        console.log(list);
+
+                        console.log(len);
+                        console.log(row);
+                        row.typeId = list;
+                        console.log(row);
+                        this.handleChange(list);
                         this.addForm = Object.assign({}, row);
                         console.log("addFrom:");
                         console.log(this.addForm);
@@ -1139,19 +1150,30 @@
             },
             //编辑
             editSubmit: function () {
-                let para = Object.assign({}, this.addForm);
-                if (para.typeId != null && para.typeId.length > 0) {
-                    para.typeId = para.typeId.pop();
-                }
-                if(para.isAppuserHold == 0) {
-                    para.appuserId = null;
-                    para.shareholdingPercentModelId = null;
-                }
+                // let para = Object.assign({}, this.addForm);
+                // if (para.typeId != null && para.typeId.length > 0) {
+                //     para.typeId = para.typeId.pop();
+                // }
+                // if(para.isAppuserHold == 0) {
+                //     para.appuserId = null;
+                //     para.shareholdingPercentModelId = null;
+                // }
                 // para = util.filterParams(para);
                 // console.log(para);
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        //TODO 提交失败一次this.addForm长度减一
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                            console.log(this.addForm);
+                            let para = Object.assign({}, this.addForm);
+                            if (Array.isArray(para.typeId) && para.typeId != null && para.typeId.length > 0) {
+                                para.typeId = para.typeId.pop();
+                            }
+                            if(para.isAppuserHold == 0) {
+                                para.appuserId = null;
+                                para.shareholdingPercentModelId = null;
+                            }
+                            console.log(para.typeId);
                             this.addLoading = true;
                             //NProgress.start();
                             // let para = Object.assign({}, this.addForm);
@@ -1167,13 +1189,14 @@
                                     this.addFormVisible = false;
                                     this.getDevices();
                                 } else {
+                                    console.log("请求失败:" + res.meta.message);
                                     this.$message({
                                         message: res.meta.message,
                                         type: 'error'
                                     });
                                 }
                             });
-                        });
+                        // });
                     }
                 });
             },
@@ -1183,7 +1206,7 @@
                 // console.log(para);
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
 
                             let para = Object.assign({}, this.addForm);
                             if (Array.isArray(para.typeId) && para.typeId != null && para.typeId.length > 0) {
@@ -1216,9 +1239,13 @@
                                     });
                                 }
                             });
-                        });
+                        // });
                     }
                 });
+            },
+            addCancel: function(){
+                this.$refs.addForm.resetFields();
+                this.addFormVisible = false;
             },
             selsChange: function (sels) {
                 this.sels = sels;

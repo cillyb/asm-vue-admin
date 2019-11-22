@@ -45,7 +45,13 @@ export function isvalidPhone(str) {
     const reg = /^1[3|4|5|6|7|8][0-9]\d{8}$/
     return reg.test(str)
 }
-
+export function isvalidTel(str){
+    var tel = str;
+    if(!/^([0-9]{3,4}-)?[0-9]{7,8}$/.test(tel)){
+        return false;
+    }
+    return true;
+}
 //社区状态-开启
 export const openCommunity = params =>{
     return axios.post(`/api/bg/admin/community/enable`, params, {

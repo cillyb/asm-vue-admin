@@ -114,7 +114,7 @@
         </el-dialog>
 
         <!--新增界面-->
-        <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
+        <el-dialog title="新增" :visible.sync="addFormVisible" @close="addCancel" :close-on-click-modal="false">
         <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
             <el-form-item label="社区名称" prop="communityName">
                 <el-input v-model="addForm.communityName" auto-complete="off"></el-input>
@@ -132,7 +132,7 @@
                 <el-input v-model="addForm.manager" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="联系电话" prop="managerPhone">
-                <el-input v-model.number="addForm.managerPhone" auto-complete="off"></el-input>
+                <el-input v-model="addForm.managerPhone" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="开始营业时间" prop="onlineTimeBegin">
                 <el-time-select v-model="addForm.onlineTimeBegin" :picker-options="{start:'00:00',step: '00:30',end: '24:00'}"></el-time-select>
@@ -142,7 +142,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click.native="addFormVisible = false">取消</el-button>
+            <el-button @click.native="addCancel">取消</el-button>
             <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
         </div>
         </el-dialog>
@@ -150,15 +150,16 @@
 </template>
 
 <script>
-    import { getCommunityListPage, removeCommunity, addCommunity, editCommunity, isvalidPhone, openCommunity, closeCommunity } from '../../api/communityApi';
+    import { getCommunityListPage, removeCommunity, addCommunity, editCommunity, isvalidPhone, isvalidTel, openCommunity, closeCommunity } from '../../api/communityApi';
     import util from '../../common/js/util'
 
     //手机号码验证
     var validPhone=(rule, value,callback)=>{
+        // console.log("validTel : " + isvalidTel(value));
         if (!value){
             callback(new Error('请输入电话号码'))
-        }else  if (!isvalidPhone(value)){
-            callback(new Error('请输入正确的11位手机号码'))
+        }else  if (!isvalidPhone(value) && !isvalidTel(value)){
+            callback(new Error('请输入正确的11位手机号码或座机号码'))
         }else {
             callback()
         }
@@ -430,7 +431,7 @@
                    var regPos = /^\d+(\.\d+)?$/; //非负浮点数
                    if(regPos.test(this.addForm.longitude) && regPos.test(this.addForm.latitude)) {
                        if (valid) {
-                           this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                           // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                                this.addLoading = true;
                                let para = Object.assign({}, this.addForm);
                                addCommunity(para).then((res) => {
@@ -450,7 +451,7 @@
                                    this.addFormVisible = false;
                                    this.getCommunity();
                                });
-                           });
+                           // });
                        }
                    }else{
                        this.$message({
@@ -460,6 +461,10 @@
                    }
                });
            },
+            addCancel: function(){
+                this.$refs.addForm.resetFields();
+                this.addFormVisible = false;
+            },
             selsChange: function (sels) {
                 this.sels = sels;
             },

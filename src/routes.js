@@ -106,7 +106,7 @@ let routes = [
         iconCls: 'iconfont icon-jiankong',
         children: [
             { path: '/monitorList', component: monitorList, name: '监控列表' },
-            { path: '/logList', component: logList, name: '日志列表' }
+            // { path: '/logList', component: logList, name: '日志列表' }
 
         ]
     },

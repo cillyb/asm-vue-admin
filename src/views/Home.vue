@@ -13,8 +13,8 @@
 				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item @click.native="clickMyMessage">我的消息</el-dropdown-item>
-						<el-dropdown-item @click.native="clickSetting">设置</el-dropdown-item>
+						<!--<el-dropdown-item @click.native="clickMyMessage">我的消息</el-dropdown-item>-->
+						<!--<el-dropdown-item @click.native="clickSetting">设置</el-dropdown-item>-->
 						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -165,7 +165,7 @@
 		top: 0px;
 		bottom: 0px;
 		width: 100%;
-		height: 150%;
+		/*height: 150%;*/
 		.header {
 			height: 60px;
 			line-height: 60px;
@@ -179,18 +179,18 @@
 				.userinfo-inner {
 					cursor: pointer;
 					color:$color-primary;
-					img {
-						width: 40px;
-						height: 40px;
-						border-radius: 20px;
-						margin: 10px 0px 10px 10px;
-						float: right;
-					}
-				}
-			}
+					i
 			.logo {
 				//width:230px;
-				height:160px;
+				heighmg {
+					width: 40px;
+					height: 40px;
+					border-radius: 20px;
+					margin: 10px 0px 10px 10px;
+					float: right;
+				}
+			}
+		}t:160px;
 				font-size: 22px;
 				padding-left:20px;
 				padding-right:20px;

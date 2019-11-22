@@ -16,7 +16,7 @@
         <el-table :data="refund" highlight-current-row v-loading="listLoading" style="width: 100%;">
             <el-table-column type="index">
             </el-table-column>
-            <el-table-column prop="orderId" label="订单编号" sortable>
+            <el-table-column prop="orderNo" label="订单编号" sortable>
             </el-table-column>
             <el-table-column prop="id" label="退款编号" sortable>
             </el-table-column>

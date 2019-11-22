@@ -97,7 +97,7 @@
         </el-dialog>
 
         <!--新增界面-->
-        <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
+        <el-dialog title="新增" :visible.sync="addFormVisible" @close="addCancel" :close-on-click-modal="false">
             <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
                 <el-form-item label="手机号" prop="phoneNumber">
                     <el-input v-model="addForm.phoneNumber" auto-complete="off" maxlength="11" style="width: 25%"></el-input>
@@ -123,7 +123,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click.native="addFormVisible = false">取消</el-button>
+                <el-button @click.native="addCancel">取消</el-button>
                 <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
             </div>
         </el-dialog>
@@ -197,6 +197,7 @@
                     birthday: '',
                     isHolder: '',
                     userName:'',
+                    assetCount:'',
                 }
 
             }
@@ -288,6 +289,13 @@
                 this.$confirm('确认删除该记录吗?', '提示', {
                     type: 'warning'
                 }).then(() => {
+                    if(row.isHolder == 1 && row.assetCount > 0) {
+                        this.$message({
+                            message: '该持有人拥有设备，无法删除！',
+                            type: 'error'
+                        })
+                        return;
+                    }
                     this.listLoading = true;
                     //NProgress.start();
                     let para = { ids: [] };
@@ -319,7 +327,6 @@
             },
             //显示新增界面
             handleAdd: function () {
-                this.addFormVisible = true;
                 this.addForm = {
                     phoneNumber: '',
                     sex: '',
@@ -327,15 +334,23 @@
                     isHolder: '',
                     userName: '',
                 };
+                this.addFormVisible = true;
             },
             //编辑
             editSubmit: function () {
                 this.$refs.editForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.editLoading = true;
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             //NProgress.start();
                             let para = Object.assign({}, this.editForm);
+                            if(para.isHolder == 0 && para.assetCount > 0) {
+                                this.$message({
+                                    message: '该持有人拥有设备，无法修改为非持有人！',
+                                    type: 'error'
+                                })
+                                return;
+                            }
+                            this.editLoading = true;
                             // para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             editUser(para).then((res) => {
                                 this.editLoading = false;
@@ -355,7 +370,7 @@
                                     });
                                 }
                             });
-                        });
+                        // });
                     }
                 });
             },
@@ -363,7 +378,7 @@
             addSubmit: function () {
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.addLoading = true;
                             //NProgress.start();
                             let para = Object.assign({}, this.addForm);
@@ -386,9 +401,13 @@
                                     });
                                 }
                             });
-                        });
+                        // });
                     }
                 });
+            },
+            addCancel: function(){
+                this.$refs.addForm.resetFields();
+                this.addFormVisible = false;
             },
             selsChange: function (sels) {
                 this.sels = sels;
