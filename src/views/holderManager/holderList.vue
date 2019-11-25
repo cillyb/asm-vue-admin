@@ -116,7 +116,6 @@
 
 
             load(tree, treeNode, resolve) {
-                //TODO bg-Bug?
                 let para = {
                     page: {
                         size: 10000,

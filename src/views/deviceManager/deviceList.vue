@@ -1247,6 +1247,10 @@
                 this.$refs.addForm.resetFields();
                 this.addFormVisible = false;
             },
+            editCancel: function(){
+                this.$refs.editForm.resetFields();
+                this.editFormVisible = false;
+            },
             selsChange: function (sels) {
                 this.sels = sels;
             },

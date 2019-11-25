@@ -72,7 +72,7 @@
         </el-col>
 
         <!--编辑界面-->
-        <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
+        <el-dialog title="编辑" :visible.sync="editFormVisible" @close="editCancel" :close-on-click-modal="false">
         <el-form :model="editForm" label-width="150px" :rules="editFormRules" ref="editForm">
             <el-form-item label="社区名称" prop="communityName">
                 <el-input v-model="editForm.communityName" auto-complete="off"></el-input>
@@ -108,7 +108,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click.native="editFormVisible = false">取消</el-button>
+            <el-button @click.native="editCancel">取消</el-button>
             <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
         </div>
         </el-dialog>
@@ -464,6 +464,10 @@
             addCancel: function(){
                 this.$refs.addForm.resetFields();
                 this.addFormVisible = false;
+            },
+            editCancel: function(){
+                this.$refs.editForm.resetFields();
+                this.editFormVisible = false;
             },
             selsChange: function (sels) {
                 this.sels = sels;
