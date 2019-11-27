@@ -16,7 +16,7 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="holder"
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="holder"
                   highlight-current-row
                   v-loading="listLoading"
                   @selection-change="selsChange"

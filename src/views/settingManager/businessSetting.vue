@@ -1,7 +1,7 @@
 <template>
     <section>
         <!--列表-->
-        <el-table :data="orderSetting" highlight-current-row v-loading="listLoading" style="width: 100%;">
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="orderSetting" highlight-current-row v-loading="listLoading" style="width: 100%;">
             <el-table-column prop="orderPayTimeout" label="待付款订单的存在时间" :formatter="formatTimeout">
             </el-table-column>
             <el-table-column prop="refundLimitLevel1" label="第一层时间" :formatter="formatLevel1">

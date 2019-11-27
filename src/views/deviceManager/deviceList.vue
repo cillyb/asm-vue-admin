@@ -70,7 +70,7 @@
                     </el-col>
 
                     <!--列表-->
-                    <el-table :data="devices" highlight-current-row v-loading="listLoading"
+                    <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="devices" highlight-current-row v-loading="listLoading"
                               @selection-change="selsChange" style="width: 100%;">
                         <el-table-column type="selection" width="55">
                         </el-table-column>
@@ -194,7 +194,7 @@
                             <el-radio class="radio" :label="1">是</el-radio>
                         </el-radio-group>
                         <el-form-item v-if="addForm.isAppuserHold == 1" label="持有人: ">
-                            <span v-model="addForm.appuserId">{{ addForm.userName }}</span>
+                            <span v-model="addForm.appuserId">{{ addForm.userName.length == 0 ? addForm.phoneNumber : addForm.userName }}</span>
                             <el-button @click="addChoiceHolder">选择</el-button>
                         </el-form-item>
                         <el-form-item v-if="addForm.isAppuserHold == 1" label="分利方案: " >
@@ -222,7 +222,7 @@
             <!--            社区选择-->
             <el-dialog title="社区选择" :visible.sync="showCommunityList" width="50%" :close-on-click-modal="false">
                 <!--列表-->
-                <el-table :data="communitys" highlight-current-row v-loading="listLoading"
+                <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="communitys" highlight-current-row v-loading="listLoading"
                           @current-change="selsCommunityChange" style="width: 100%;">
                     <el-table-column type="index">
                     </el-table-column>
@@ -252,7 +252,7 @@
             <!--            预约选择-->
             <el-dialog title="预约模板选择" :visible.sync="showAppointList" width="50%" :close-on-click-modal="false">
                 <!--列表-->
-                <el-table :data="appoints" highlight-current-row v-loading="listLoading"
+                <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="appoints" highlight-current-row v-loading="listLoading"
                           @current-change="selsAppointChange" style="width: 100%;">
                     <el-table-column type="index">
                     </el-table-column>
@@ -281,7 +281,7 @@
             <!--            价格选择-->
             <el-dialog title="价格模板选择" :visible.sync="showPriceList" width="50%" :close-on-click-modal="false">
                 <!--列表-->
-                <el-table :data="prices" highlight-current-row v-loading="listLoading"
+                <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="prices" highlight-current-row v-loading="listLoading"
                           @current-change="selsPriceChange" style="width: 100%;">
                     <el-table-column type="index">
                     </el-table-column>
@@ -312,7 +312,7 @@
             <!--            持有人选择-->
             <el-dialog title="持有人选择" :visible.sync="showHolderList" width="50%" :close-on-click-modal="false">
                 <!--列表-->
-                <el-table :data="holders" highlight-current-row v-loading="listLoading"
+                <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="holders" highlight-current-row v-loading="listLoading"
                           @current-change="selsHolderChange" style="width: 100%;">
                     <el-table-column type="index">
                     </el-table-column>
@@ -341,7 +341,7 @@
             <!--            分利选择-->
             <el-dialog title="分利选择" :visible.sync="showShareList" width="50%" :close-on-click-modal="false">
                 <!--列表-->
-                <el-table :data="shares" highlight-current-row v-loading="listLoading"
+                <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="shares" highlight-current-row v-loading="listLoading"
                           @current-change="selsShareChange" style="width: 100%;">
                     <el-table-column type="index">
                     </el-table-column>

@@ -1,7 +1,8 @@
 <template>
 	<el-row class="container">
 		<el-col :span="24" class="header">
-			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
+			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'"
+					style="font-size: 24px; margin-left: 15px;">
 				{{collapsed?'':sysName}}
 			</el-col>
 			<!--<el-col :span="10">-->
@@ -15,7 +16,9 @@
 					<el-dropdown-menu slot="dropdown">
 						<!--<el-dropdown-item @click.native="clickMyMessage">我的消息</el-dropdown-item>-->
 						<!--<el-dropdown-item @click.native="clickSetting">设置</el-dropdown-item>-->
-						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+						<!--<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>-->
+						<!--divided 分隔符-->
+						<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</el-col>
@@ -167,7 +170,7 @@
 		width: 100%;
 		/*height: 150%;*/
 		.header {
-			height: 60px;
+			height: 70px;
 			line-height: 60px;
 			background: #ffffff;
 			border-bottom: 5px solid $color-primary;

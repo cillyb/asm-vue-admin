@@ -10,7 +10,7 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="flows"
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="flows"
                   highlight-current-row
                   v-loading="listLoading"
                   @selection-change="selsChange"

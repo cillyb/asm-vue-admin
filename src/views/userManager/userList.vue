@@ -13,12 +13,13 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" fit="true" style="width: 100%;">
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange"
+                  fit="true" style="width: 100%; ">
 <!--            <el-table-column type="selection" >-->
 <!--            </el-table-column>-->
             <el-table-column type="index" >
             </el-table-column>
-            <el-table-column prop="createTime" label="注册时间"  sortable>
+            <el-table-column prop="createTime" label="注册时间" sortable>
             </el-table-column>
             <el-table-column prop="userName" label="用户名" >
             </el-table-column>
@@ -291,7 +292,7 @@
                 }).then(() => {
                     if(row.isHolder == 1 && row.assetCount > 0) {
                         this.$message({
-                            message: '该持有人拥有设备，无法删除！',
+                            message: '该用户为持有人且当前持有设备，不能被删除！',
                             type: 'error'
                         })
                         return;
@@ -345,7 +346,7 @@
                             let para = Object.assign({}, this.editForm);
                             if(para.isHolder == 0 && para.assetCount > 0) {
                                 this.$message({
-                                    message: '该持有人拥有设备，无法修改为非持有人！',
+                                    message: '该持有人持有设备不能被变更状态！',
                                     type: 'error'
                                 })
                                 return;

@@ -13,7 +13,7 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="monitor" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="monitor" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
             <el-table-column type="index" style="width: 10%;">
             </el-table-column>
             <el-table-column prop="deviceNo" label="设备编号" style="width: 15%;" sortable>
