@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //获取社区列表
 export const getCommunityListPage = params => {
-    return axios.post(`/api/bg/view/community-view/list`, params, {
+    return axios.post(`/bgapi/bg/view/community-view/list`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -11,7 +11,7 @@ export const getCommunityListPage = params => {
 
 //删除社区
 export const removeCommunity = params => {
-    return axios.post(`/api/bg/admin/community/delete`, params, {
+    return axios.post(`/bgapi/bg/admin/community/delete`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -20,7 +20,7 @@ export const removeCommunity = params => {
 
 //添加社区
 export const addCommunity = params => {
-    return axios.post(`/api/bg/admin/community/add`, params, {
+    return axios.post(`/bgapi/bg/admin/community/add`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -29,7 +29,7 @@ export const addCommunity = params => {
 
 //修改社区
 export const editCommunity = params => {
-    return axios.post(`/api/bg/admin/community/update`, params, {
+    return axios.post(`/bgapi/bg/admin/community/update`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -50,7 +50,7 @@ export function isvalidTel(str){
 }
 //社区状态-开启
 export const openCommunity = params =>{
-    return axios.post(`/api/bg/admin/community/enable`, params, {
+    return axios.post(`/bgapi/bg/admin/community/enable`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -59,7 +59,7 @@ export const openCommunity = params =>{
 
 //社区状态-关闭
 export const closeCommunity = params =>{
-    return axios.post(`/api/bg/admin/community/disable`, params, {
+    return axios.post(`/bgapi/bg/admin/community/disable`, params, {
         headers :{
             'Content-Type': 'application/json',
         }

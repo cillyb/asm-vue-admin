@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //获取监控列表
 export const getMonitorListPage = params => {
-    return axios.post(`/api/bg/view/asset-view/list`, params, {
+    return axios.post(`/bgapi/bg/view/asset-view/list`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -11,7 +11,7 @@ export const getMonitorListPage = params => {
 
 //上架
 export const openStatus = params =>{
-    return axios.post(`/api/bg/assets/asset/enable`, params, {
+    return axios.post(`/bgapi/bg/assets/asset/enable`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -20,7 +20,7 @@ export const openStatus = params =>{
 
 //下架
 export const closeStatus = params =>{
-    return axios.post(`/api/bg/assets/asset/disable`, params, {
+    return axios.post(`/bgapi/bg/assets/asset/disable`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -29,7 +29,7 @@ export const closeStatus = params =>{
 
 //可预约
 export const openIsCanBook = params =>{
-    return axios.post(`/api/bg/assets/asset/enableBook`, params, {
+    return axios.post(`/bgapi/bg/assets/asset/enableBook`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -38,7 +38,7 @@ export const openIsCanBook = params =>{
 
 //不可预约
 export const closeIsCanBook = params =>{
-    return axios.post(`/api/bg/assets/asset/disableBook`, params, {
+    return axios.post(`/bgapi/bg/assets/asset/disableBook`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -46,7 +46,7 @@ export const closeIsCanBook = params =>{
 }
 
 export const getLogs = params =>{
-    return axios.post(`/api/bg/view/log-view/list`, params, {
+    return axios.post(`/bgapi/bg/view/log-view/list`, params, {
         headers :{
             'Content-Type': 'application/json',
         }

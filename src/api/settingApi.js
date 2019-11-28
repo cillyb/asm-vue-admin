@@ -4,7 +4,7 @@ import axios from 'axios';
 
 //获取分利列表
 export const getShareholdingListPage = params => {
-    return axios.post(`/api/bg/assets/shareholding-model/list`, params, {
+    return axios.post(`/bgapi/bg/assets/shareholding-model/list`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -12,7 +12,7 @@ export const getShareholdingListPage = params => {
 };
 //删除分利
 export const removeShareholding = params => {
-    return axios.post(`/api/bg/assets/shareholding-model/delete`, params, {
+    return axios.post(`/bgapi/bg/assets/shareholding-model/delete`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -20,7 +20,7 @@ export const removeShareholding = params => {
 };
 //添加分利
 export const addShareholding = params => {
-    return axios.post(`/api/bg/assets/shareholding-model/add`, params, {
+    return axios.post(`/bgapi/bg/assets/shareholding-model/add`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -28,7 +28,7 @@ export const addShareholding = params => {
 };
 //修改分利
 export const editShareholding = params => {
-    return axios.post(`/api/bg/assets/shareholding-model/update`, params, {
+    return axios.post(`/bgapi/bg/assets/shareholding-model/update`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -47,7 +47,7 @@ export function isvalidDate(number) {
 
 ////获取预约时间列表
 export const getTimeModelListPage = params => {
-    return axios.post(`/api/bg/assets/appoint-model/list`, params, {
+    return axios.post(`/bgapi/bg/assets/appoint-model/list`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -55,7 +55,7 @@ export const getTimeModelListPage = params => {
 };
 //删除预约时间
 export const removeTimeModel = params => {
-    return axios.post(`/api/bg/assets/appoint-model/delete`, params, {
+    return axios.post(`/bgapi/bg/assets/appoint-model/delete`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -63,7 +63,7 @@ export const removeTimeModel = params => {
 };
 //添加预约时间
 export const addTimeModel = params => {
-    return axios.post(`/api/bg/assets/appoint-model/add`, params, {
+    return axios.post(`/bgapi/bg/assets/appoint-model/add`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -71,7 +71,7 @@ export const addTimeModel = params => {
 };
 //修改预约时间
 export const editTimeModel = params => {
-    return axios.post(`/api/bg/assets/appoint-model/update`, params, {
+    return axios.post(`/bgapi/bg/assets/appoint-model/update`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -90,7 +90,7 @@ export function isvalidTime(number) {
 
 //获取价格模板列表
 export const getPriceModelListPage = params => {
-    return axios.post(`/api/bg/view/price-model-view/list`, params, {
+    return axios.post(`/bgapi/bg/view/price-model-view/list`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -98,7 +98,7 @@ export const getPriceModelListPage = params => {
 };
 //删除价格模板
 export const removePriceModel = params => {
-    return axios.post(`/api/bg/assets/price-model/delete`, params, {
+    return axios.post(`/bgapi/bg/assets/price-model/delete`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -106,7 +106,7 @@ export const removePriceModel = params => {
 };
 //添加价格模板
 export const addPriceModel = params => {
-    return axios.post(`/api/bg/assets/price-model/add`, params, {
+    return axios.post(`/bgapi/bg/assets/price-model/add`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -114,7 +114,7 @@ export const addPriceModel = params => {
 };
 //修改价格模板
 export const editPriceModel = params => {
-    return axios.post(`/api/bg/assets/price-model/update`, params, {
+    return axios.post(`/bgapi/bg/assets/price-model/update`, params, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -133,7 +133,7 @@ export function isvalidUnitCount(number) {
 
 //预约模板状态-开启
 export const openTimeModel = params =>{
-    return axios.post(`/api/bg/assets/appoint-model/enable`, params, {
+    return axios.post(`/bgapi/bg/assets/appoint-model/enable`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -142,7 +142,7 @@ export const openTimeModel = params =>{
 
 //预约模板状态-关闭
 export const closeTimeModel = params =>{
-    return axios.post(`/api/bg/assets/appoint-model/disable`, params, {
+    return axios.post(`/bgapi/bg/assets/appoint-model/disable`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -153,7 +153,7 @@ export const closeTimeModel = params =>{
 
 //价格模板状态-开启
 export const openPriceModel = params =>{
-    return axios.post(`/api/bg/assets/price-model/enable`, params, {
+    return axios.post(`/bgapi/bg/assets/price-model/enable`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -162,7 +162,7 @@ export const openPriceModel = params =>{
 
 //价格模板状态-关闭
 export const closePriceModel = params =>{
-    return axios.post(`/api/bg/assets/price-model/disable`, params, {
+    return axios.post(`/bgapi/bg/assets/price-model/disable`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -173,7 +173,7 @@ export const closePriceModel = params =>{
 
 //分利模板状态-开启
 export const openShareholding = params =>{
-    return axios.post(`/api/bg/assets/shareholding-model/enable`, params, {
+    return axios.post(`/bgapi/bg/assets/shareholding-model/enable`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -182,7 +182,7 @@ export const openShareholding = params =>{
 
 //分利模板状态-关闭
 export const closeShareholding = params =>{
-    return axios.post(`/api/bg/assets/shareholding-model/disable`, params, {
+    return axios.post(`/bgapi/bg/assets/shareholding-model/disable`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -193,7 +193,7 @@ export const closeShareholding = params =>{
 
 //获取交易设置
 export const getOrderSettingListPage = params =>{
-    return axios.post(`/api/bg/settings/orders-setting/getOrderSetting`, params, {
+    return axios.post(`/bgapi/bg/settings/orders-setting/getOrderSetting`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
@@ -202,7 +202,7 @@ export const getOrderSettingListPage = params =>{
 
 //修改交易设置
 export const editOrderSetting = params =>{
-    return axios.post(`/api/bg/settings/orders-setting/update`, params, {
+    return axios.post(`/bgapi/bg/settings/orders-setting/update`, params, {
         headers :{
             'Content-Type': 'application/json',
         }
