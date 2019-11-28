@@ -40,11 +40,7 @@
             </el-table-column>
             <el-table-column prop="deviceNo" label="设备编号" :formatter="formatNo" style="width: 15%;" >
             </el-table-column>
-            <el-table-column prop="sex" label="性别" style="width: 10%;" sortable>
-            </el-table-column>
             <el-table-column prop="shareholdingPercent" label="分利比" :formatter="formatPercent" style="width: 15%;" >
-            </el-table-column>
-            <el-table-column prop="birthday" label="生日" style="width: 10%;" sortable>
             </el-table-column>
             <el-table-column prop="totalShareBenefit" label="总收益" :formatter="formatBenefit" style="width: 10%;" >
             </el-table-column>
