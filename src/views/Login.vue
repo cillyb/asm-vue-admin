@@ -56,7 +56,7 @@
                 });
               } else {
                 let token = res.data.token;
-                sessionStorage.setItem('user', token);
+                localStorage.setItem('user', token);
                 this.$router.push({ path: '/userList' });
               }
             });

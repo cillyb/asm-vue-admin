@@ -5,7 +5,6 @@ export const getCommunityListPage = params => {
     return axios.post(`/api/bg/view/community-view/list`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -15,7 +14,6 @@ export const removeCommunity = params => {
     return axios.post(`/api/bg/admin/community/delete`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -25,7 +23,6 @@ export const addCommunity = params => {
     return axios.post(`/api/bg/admin/community/add`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -35,7 +32,6 @@ export const editCommunity = params => {
     return axios.post(`/api/bg/admin/community/update`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -57,7 +53,6 @@ export const openCommunity = params =>{
     return axios.post(`/api/bg/admin/community/enable`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -67,7 +62,6 @@ export const closeCommunity = params =>{
     return axios.post(`/api/bg/admin/community/disable`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }

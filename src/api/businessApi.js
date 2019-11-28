@@ -5,7 +5,6 @@ export const getOrderListPage = params => {
     return axios.post(`/api/bg/view/order-view/list`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -15,7 +14,6 @@ export const getRefundListPage = params => {
     return axios.post(`/api/bg/view/refund-view/list`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };

@@ -7,7 +7,6 @@ export const getShareholdingListPage = params => {
     return axios.post(`/api/bg/assets/shareholding-model/list`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -16,7 +15,6 @@ export const removeShareholding = params => {
     return axios.post(`/api/bg/assets/shareholding-model/delete`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -25,7 +23,6 @@ export const addShareholding = params => {
     return axios.post(`/api/bg/assets/shareholding-model/add`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -34,7 +31,6 @@ export const editShareholding = params => {
     return axios.post(`/api/bg/assets/shareholding-model/update`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -54,7 +50,6 @@ export const getTimeModelListPage = params => {
     return axios.post(`/api/bg/assets/appoint-model/list`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -63,7 +58,6 @@ export const removeTimeModel = params => {
     return axios.post(`/api/bg/assets/appoint-model/delete`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -72,7 +66,6 @@ export const addTimeModel = params => {
     return axios.post(`/api/bg/assets/appoint-model/add`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -81,7 +74,6 @@ export const editTimeModel = params => {
     return axios.post(`/api/bg/assets/appoint-model/update`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -101,7 +93,6 @@ export const getPriceModelListPage = params => {
     return axios.post(`/api/bg/view/price-model-view/list`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -110,7 +101,6 @@ export const removePriceModel = params => {
     return axios.post(`/api/bg/assets/price-model/delete`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -119,7 +109,6 @@ export const addPriceModel = params => {
     return axios.post(`/api/bg/assets/price-model/add`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -128,7 +117,6 @@ export const editPriceModel = params => {
     return axios.post(`/api/bg/assets/price-model/update`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -148,7 +136,6 @@ export const openTimeModel = params =>{
     return axios.post(`/api/bg/assets/appoint-model/enable`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -158,7 +145,6 @@ export const closeTimeModel = params =>{
     return axios.post(`/api/bg/assets/appoint-model/disable`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -170,7 +156,6 @@ export const openPriceModel = params =>{
     return axios.post(`/api/bg/assets/price-model/enable`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -180,7 +165,6 @@ export const closePriceModel = params =>{
     return axios.post(`/api/bg/assets/price-model/disable`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -192,7 +176,6 @@ export const openShareholding = params =>{
     return axios.post(`/api/bg/assets/shareholding-model/enable`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -202,7 +185,6 @@ export const closeShareholding = params =>{
     return axios.post(`/api/bg/assets/shareholding-model/disable`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -214,7 +196,6 @@ export const getOrderSettingListPage = params =>{
     return axios.post(`/api/bg/settings/orders-setting/getOrderSetting`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -224,7 +205,6 @@ export const editOrderSetting = params =>{
     return axios.post(`/api/bg/settings/orders-setting/update`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }

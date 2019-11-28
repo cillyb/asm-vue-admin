@@ -5,7 +5,6 @@ export const getMonitorListPage = params => {
     return axios.post(`/api/bg/view/asset-view/list`, params, {
         headers: {
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 };
@@ -15,7 +14,6 @@ export const openStatus = params =>{
     return axios.post(`/api/bg/assets/asset/enable`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -25,7 +23,6 @@ export const closeStatus = params =>{
     return axios.post(`/api/bg/assets/asset/disable`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -35,7 +32,6 @@ export const openIsCanBook = params =>{
     return axios.post(`/api/bg/assets/asset/enableBook`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -45,7 +41,6 @@ export const closeIsCanBook = params =>{
     return axios.post(`/api/bg/assets/asset/disableBook`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
@@ -54,7 +49,6 @@ export const getLogs = params =>{
     return axios.post(`/api/bg/view/log-view/list`, params, {
         headers :{
             'Content-Type': 'application/json',
-            'X-BG-TOKEN': 1
         }
     }).then(res => res.data);
 }
