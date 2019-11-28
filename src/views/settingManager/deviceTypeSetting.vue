@@ -299,5 +299,7 @@
 </script>
 
 <style scoped>
-
+    .el-dialog .el-input{
+        width: 25%;
+    }
 </style>

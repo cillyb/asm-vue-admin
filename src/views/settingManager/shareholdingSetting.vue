@@ -71,11 +71,19 @@
                 <el-form-item label="模板名称" prop="modelName">
                     <el-input v-model="editForm.modelName" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="分利百分比" prop="shareholdingPercent">
+                <el-form-item prop="shareholdingPercent">
+                    <span slot="label" >持有人分利 <br>(单位：%)</span>
                     <el-input v-model.number="editForm.shareholdingPercent"></el-input>
+                    <el-tooltip class="item" effect="dark" content="指持有人会获得的获利比率" placement="right">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
-                <el-form-item label="每月结算日" prop="accountDate">
+                <el-form-item prop="accountDate">
+                    <span slot="label" >每月结账日</span>
                     <el-input v-model.number="editForm.accountDate"></el-input>
+                    <el-tooltip class="item" effect="dark" content="指每月设定日子进行上一周期收益的转存" placement="right">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -90,11 +98,19 @@
                 <el-form-item label="模板名称" prop="modelName">
                     <el-input v-model="addForm.modelName" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="分利百分比" prop="shareholdingPercent">
+                <el-form-item prop="shareholdingPercent">
+                    <span slot="label" >持有人分利 <br>(单位：%)</span>
                     <el-input v-model.number="addForm.shareholdingPercent"></el-input>
+                    <el-tooltip class="item" effect="dark" content="指持有人会获得的获利比率" placement="right">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
-                <el-form-item label="每月结算日" prop="accountDate">
+                <el-form-item prop="accountDate">
+                    <span slot="label" >每月结账日</span>
                     <el-input v-model.number="addForm.accountDate"></el-input>
+                    <el-tooltip class="item" effect="dark" content="指每月设定日子进行上一周期收益的转存" placement="right">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -408,5 +424,25 @@
 </script>
 
 <style scoped>
+    .el-dialog .el-input{
+        width: 25%;
+    }
 
+    .el-dialog .el-input-number{
+        width: 25%;
+    }
+
+    .el-icon-info{
+        margin-left: 10px;
+        font-size: 20px;
+    }
+
+    .el-icon-info:hover{
+        color: #409EFF;
+    }
+
+    .el-form-item span{
+        display:inline-block;
+        line-height:1.3;
+    }
 </style>

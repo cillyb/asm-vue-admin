@@ -84,7 +84,7 @@
                 <el-input v-model="editForm.latitude"></el-input>
             </el-form-item>
             <el-form-item label="地址" prop="address">
-                <el-input type="textarea" v-model="editForm.address" auto-complete="off"></el-input>
+                <el-input type="textarea" v-model="editForm.address" auto-complete="off" style="width: 50%;"></el-input>
             </el-form-item>
             <el-form-item label="管理员" prop="manager">
                 <el-input v-model="editForm.manager" auto-complete="off"></el-input>
@@ -126,7 +126,7 @@
                 <el-input v-model="addForm.latitude"></el-input>
             </el-form-item>
             <el-form-item label="地址" prop="address">
-                <el-input type="textarea" v-model="addForm.address" auto-complete="off"></el-input>
+                <el-input type="textarea" v-model="addForm.address" auto-complete="off" style="width: 50%;"></el-input>
             </el-form-item>
             <el-form-item label="管理员" prop="manager">
                 <el-input v-model="addForm.manager" auto-complete="off"></el-input>
@@ -511,5 +511,7 @@
 </script>
 
 <style scoped>
-
+    .el-dialog .el-input{
+        width: 25%;
+    }
 </style>
