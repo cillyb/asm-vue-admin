@@ -19,7 +19,7 @@
         <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="shareholding" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
             <el-table-column type="selection">
             </el-table-column>
-            <el-table-column type="index">
+            <el-table-column type="index" label="序号">
             </el-table-column>
             <!--<el-table-column prop="id" label="模板id" sortable>-->
             <!--</el-table-column>-->

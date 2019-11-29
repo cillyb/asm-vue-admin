@@ -17,7 +17,7 @@
                   fit="true" style="width: 100%; ">
 <!--            <el-table-column type="selection" >-->
 <!--            </el-table-column>-->
-            <el-table-column type="index" >
+            <el-table-column type="index" label="序号">
             </el-table-column>
             <el-table-column prop="createTime" label="注册时间" sortable>
             </el-table-column>

@@ -46,8 +46,6 @@
             </el-table-column>
             <el-table-column prop="status" label="状态" :formatter="formatStatus" style="width: 10%;" >
             </el-table-column>
-            <el-table-column prop="lastUseTime" label="上次使用时间" style="width: 20%;" sortable>
-            </el-table-column>
             <el-table-column prop="createTime" label="注册时间" style="width: 20%;" sortable>
             </el-table-column>
         </el-table>

@@ -16,7 +16,7 @@
                   @selection-change="selsChange"
                   row-key="id"
                   style="width: 100%;">
-            <el-table-column type="index" style="width: 10%;">
+            <el-table-column type="index" label="序号" style="width: 10%;">
             </el-table-column>
             <el-table-column prop="userName" label="用户名" style="width: 15%;" sortable>
             </el-table-column>

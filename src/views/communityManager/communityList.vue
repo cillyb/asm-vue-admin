@@ -19,7 +19,7 @@
         <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="community" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
             <el-table-column type="selection" width="50">
             </el-table-column>
-            <el-table-column type="index" width="50">
+            <el-table-column type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column prop="communityName" label="社区名称" sortable>
             </el-table-column>
