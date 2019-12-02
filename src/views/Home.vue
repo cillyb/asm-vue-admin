@@ -1,7 +1,8 @@
 <template>
 	<el-row class="container">
 		<el-col :span="24" class="header">
-			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
+			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'"
+					style="font-size: 24px; margin-left: 15px;">
 				{{collapsed?'':sysName}}
 			</el-col>
 			<!--<el-col :span="10">-->
@@ -13,9 +14,11 @@
 				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>我的消息</el-dropdown-item>
-						<el-dropdown-item>设置</el-dropdown-item>
-						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+						<!--<el-dropdown-item @click.native="clickMyMessage">我的消息</el-dropdown-item>-->
+						<!--<el-dropdown-item @click.native="clickSetting">设置</el-dropdown-item>-->
+						<!--<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>-->
+						<!--divided 分隔符-->
+						<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</el-col>
@@ -103,13 +106,29 @@
 			},
 			handleselect: function (a, b) {
 			},
+
+			//点击我的消息
+			clickMyMessage(){
+				console.log("clickMyMessage");
+				this.$message({
+					message: "二期开发",
+					type: 'error'
+				});
+			},
+			//点击设置
+			clickSetting(){
+				this.$message({
+					message: "二期开发",
+					type: 'error'
+				});
+			},
 			//退出登录
 			logout: function () {
 				var _this = this;
 				this.$confirm('确认退出吗?', '提示', {
 					//type: 'warning'
 				}).then(() => {
-					sessionStorage.removeItem('user');
+					localStorage.removeItem('user');
 					_this.$router.push('/login');
 				}).catch(() => {
 
@@ -126,12 +145,15 @@
 			}
 		},
 		mounted() {
-			var user = sessionStorage.getItem('user');
-			if (user) {
-				user = JSON.parse(user);
-				this.sysUserName = user.name || '';
-				this.sysUserAvatar = user.avatar || '';
-			}
+			var user = localStorage.getItem('user');
+			//TODO获取用户头像和昵称
+			this.sysUserName = "admin";
+			this.sysUserAvatar = "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1574302814&di=126db98b0d310b2e8a948e15600c2625&src=http://hbimg.b0.upaiyun.com/69ad7a731f43d4b8729f1a2fbe65c43801ca0f033250-EV1vMf_fw658";
+			// if (user) {
+			// 	user = JSON.parse(user);
+			// 	this.sysUserName = user.name || '';
+			// 	this.sysUserAvatar = user.avatar || '';
+			// }
 
 		}
 	}
@@ -146,9 +168,9 @@
 		top: 0px;
 		bottom: 0px;
 		width: 100%;
-		height: 150%;
+		/*height: 150%;*/
 		.header {
-			height: 60px;
+			height: 70px;
 			line-height: 60px;
 			background: #ffffff;
 			border-bottom: 5px solid $color-primary;
@@ -160,18 +182,18 @@
 				.userinfo-inner {
 					cursor: pointer;
 					color:$color-primary;
-					img {
-						width: 40px;
-						height: 40px;
-						border-radius: 20px;
-						margin: 10px 0px 10px 10px;
-						float: right;
-					}
-				}
-			}
+					i
 			.logo {
 				//width:230px;
-				height:160px;
+				heighmg {
+					width: 40px;
+					height: 40px;
+					border-radius: 20px;
+					margin: 10px 0px 10px 10px;
+					float: right;
+				}
+			}
+		}t:160px;
 				font-size: 22px;
 				padding-left:20px;
 				padding-right:20px;

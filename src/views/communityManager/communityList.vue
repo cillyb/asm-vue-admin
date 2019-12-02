@@ -16,10 +16,10 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="community" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="community" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
             <el-table-column type="selection" width="50">
             </el-table-column>
-            <el-table-column type="index" width="50">
+            <el-table-column type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column prop="communityName" label="社区名称" sortable>
             </el-table-column>
@@ -72,7 +72,7 @@
         </el-col>
 
         <!--编辑界面-->
-        <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
+        <el-dialog title="编辑" :visible.sync="editFormVisible" @close="editCancel" :close-on-click-modal="false">
         <el-form :model="editForm" label-width="150px" :rules="editFormRules" ref="editForm">
             <el-form-item label="社区名称" prop="communityName">
                 <el-input v-model="editForm.communityName" auto-complete="off"></el-input>
@@ -84,7 +84,7 @@
                 <el-input v-model="editForm.latitude"></el-input>
             </el-form-item>
             <el-form-item label="地址" prop="address">
-                <el-input type="textarea" v-model="editForm.address" auto-complete="off"></el-input>
+                <el-input type="textarea" v-model="editForm.address" auto-complete="off" style="width: 50%;"></el-input>
             </el-form-item>
             <el-form-item label="管理员" prop="manager">
                 <el-input v-model="editForm.manager" auto-complete="off"></el-input>
@@ -108,13 +108,13 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click.native="editFormVisible = false">取消</el-button>
+            <el-button @click.native="editCancel">取消</el-button>
             <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
         </div>
         </el-dialog>
 
         <!--新增界面-->
-        <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
+        <el-dialog title="新增" :visible.sync="addFormVisible" @close="addCancel" :close-on-click-modal="false">
         <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
             <el-form-item label="社区名称" prop="communityName">
                 <el-input v-model="addForm.communityName" auto-complete="off"></el-input>
@@ -126,13 +126,13 @@
                 <el-input v-model="addForm.latitude"></el-input>
             </el-form-item>
             <el-form-item label="地址" prop="address">
-                <el-input type="textarea" v-model="addForm.address" auto-complete="off"></el-input>
+                <el-input type="textarea" v-model="addForm.address" auto-complete="off" style="width: 50%;"></el-input>
             </el-form-item>
             <el-form-item label="管理员" prop="manager">
                 <el-input v-model="addForm.manager" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="联系电话" prop="managerPhone">
-                <el-input v-model.number="addForm.managerPhone" auto-complete="off"></el-input>
+                <el-input v-model="addForm.managerPhone" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="开始营业时间" prop="onlineTimeBegin">
                 <el-time-select v-model="addForm.onlineTimeBegin" :picker-options="{start:'00:00',step: '00:30',end: '24:00'}"></el-time-select>
@@ -142,7 +142,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click.native="addFormVisible = false">取消</el-button>
+            <el-button @click.native="addCancel">取消</el-button>
             <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
         </div>
         </el-dialog>
@@ -150,15 +150,16 @@
 </template>
 
 <script>
-    import { getCommunityListPage, removeCommunity, addCommunity, editCommunity, isvalidPhone, openCommunity, closeCommunity } from '../../api/communityApi';
+    import { getCommunityListPage, removeCommunity, addCommunity, editCommunity, isvalidPhone, isvalidTel, openCommunity, closeCommunity } from '../../api/communityApi';
     import util from '../../common/js/util'
 
     //手机号码验证
     var validPhone=(rule, value,callback)=>{
+        // console.log("validTel : " + isvalidTel(value));
         if (!value){
             callback(new Error('请输入电话号码'))
-        }else  if (!isvalidPhone(value)){
-            callback(new Error('请输入正确的11位手机号码'))
+        }else  if (!isvalidPhone(value) && !isvalidTel(value)){
+            callback(new Error('请输入正确的11位手机号码或座机号码'))
         }else {
             callback()
         }
@@ -383,66 +384,91 @@
             //编辑社区
            editSubmit: function () {
                this.$refs.editForm.validate((valid) => {
-                   if (valid) {
-                       this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                           this.editLoading = true;
-                           let para = Object.assign({}, this.editForm);
-                           var communityNoBusinessSetList = [];
-                           if(para.noBusinessDates!=null){
-                               for(var i=0;i<para.noBusinessDates.length;i++){
-                                   communityNoBusinessSetList.push({"noBusinessDate":para.noBusinessDates[i]});
+                   var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+                   if(regPos.test(this.editForm.longitude) && regPos.test(this.editForm.latitude)){
+                       if (valid) {
+                           this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                               this.editLoading = true;
+                               let para = Object.assign({}, this.editForm);
+                               var communityNoBusinessSetList = [];
+                               if(para.noBusinessDates!=null){
+                                   for(var i=0;i<para.noBusinessDates.length;i++){
+                                       communityNoBusinessSetList.push({"noBusinessDate":para.noBusinessDates[i]});
+                                   }
                                }
-                           }
-                           para.communityNoBusinessSetList = communityNoBusinessSetList;
-                           editCommunity(para).then((res) => {
-                               this.editLoading = false;
-                               if(res.meta.success){
-                                   this.$message({
-                                       message: '编辑成功',
-                                       type: 'success'
-                                   });
-                               }else{
-                                   this.$message({
-                                       message:res.meta.message,
-                                       type: 'error'
-                                   });
-                               }
-                               this.$refs['editForm'].resetFields();
-                               this.editFormVisible = false;
-                               this.getCommunity();
+                               para.communityNoBusinessSetList = communityNoBusinessSetList;
+                               editCommunity(para).then((res) => {
+                                   this.editLoading = false;
+                                   if(res.meta.success){
+                                       this.$message({
+                                           message: '编辑成功',
+                                           type: 'success'
+                                       });
+                                   }else{
+                                       this.$message({
+                                           message:res.meta.message,
+                                           type: 'error'
+                                       });
+                                   }
+                                   this.$refs['editForm'].resetFields();
+                                   this.editFormVisible = false;
+                                   this.getCommunity();
+                               });
                            });
+                       }
+                   }else{
+                       this.$message({
+                           message:"输入正确的经纬度",
+                           type: 'error'
                        });
                    }
+
                });
            },
             //新增社区
            addSubmit: function () {
                this.$refs.addForm.validate((valid) => {
-                   if (valid) {
-                       this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                           this.addLoading = true;
-                           let para = Object.assign({}, this.addForm);
-                           addCommunity(para).then((res) => {
-                               this.addLoading = false;
-                               if(res.meta.success){
-                                   this.$message({
-                                       message: '新增成功',
-                                       type: 'success'
-                                   });
-                               }else{
-                                   this.$message({
-                                       message:res.meta.message,
-                                       type: 'error'
-                                   });
-                               }
-                               this.$refs['addForm'].resetFields();
-                               this.addFormVisible = false;
-                               this.getCommunity();
-                           });
+                   var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+                   if(regPos.test(this.addForm.longitude) && regPos.test(this.addForm.latitude)) {
+                       if (valid) {
+                           // this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                               this.addLoading = true;
+                               let para = Object.assign({}, this.addForm);
+                               addCommunity(para).then((res) => {
+                                   this.addLoading = false;
+                                   if (res.meta.success) {
+                                       this.$message({
+                                           message: '新增成功',
+                                           type: 'success'
+                                       });
+                                   } else {
+                                       this.$message({
+                                           message: res.meta.message,
+                                           type: 'error'
+                                       });
+                                   }
+                                   this.$refs['addForm'].resetFields();
+                                   this.addFormVisible = false;
+                                   this.getCommunity();
+                               });
+                           // });
+                       }
+                   }else{
+                       this.$message({
+                           message:"输入正确的经纬度",
+                           type: 'error'
                        });
                    }
                });
            },
+            addCancel: function(){
+                this.$refs.addForm.resetFields();
+                this.addFormVisible = false;
+            },
+            editCancel: function(){
+                this.$refs.editForm.resetFields();
+                this.editFormVisible = false;
+            },
             selsChange: function (sels) {
                 this.sels = sels;
             },
@@ -485,5 +511,7 @@
 </script>
 
 <style scoped>
-
+    .el-dialog .el-input{
+        width: 25%;
+    }
 </style>

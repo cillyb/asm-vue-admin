@@ -1,7 +1,7 @@
 <template>
     <section>
         <!--列表-->
-        <el-table :data="orderSetting" highlight-current-row v-loading="listLoading" style="width: 100%;">
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="orderSetting" highlight-current-row v-loading="listLoading" style="width: 100%;">
             <el-table-column prop="orderPayTimeout" label="待付款订单的存在时间" :formatter="formatTimeout">
             </el-table-column>
             <el-table-column prop="refundLimitLevel1" label="第一层时间" :formatter="formatLevel1">
@@ -36,7 +36,7 @@
         </div>
 
         <!--编辑界面-->
-        <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
+        <el-dialog title="编辑" :visible.sync="editFormVisible" @close="editCancel" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="180px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="待付款订单的存在时间" prop="orderPayTimeout">
                     <el-input v-model="editForm.orderPayTimeout" auto-complete="off"></el-input>
@@ -58,7 +58,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click.native="editFormVisible = false">取消</el-button>
+                <el-button @click.native="editCancel">取消</el-button>
                 <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
             </div>
         </el-dialog>
@@ -152,7 +152,7 @@
             editSubmit: function () {
                 this.$refs.editForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.editLoading = true;
                             let para = Object.assign({}, this.editForm);
                             editOrderSetting(para).then((res) => {
@@ -172,7 +172,7 @@
                                 this.editFormVisible = false;
                                 this.getOrderSetting();
                             });
-                        });
+                        // });
                     }
                 });
             },
@@ -185,5 +185,7 @@
 </script>
 
 <style scoped>
-
+    .el-dialog .el-input{
+        width: 25%;
+    }
 </style>

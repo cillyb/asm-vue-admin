@@ -3,20 +3,24 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             用户名:<el-input v-model="condition.userName" style="width: 10%;"></el-input>
-            订单编号:<el-input v-model="condition.orderId" style="width: 18%;"></el-input>
+            手机号(后台暂不支持):<el-input v-model="condition.phoneNumber" style="width: 10%;"></el-input>
+            订单编号(后台暂不支持):<el-input v-model="condition.orderNo" style="width: 10%;"></el-input>
+            设备编号(后台暂不支持):<el-input v-model="condition.deviceNo" style="width: 10%;"></el-input>
             <el-button type="primary" v-on:click="handleQuery">查询</el-button>
         </el-col>
 
         <!--列表-->
-        <el-table :data="flows"
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="flows"
                   highlight-current-row
                   v-loading="listLoading"
                   @selection-change="selsChange"
                   row-key="id"
                   style="width: 100%;">
-            <el-table-column type="index" style="width: 10%;">
+            <el-table-column type="index" label="序号" style="width: 10%;">
             </el-table-column>
             <el-table-column prop="userName" label="用户名" style="width: 15%;" sortable>
+            </el-table-column>
+            <el-table-column prop="phoneNumber" label="手机号" style="width: 15%;" >
             </el-table-column>
             <el-table-column prop="assetName" label="设备名" style="width: 15%;" >
             </el-table-column>
@@ -24,13 +28,13 @@
             </el-table-column>
             <el-table-column prop="shareholdingPercent" label="分利比" :formatter="formatPercent" style="width: 15%;" sortable>
             </el-table-column>
-            <el-table-column prop="orderId" label="订单编号" style="width: 15%;" sortable>
+            <el-table-column prop="orderNo" label="订单编号" style="width: 15%;" sortable>
             </el-table-column>
             <el-table-column prop="capitalFlowType" label="流水类型" style="width: 10%;" sortable>
             </el-table-column>
             <el-table-column prop="accountDate" label="结账日" :formatter="formatDate" style="width: 15%;" sortable>
             </el-table-column>
-            <el-table-column prop="accountDateBenefit" label="该单收益" style="width: 10%;" sortable>
+            <el-table-column prop="moneyChange" label="该单收益" style="width: 10%;" sortable>
             </el-table-column>
             <el-table-column prop="totalShareBenefit" label="总收益" style="width: 20%;" sortable>
             </el-table-column>
@@ -58,7 +62,9 @@
             return {
                 condition: {
                     userName:'',
-                    orderId:'',
+                    orderNo:'',
+                    phoneNumber:'',
+                    deviceNo:''
                 },
                 flows: [],
                 total: 0,

@@ -7,13 +7,16 @@
                     <el-input v-model="filters.userName" placeholder="用户名"></el-input>
                 </el-form-item>
                 <el-form-item>
+                    <el-input v-model="filters.phoneNumber" placeholder="手机号"></el-input>
+                </el-form-item>
+                <el-form-item>
                     <el-button type="primary" v-on:click="handleQuery">查询</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
 
         <!--列表-->
-        <el-table :data="holder"
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="holder"
                   highlight-current-row
                   v-loading="listLoading"
                   @selection-change="selsChange"
@@ -22,23 +25,26 @@
                   :load="load"
                   :tree-props="{children: 'children', hasChildren: 'hasAsset'}"
                   style="width: 100%;">
-            <el-table-column type="index" style="width: 10%;">
+<!--            <el-table-column type="index" style="width: 10%;">-->
+<!--                <template scope="scope"><span>{{scope.$index+(page - 1) * size + 1}} </span></template>-->
+<!--            </el-table-column>-->
+            <el-table-column prop="idx" label="序号" align="center" width="70">
             </el-table-column>
             <el-table-column prop="userName" label="名称" style="width: 15%;" sortable>
             </el-table-column>
 <!--            <el-table-column prop="assetName" label="设备名称" style="width: 15%;" sortable>-->
 <!--            </el-table-column>-->
-            <el-table-column prop="phoneNumber" label="手机号码" style="width: 15%;" sortable>
+            <el-table-column prop="phoneNumber" label="手机号" style="width: 15%;" sortable>
             </el-table-column>
-            <el-table-column prop="typeName" label="设备类型" style="width: 15%;" sortable>
+            <el-table-column prop="typeName" label="设备类型" style="width: 15%;" >
             </el-table-column>
-            <el-table-column prop="sex" label="性别" style="width: 10%;" sortable>
+            <el-table-column prop="deviceNo" label="设备编号" :formatter="formatNo" style="width: 15%;" >
             </el-table-column>
-            <el-table-column prop="shareholdingPercent" label="分利比" :formatter="formatPercent" style="width: 15%;" sortable>
+            <el-table-column prop="shareholdingPercent" label="分利比" :formatter="formatPercent" style="width: 15%;" >
             </el-table-column>
-            <el-table-column prop="birthday" label="生日" style="width: 10%;" sortable>
+            <el-table-column prop="totalShareBenefit" label="总收益" :formatter="formatBenefit" style="width: 10%;" >
             </el-table-column>
-            <el-table-column prop="lastUseTime" label="上次使用时间" style="width: 20%;" sortable>
+            <el-table-column prop="status" label="状态" :formatter="formatStatus" style="width: 10%;" >
             </el-table-column>
             <el-table-column prop="createTime" label="注册时间" style="width: 20%;" sortable>
             </el-table-column>
@@ -55,14 +61,15 @@
 
 <script>
     import { getHolderListPage } from '../../api/holderApi';
-    import { getDevices } from '../../api/deviceApi'
+    import { getDevices, getHolderDevices} from '../../api/deviceApi'
     import util from '../../common/js/util';
 
     export default {
         data() {
             return {
                 filters: {
-                    userName:''
+                    userName:'',
+                    phoneNumber:''
                 },
                 holder: [],
                 total: 0,
@@ -78,6 +85,29 @@
                     return row.shareholdingPercent+"%";
                 }
             },
+            //设备编号添加No
+            formatNo: function (row, column) {
+                if(row.deviceNo != null) {
+                    return "NO."+row.deviceNo;
+                }
+            },
+            //设备状态格式化
+            formatStatus: function (row, column) {
+                if(row.assetName != null) {
+                    return row.status == 0 ? "冻结    " : "正常";
+                } else {
+                    return null;
+                }
+            },
+            //设备总收益格式化
+            formatBenefit: function (row, column) {
+                if(row.totalShareBenefit != null) {
+                    return row.totalShareBenefit+"元";
+                } else {
+                    return null;
+                }
+            },
+
 
             load(tree, treeNode, resolve) {
                 let para = {
@@ -86,10 +116,10 @@
                         current: 1
                     },
                     condition: {
-                        appuserId:tree.id
+                        holderId:tree.id
                     }
                 };
-                getDevices(para).then((res) => {
+                getHolderDevices(para).then((res) => {
                     // console.log(res);
                     if (res.meta.success) {
                         let asset = res.data.records;
@@ -100,19 +130,6 @@
                         resolve(asset);
                     }
                 });
-                // resolve([
-                //     {
-                //         id: 31,
-                //         date: '2016-05-01',
-                //         name: '王小虎',
-                //         address: '上海市普陀区金沙江路 1519 弄'
-                //     }, {
-                //         id: 32,
-                //         date: '2016-05-01',
-                //         name: '王小虎',
-                //         address: '上海市普陀区金沙江路 1519 弄'
-                //     }
-                // ])
             },
 
             handleSizeChange(val) {
@@ -145,6 +162,7 @@
                     this.total = res.data.total;
                     this.holder = res.data.records;
                     for(let i = 0; i < this.holder.length; i++) {
+                        this.holder[i].idx = (this.page-1)*this.size+i+1;
                         if(this.holder[i].hasAsset == 0) {
                             this.holder[i].hasAsset = false;
                         } else {

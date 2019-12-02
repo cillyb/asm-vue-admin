@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.id" placeholder="订单编号"></el-input>
+                    <el-input v-model="filters.orderNo" placeholder="订单编号"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="handleQuery">查询</el-button>
@@ -13,10 +13,10 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="order" highlight-current-row v-loading="listLoading" style="width: 100%;">
-            <el-table-column type="index">
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="order" highlight-current-row v-loading="listLoading" style="width: 100%;">
+            <el-table-column type="index" label="序号">
             </el-table-column>
-            <el-table-column prop="id" label="订单编号" sortable>
+            <el-table-column prop="orderNo" label="订单编号" sortable>
             </el-table-column>
             <el-table-column prop="phoneNumber" label="使用人手机" sortable>
             </el-table-column>
@@ -53,7 +53,7 @@
         data() {
             return {
                 filters: {
-                    id: ''
+                    orderNo: ''
                 },
                 order: [],
                 total: 0,

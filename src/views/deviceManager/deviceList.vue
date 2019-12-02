@@ -3,7 +3,7 @@
         <div class="app-container">
             <el-row :gutter="20">
                 <!--部门数据-->
-                <el-col :span="4" :xs="24" style="width: 15%; ">
+                <el-col :span="4" :xs="24" style="width: 240px ">
                     <div class="head-container" style="margin-top: 10px;">
                         设备类型
                     </div>
@@ -52,7 +52,7 @@
                         <el-button type="primary" @click.native="editTypeSubmit" :loading="editLoading">提交</el-button>
                     </div>
                 </el-dialog>
-                <el-col :span="20" :xs="24">
+                <el-col :span="20" :xs="24" :sm="22" :md="20" :lg="18" :xl="18">
                     <!--工具条-->
                     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
                         设备名称:<el-input v-model="condition.assetName" style="width: 10%;"></el-input>
@@ -70,11 +70,11 @@
                     </el-col>
 
                     <!--列表-->
-                    <el-table :data="devices" highlight-current-row v-loading="listLoading"
+                    <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="devices" highlight-current-row v-loading="listLoading"
                               @selection-change="selsChange" style="width: 100%;">
                         <el-table-column type="selection" width="55">
                         </el-table-column>
-                        <el-table-column type="index" width="60">
+                        <el-table-column type="index" label="序号" width="60">
                         </el-table-column>
                         <el-table-column prop="assetName" label="设备名称" width="120" sortable>
                         </el-table-column>
@@ -86,7 +86,10 @@
                         </el-table-column>
                         <el-table-column prop="firstCost" label="成本价格" min-width="100" sortable>
                         </el-table-column>
-                        <el-table-column prop="" label="租赁价格" min-width="100">
+                        <el-table-column prop="" label="租赁价格">
+                            <template slot-scope="scope">
+                                <el-button @click="showPrice(scope.row)" type="text" size="small">查看</el-button>
+                            </template>
                         </el-table-column>
                         <el-table-column prop="shareholdingPercent" label="分利比" :formatter="formatPercent" min-width="100" sortable>
                         </el-table-column>
@@ -124,6 +127,13 @@
                 </el-col>
             </el-row>
 
+            <!--租赁价格查看-->
+            <el-dialog :title="priceTitle" :visible.sync="showPriceVisible"  width="25%">
+                <div style="text-align: center; font-size: large">
+                    {{ price }}元 / {{ unitCount }} {{ unitName }}
+                </div>
+            </el-dialog>
+
             <!--二维码查看-->
             <el-dialog :title="erweimaTitle" :visible.sync="showErweimaVisible"  width="25%">
                 <img :src="erweimaUrl" height="100%" width="100%">
@@ -137,6 +147,7 @@
                     </el-form-item>
                     <el-form-item label="分类" prop="typeId">
                         <el-cascader
+                                clearable
                                 filterable
                                 style="width: 25%;"
                                 v-model="addForm.typeId"
@@ -151,22 +162,20 @@
                     </el-form-item>
                     <el-form-item label="开始提供时间" prop="provideStartTime">
                         <el-date-picker
-                                value-format="yyyy-MM-dd HH:mm:ss"
+                                value-format="yyyy-MM-dd"
                                 style="width: 25%;"
                                 v-model="addForm.provideStartTime"
-                                type="datetime"
-                                placeholder="选择日期时间"
-                                default-time="12:00:00">
+                                placeholder="选择日期"
+                        >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="截止提供时间" prop="provideEndTime">
                         <el-date-picker
-                                value-format="yyyy-MM-dd HH:mm:ss"
+                                value-format="yyyy-MM-dd"
                                 style="width: 25%;"
                                 v-model="addForm.provideEndTime"
-                                type="datetime"
-                                placeholder="选择日期时间"
-                                default-time="12:00:00">
+                                placeholder="选择日期"
+                                >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="成本价格" prop="firstCost">
@@ -185,7 +194,7 @@
                             <el-radio class="radio" :label="1">是</el-radio>
                         </el-radio-group>
                         <el-form-item v-if="addForm.isAppuserHold == 1" label="持有人: ">
-                            <span v-model="addForm.appuserId">{{ addForm.userName }}</span>
+                            <span v-model="addForm.appuserId">{{ addForm.userName.length == 0 ? addForm.phoneNumber : addForm.userName }}</span>
                             <el-button @click="addChoiceHolder">选择</el-button>
                         </el-form-item>
                         <el-form-item v-if="addForm.isAppuserHold == 1" label="分利方案: " >
@@ -203,7 +212,7 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click.native="addFormVisible = false">取消</el-button>
+                    <el-button @click.native="addCancel">取消</el-button>
                     <el-button v-if="op == 'add'" type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
                     <el-button v-if="op == 'edit'" type="primary" @click.native="editSubmit" :loading="addLoading">修改</el-button>
 
@@ -213,7 +222,7 @@
             <!--            社区选择-->
             <el-dialog title="社区选择" :visible.sync="showCommunityList" width="50%" :close-on-click-modal="false">
                 <!--列表-->
-                <el-table :data="communitys" highlight-current-row v-loading="listLoading"
+                <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="communitys" highlight-current-row v-loading="listLoading"
                           @current-change="selsCommunityChange" style="width: 100%;">
                     <el-table-column type="index">
                     </el-table-column>
@@ -243,7 +252,7 @@
             <!--            预约选择-->
             <el-dialog title="预约模板选择" :visible.sync="showAppointList" width="50%" :close-on-click-modal="false">
                 <!--列表-->
-                <el-table :data="appoints" highlight-current-row v-loading="listLoading"
+                <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="appoints" highlight-current-row v-loading="listLoading"
                           @current-change="selsAppointChange" style="width: 100%;">
                     <el-table-column type="index">
                     </el-table-column>
@@ -272,7 +281,7 @@
             <!--            价格选择-->
             <el-dialog title="价格模板选择" :visible.sync="showPriceList" width="50%" :close-on-click-modal="false">
                 <!--列表-->
-                <el-table :data="prices" highlight-current-row v-loading="listLoading"
+                <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="prices" highlight-current-row v-loading="listLoading"
                           @current-change="selsPriceChange" style="width: 100%;">
                     <el-table-column type="index">
                     </el-table-column>
@@ -303,7 +312,7 @@
             <!--            持有人选择-->
             <el-dialog title="持有人选择" :visible.sync="showHolderList" width="50%" :close-on-click-modal="false">
                 <!--列表-->
-                <el-table :data="holders" highlight-current-row v-loading="listLoading"
+                <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="holders" highlight-current-row v-loading="listLoading"
                           @current-change="selsHolderChange" style="width: 100%;">
                     <el-table-column type="index">
                     </el-table-column>
@@ -332,7 +341,7 @@
             <!--            分利选择-->
             <el-dialog title="分利选择" :visible.sync="showShareList" width="50%" :close-on-click-modal="false">
                 <!--列表-->
-                <el-table :data="shares" highlight-current-row v-loading="listLoading"
+                <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="shares" highlight-current-row v-loading="listLoading"
                           @current-change="selsShareChange" style="width: 100%;">
                     <el-table-column type="index">
                     </el-table-column>
@@ -401,6 +410,7 @@
                 prices:[],
                 holders:[],
                 shares:[],
+                appoints:[],
 
                 //选中得
                 selsCommunity: '',
@@ -414,6 +424,14 @@
                 showPriceList: false,
                 showHolderList: false,
                 showShareList: false,
+
+
+                //价格
+                showPriceVisible:false,
+                priceTitle:'',
+                price:'',
+                unitCount:'',
+                unitName:'',
 
                 //二维码
                 showErweimaVisible: false,
@@ -495,7 +513,7 @@
                 //新增界面数据
                 addForm: {
                     assetName: '',
-                    typeId: '',
+                    typeId: [],
                     provideStartTime: '',
                     provideEndTime: '',
                     firstCost: '',
@@ -516,12 +534,52 @@
             }
         },
         methods: {
+            //cascader社区选择
+            handleChange(value) {
+                console.log(value);
+                console.log("社区选择发生变化")
+                var tmp = value;
+                if (Array.isArray(tmp) && tmp != null && tmp.length > 0) {
+                    tmp = tmp[tmp.length-1];
+                }
+                // console.log(tmp);
+                this.addForm.typeId = tmp;
+            },
 
             //百分比显示格式转化
             formatPercent: function (row, column) {
                 if(row.shareholdingPercent != null) {
                     return row.shareholdingPercent+"%";
                 }
+            },
+
+            //显示价格
+            showPrice(row) {
+                this.showPriceVisible = true;
+                this.priceTitle = row.assetName+"的价格";
+                let para = {
+                    page:{
+                        current:1,
+                        size:10
+                    },
+                    condition: {
+                        id:row.priceModelId
+                    }
+                };
+                para.condition = util.filterParams(para.condition);
+                getPriceModelListPage(para).then((res) => {
+                    if(res.meta.success) {
+                        this.price = res.data.records[0].price;
+                        this.unitCount = res.data.records[0].unitCount;
+                        this.unitName = res.data.records[0].unitName;
+                        console.log(row.assetName + " " + price + " " + unitCount + " " + unitName);
+                    } else {
+                        this.$message({
+                            message: res.meta.message,
+                            type: 'error'
+                        });
+                    }
+                });
             },
 
             //显示二维码
@@ -562,6 +620,9 @@
                     "page": {
                         "current": this.otherCurrent,
                         "size": this.size
+                    },
+                    "condition":{
+                        "status": 1
                     }
                 };
                 this.listLoading = true;
@@ -604,6 +665,9 @@
                     "page": {
                         "current": this.otherCurrent,
                         "size": this.size
+                    },
+                    "condition":{
+                        "status": 1
                     }
                 };
                 this.listLoading = true;
@@ -647,6 +711,9 @@
                     "page": {
                         "current": this.otherCurrent,
                         "size": this.size
+                    },
+                    "condition":{
+                        "status": 1
                     }
                 };
                 this.listLoading = true;
@@ -739,7 +806,7 @@
                         "size": this.size
                     },
                     "condition":{
-
+                        "status": 1
                     }
                 };
                 this.listLoading = true;
@@ -945,6 +1012,10 @@
                 this.otherCurrent = val;
                 this.getHolder();
             },
+            handlShareCurrentChange(val) {
+                this.otherCurrent = val;
+                this.getShare();
+            },
 
             //获取用户列表
             getDevices() {
@@ -1004,6 +1075,7 @@
             },
             //显示编辑界面
             handleEdit: function (index, row) {
+                console.log(row);
                 this.op = "edit";
                 //获取树形分类
                 let para = {};
@@ -1018,17 +1090,28 @@
                         });
                     }
                 });
+                // console.log(row.typeId + " " + row.typeId.length + " " + Array.isArray(row.typeId));
                 //typeId设置不正确
-                //TODO -修改是否有持有人 设置为否 仍有分利ID和持有人id
                 para.id = row.typeId;
+                if (Array.isArray(para.id) && para.id != null && para.id.length > 0) {
+                    para.id = para.id[para.id.length-1];
+                }
+                console.log(para.id);
                 getTypeTreeRoute(para).then((res) => {
                     if (res.meta.success) {
-                        row.typeId = [];
+                        var list = [];
                         var len = res.data.length;
                         for(var i = 1; i < len; i++) {
-                            row.typeId.push(res.data[len-i-1]);
+                            list.push(res.data[len-i-1]);
+                            console.log(list);
                         };
-                        console.log("getTypeRoute : " + row);
+                        console.log(list);
+
+                        console.log(len);
+                        console.log(row);
+                        row.typeId = list;
+                        console.log(row);
+                        this.handleChange(list);
                         this.addForm = Object.assign({}, row);
                         console.log("addFrom:");
                         console.log(this.addForm);
@@ -1060,7 +1143,6 @@
                         });
                     }
                 });
-                //TODO
                 this.addForm = {
                     isAppuserHold: 0,
                     isCanBook: 0,
@@ -1068,19 +1150,30 @@
             },
             //编辑
             editSubmit: function () {
-                let para = Object.assign({}, this.addForm);
-                if (para.typeId != null && para.typeId.length > 0) {
-                    para.typeId = para.typeId.pop();
-                }
-                if(para.isAppuserHold == 0) {
-                    para.appuserId = null;
-                    para.shareholdingPercentModelId = null;
-                }
+                // let para = Object.assign({}, this.addForm);
+                // if (para.typeId != null && para.typeId.length > 0) {
+                //     para.typeId = para.typeId.pop();
+                // }
+                // if(para.isAppuserHold == 0) {
+                //     para.appuserId = null;
+                //     para.shareholdingPercentModelId = null;
+                // }
                 // para = util.filterParams(para);
                 // console.log(para);
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        //TODO 提交失败一次this.addForm长度减一
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                            console.log(this.addForm);
+                            let para = Object.assign({}, this.addForm);
+                            if (Array.isArray(para.typeId) && para.typeId != null && para.typeId.length > 0) {
+                                para.typeId = para.typeId.pop();
+                            }
+                            if(para.isAppuserHold == 0) {
+                                para.appuserId = null;
+                                para.shareholdingPercentModelId = null;
+                            }
+                            console.log(para.typeId);
                             this.addLoading = true;
                             //NProgress.start();
                             // let para = Object.assign({}, this.addForm);
@@ -1096,31 +1189,35 @@
                                     this.addFormVisible = false;
                                     this.getDevices();
                                 } else {
+                                    console.log("请求失败:" + res.meta.message);
                                     this.$message({
                                         message: res.meta.message,
                                         type: 'error'
                                     });
                                 }
                             });
-                        });
+                        // });
                     }
                 });
             },
             //新增
             addSubmit: function () {
-                let para = Object.assign({}, this.addForm);
-                if (para.typeId != null && para.typeId.length > 0) {
-                    para.typeId = para.typeId.pop();
-                }
-                if(para.isAppuserHold == 0) {
-                    para.appuserId = null;
-                    para.shareholdingPercentModelId = null;
-                }
                 // para = util.filterParams(para);
                 // console.log(para);
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
+
+                            let para = Object.assign({}, this.addForm);
+                            if (Array.isArray(para.typeId) && para.typeId != null && para.typeId.length > 0) {
+                                para.typeId = para.typeId.pop();
+                            }
+                            if(para.isAppuserHold == 0) {
+                                para.appuserId = null;
+                                para.shareholdingPercentModelId = null;
+                            }
+                            // console.log(this.addForm);
+                            // console.log(para);
                             this.addLoading = true;
                             //NProgress.start();
                             // let para = Object.assign({}, this.addForm);
@@ -1142,9 +1239,17 @@
                                     });
                                 }
                             });
-                        });
+                        // });
                     }
                 });
+            },
+            addCancel: function(){
+                this.$refs.addForm.resetFields();
+                this.addFormVisible = false;
+            },
+            editCancel: function(){
+                this.$refs.editForm.resetFields();
+                this.editFormVisible = false;
             },
             selsChange: function (sels) {
                 this.sels = sels;

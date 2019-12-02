@@ -13,12 +13,13 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" fit="true" style="width: 100%;">
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange"
+                  fit="true" style="width: 100%; ">
 <!--            <el-table-column type="selection" >-->
 <!--            </el-table-column>-->
-            <el-table-column type="index" >
+            <el-table-column type="index" label="序号">
             </el-table-column>
-            <el-table-column prop="createTime" label="注册时间"  sortable>
+            <el-table-column prop="createTime" label="注册时间" sortable>
             </el-table-column>
             <el-table-column prop="userName" label="用户名" >
             </el-table-column>
@@ -65,7 +66,7 @@
         </el-col>
 
         <!--编辑界面-->
-        <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
+        <el-dialog title="编辑" :visible.sync="editFormVisible" @close="editCancel" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="150px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="手机号" prop="phoneNumber">
                     <el-input v-model="editForm.phoneNumber" disabled="true" auto-complete="off" maxlength="11" style="width: 25%"></el-input>
@@ -91,13 +92,13 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click.native="editFormVisible = false">取消</el-button>
+                <el-button @click.native="editCancel">取消</el-button>
                 <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
             </div>
         </el-dialog>
 
         <!--新增界面-->
-        <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
+        <el-dialog title="新增" :visible.sync="addFormVisible" @close="addCancel" :close-on-click-modal="false">
             <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
                 <el-form-item label="手机号" prop="phoneNumber">
                     <el-input v-model="addForm.phoneNumber" auto-complete="off" maxlength="11" style="width: 25%"></el-input>
@@ -123,7 +124,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click.native="addFormVisible = false">取消</el-button>
+                <el-button @click.native="addCancel">取消</el-button>
                 <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
             </div>
         </el-dialog>
@@ -155,12 +156,12 @@
                     phoneNumber: [
                         { required: true, message: '请输入手机号', trigger: 'blur' }
                     ],
-                    sex: [
-                        { required: true, message: '请选择性别', trigger: 'blur' }
-                    ],
-                    birthday: [
-                        { required: true, message: '请选择生日', trigger: 'blur' }
-                    ],
+                    // sex: [
+                    //     { required: true, message: '请选择性别', trigger: 'blur' }
+                    // ],
+                    // birthday: [
+                    //     { required: true, message: '请选择生日', trigger: 'blur' }
+                    // ],
                     isHolder: [
                         { required: true, message: '请选择是否为持有人', trigger: 'blur' }
                     ],
@@ -180,12 +181,12 @@
                     phoneNumber: [
                         { required: true, message: '请输入手机号', trigger: 'blur' }
                     ],
-                    sex: [
-                        { required: true, message: '请选择性别', trigger: 'blur' }
-                    ],
-                    birthday: [
-                        { required: true, message: '请选择生日', trigger: 'blur' }
-                    ],
+                    // sex: [
+                    //     { required: true, message: '请选择性别', trigger: 'blur' }
+                    // ],
+                    // birthday: [
+                    //     { required: true, message: '请选择生日', trigger: 'blur' }
+                    // ],
                     isHolder: [
                         { required: true, message: '请选择是否为持有人', trigger: 'blur' }
                     ],
@@ -197,6 +198,7 @@
                     birthday: '',
                     isHolder: '',
                     userName:'',
+                    assetCount:'',
                 }
 
             }
@@ -262,6 +264,15 @@
                     condition: this.condition
                 };
                 para.condition = util.filterParams(para.condition);
+                if(para.condition.registBeginDate != null && para.condition.registEndDate != null) {
+                    if(para.condition.registBeginDate > para.condition.registEndDate) {
+                        this.$message({
+                            message: '开始时间不能晚于结束时间',
+                            type: 'error'
+                        });
+                        return ;
+                    }
+                }
                 this.listLoading = true;
                 //NProgress.start();
                 getUserListPage(para).then((res) => {
@@ -279,6 +290,13 @@
                 this.$confirm('确认删除该记录吗?', '提示', {
                     type: 'warning'
                 }).then(() => {
+                    if(row.isHolder == 1 && row.assetCount > 0) {
+                        this.$message({
+                            message: '该用户为持有人且当前持有设备，不能被删除！',
+                            type: 'error'
+                        })
+                        return;
+                    }
                     this.listLoading = true;
                     //NProgress.start();
                     let para = { ids: [] };
@@ -310,7 +328,6 @@
             },
             //显示新增界面
             handleAdd: function () {
-                this.addFormVisible = true;
                 this.addForm = {
                     phoneNumber: '',
                     sex: '',
@@ -318,15 +335,23 @@
                     isHolder: '',
                     userName: '',
                 };
+                this.addFormVisible = true;
             },
             //编辑
             editSubmit: function () {
                 this.$refs.editForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.editLoading = true;
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             //NProgress.start();
                             let para = Object.assign({}, this.editForm);
+                            if(para.isHolder == 0 && para.assetCount > 0) {
+                                this.$message({
+                                    message: '该持有人持有设备不能被变更状态！',
+                                    type: 'error'
+                                })
+                                return;
+                            }
+                            this.editLoading = true;
                             // para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             editUser(para).then((res) => {
                                 this.editLoading = false;
@@ -346,7 +371,7 @@
                                     });
                                 }
                             });
-                        });
+                        // });
                     }
                 });
             },
@@ -354,7 +379,7 @@
             addSubmit: function () {
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.addLoading = true;
                             //NProgress.start();
                             let para = Object.assign({}, this.addForm);
@@ -377,10 +402,19 @@
                                     });
                                 }
                             });
-                        });
+                        // });
                     }
                 });
             },
+            addCancel: function(){
+                this.$refs.addForm.resetFields();
+                this.addFormVisible = false;
+            },
+            editCancel: function(){
+                this.$refs.editForm.resetFields();
+                this.editFormVisible = false;
+            },
+
             selsChange: function (sels) {
                 this.sels = sels;
             },

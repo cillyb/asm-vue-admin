@@ -8,10 +8,10 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="logs" highlight-current-row v-loading="listLoading" @selection-change="selsChange" fit="true" style="width: 100%;">
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="logs" highlight-current-row v-loading="listLoading" @selection-change="selsChange" fit="true" style="width: 100%;">
             <!--            <el-table-column type="selection" >-->
             <!--            </el-table-column>-->
-            <el-table-column type="index" >
+            <el-table-column type="index" label="序号">
             </el-table-column>
             <el-table-column prop="userName" label="用户名" sortable>
             </el-table-column>
