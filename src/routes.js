@@ -35,17 +35,6 @@ let routes = [
         name: '',
         hidden: true
     },
-    //{ path: '/main', component: Main },
-    // {
-    //     path: '/',
-    //     component: Home,
-    //     name: '',
-    //     iconCls: 'iconfont icon-shouye',
-    //     leaf: true,//只有一个节点
-    //     children: [
-    //         { path: '/Index', component: Index, name: '首页' }
-    //     ]
-    // },
     {
         path: '/',
         component: Home,

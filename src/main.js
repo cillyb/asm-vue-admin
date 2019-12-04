@@ -47,7 +47,7 @@ axios.interceptors.response.use(
     response => {
       // console.log("拦截器拦截了响应：")
       // console.log(response);
-      if (response.data.meta.code === '10002') {
+      if (response.data.meta.code === '10002') {    //判断token是否失效
         console.log("token过期");
         router.replace('/login');
       }

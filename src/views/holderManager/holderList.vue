@@ -25,15 +25,10 @@
                   :load="load"
                   :tree-props="{children: 'children', hasChildren: 'hasAsset'}"
                   style="width: 100%;">
-<!--            <el-table-column type="index" style="width: 10%;">-->
-<!--                <template scope="scope"><span>{{scope.$index+(page - 1) * size + 1}} </span></template>-->
-<!--            </el-table-column>-->
             <el-table-column prop="idx" label="序号" align="center" width="70">
             </el-table-column>
             <el-table-column prop="userName" label="名称" style="width: 15%;" sortable>
             </el-table-column>
-<!--            <el-table-column prop="assetName" label="设备名称" style="width: 15%;" sortable>-->
-<!--            </el-table-column>-->
             <el-table-column prop="phoneNumber" label="手机号" style="width: 15%;" sortable>
             </el-table-column>
             <el-table-column prop="typeName" label="设备类型" style="width: 15%;" >
