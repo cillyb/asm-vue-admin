@@ -266,6 +266,7 @@
 				flex:0 0 230px;
 				width: 230px;
 				padding-top: 50px;
+				overflow: auto;
 			}
 			.content-container {
 				// background: #f1f2f7;
