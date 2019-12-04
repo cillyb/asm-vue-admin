@@ -77,19 +77,7 @@ let routes = [
             { path: '/communityList', component: communityList, name: '社区列表' }
         ]
     },
-    {
-        path: '/',
-        component: Home,
-        name: '设置管理',
-        iconCls: 'iconfont icon-shezhi',
-        children: [
-            // { path: '/deviceTypeSetting', component: deviceTypeSetting, name: '设备类型设置' },
-            { path: '/appointmentTimeSetting', component: appointmentTimeSetting, name: '预约时间设置' },
-            { path: '/priceSetting', component: priceSetting, name: '价格设置' },
-            { path: '/shareholdingSetting', component: shareholdingSetting, name: '分利设置' },
-            { path: '/businessSetting', component: businessSetting, name: '交易设置' }
-        ]
-    },
+
     {
         path: '/',
         component: Home,
@@ -120,15 +108,19 @@ let routes = [
             { path: '/refundManager', component: refundManager, name: '退款管理' }
         ]
     },
-    // {
-    //     path: '/',
-    //     component: Home,
-    //     name: '统计管理',
-    //     iconCls: 'iconfont icon-tongji',
-    //     children: [
-    //         { path: '/statisticalGraph', component: statisticalGraph, name: '统计图表' }
-    //     ]
-    // },
+    {
+        path: '/',
+        component: Home,
+        name: '设置管理',
+        iconCls: 'iconfont icon-shezhi',
+        children: [
+            // { path: '/deviceTypeSetting', component: deviceTypeSetting, name: '设备类型设置' },
+            { path: '/appointmentTimeSetting', component: appointmentTimeSetting, name: '预约时间设置' },
+            { path: '/priceSetting', component: priceSetting, name: '价格设置' },
+            { path: '/shareholdingSetting', component: shareholdingSetting, name: '分利设置' },
+            { path: '/businessSetting', component: businessSetting, name: '交易设置' }
+        ]
+    },
     {
         path: '*',
         hidden: true,
