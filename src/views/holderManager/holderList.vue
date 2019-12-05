@@ -4,10 +4,10 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.userName" placeholder="用户名"></el-input>
+                    <el-input v-model="filters.userName" placeholder="用户名" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-input v-model="filters.phoneNumber" placeholder="手机号"></el-input>
+                    <el-input v-model="filters.phoneNumber" placeholder="手机号" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="handleQuery">查询</el-button>
@@ -16,7 +16,7 @@
         </el-col>
 
         <!--列表-->
-        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="holder"
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="cellStyle" :data="holder"
                   highlight-current-row
                   v-loading="listLoading"
                   @selection-change="selsChange"
@@ -25,7 +25,7 @@
                   :load="load"
                   :tree-props="{children: 'children', hasChildren: 'hasAsset'}"
                   style="width: 100%;">
-            <el-table-column prop="idx" label="序号" align="center" width="70">
+            <el-table-column prop="idx" label="序号" width="70">
             </el-table-column>
             <el-table-column prop="userName" label="名称" style="width: 15%;" sortable>
             </el-table-column>
@@ -74,6 +74,14 @@
             }
         },
         methods: {
+            cellStyle({row, column, rowIndex, columnIndex}){
+                if(columnIndex === 0){ //指定坐标
+                    return 'text-align:right'
+                }else{
+                    return 'text-align:center'
+                }
+            },
+
             //百分比显示格式转化
             formatPercent: function (row, column) {
                 if(row.shareholdingPercent != null) {

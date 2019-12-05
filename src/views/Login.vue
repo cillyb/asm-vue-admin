@@ -14,7 +14,10 @@
         <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit" :loading="logining">登录</el-button>
       </el-form-item>
     </el-form>
-</div>
+        <div style="text-align: center;margin-top: -150px;">
+            <span style="color:#cccccc;">Copyright © 2019 天津众颐科技有限公司</span>
+        </div>
+    </div>
   </template>
 
 
@@ -95,7 +98,7 @@
     background-clip: padding-box;
     margin: 180px auto;
     width: 350px;
-    padding: 35px 35px 15px 35px;
+    padding: 75px 75px 45px 75px;
     background: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
