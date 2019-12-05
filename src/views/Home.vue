@@ -5,15 +5,11 @@
 					style="font-size: 24px; margin-left: 15px;">
 				{{collapsed?'':sysName}}
 			</el-col>
-			<!--<el-col :span="10">-->
-				<!--<div class="tools" @click.prevent="collapse">-->
-					<!--<i class="fa fa-align-justify"></i>-->
-				<!--</div>-->
-			<!--</el-col>-->
 			<el-col :span="4" class="userinfo">
 				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
 					<el-dropdown-menu slot="dropdown">
+						<!-- TODO 二期-->
 						<!--<el-dropdown-item @click.native="clickMyMessage">我的消息</el-dropdown-item>-->
 						<!--<el-dropdown-item @click.native="clickSetting">设置</el-dropdown-item>-->
 						<!--<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>-->
@@ -36,22 +32,6 @@
 						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i :class="item.iconCls"></i>&nbsp;&nbsp;&nbsp;{{item.children[0].name}}</el-menu-item>
 					</template>
 				</el-menu>
-				<!--导航菜单-折叠后-->
-				<!--<ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">-->
-					<!--<li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item">-->
-						<!--<template v-if="!item.leaf">-->
-							<!--<div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>-->
-							<!--<ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"> -->
-								<!--<li v-for="child in item.children" v-if="!child.hidden" :key="child.path" class="el-menu-item" style="padding-left: 40px;" :class="$route.path==child.path?'is-active':''" @click="$router.push(child.path)">{{child.name}}</li>-->
-							<!--</ul>-->
-						<!--</template>-->
-						<!--<template v-else>-->
-							<!--<li class="el-submenu">-->
-								<!--<div class="el-submenu__title el-menu-item" style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.children[0].path?'is-active':''" @click="$router.push(item.children[0].path)"><i :class="item.iconCls"></i></div>-->
-							<!--</li>-->
-						<!--</template>-->
-					<!--</li>-->
-				<!--</ul>-->
 			</aside>
 			<section class="content-container">
 				<div class="grid-content bg-purple-light">
@@ -128,7 +108,7 @@
 				this.$confirm('确认退出吗?', '提示', {
 					//type: 'warning'
 				}).then(() => {
-					sessionStorage.removeItem('user');
+					localStorage.removeItem('user');
 					_this.$router.push('/login');
 				}).catch(() => {
 
@@ -145,7 +125,7 @@
 			}
 		},
 		mounted() {
-			var user = sessionStorage.getItem('user');
+			var user = localStorage.getItem('user');
 			//TODO获取用户头像和昵称
 			this.sysUserName = "admin";
 			this.sysUserAvatar = "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1574302814&di=126db98b0d310b2e8a948e15600c2625&src=http://hbimg.b0.upaiyun.com/69ad7a731f43d4b8729f1a2fbe65c43801ca0f033250-EV1vMf_fw658";
@@ -266,6 +246,7 @@
 				flex:0 0 230px;
 				width: 230px;
 				padding-top: 50px;
+				overflow: auto;
 			}
 			.content-container {
 				// background: #f1f2f7;

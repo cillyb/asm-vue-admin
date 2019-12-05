@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.modelName" placeholder="模板名称"></el-input>
+                    <el-input v-model="filters.modelName" placeholder="模板名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="handleQuery">查询</el-button>
@@ -19,7 +19,7 @@
         <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="timeModel" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
             <el-table-column type="selection">
             </el-table-column>
-            <el-table-column type="index">
+            <el-table-column type="index" label="序号">
             </el-table-column>
             <el-table-column prop="modelName" label="模板名称" sortable>
             </el-table-column>
@@ -69,14 +69,24 @@
                 <el-form-item label="模板名称" prop="modelName">
                     <el-input v-model="editForm.modelName" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="预约天数" prop="availableDays">
-                    <el-input-number v-model="editForm.availableDays"></el-input-number>
+                <el-form-item prop="availableDays">
+                    <span slot="label" >预约天数 <br>(单位:天)</span>
+                    <div class="FormInput" >
+                        <el-input-number v-model="editForm.availableDays"></el-input-number>
+                        <el-tooltip class="item" effect="dark" content="指可开放几天供用户预约（如：今日为26日预约天数为三天。那么用户便可预约27、28、29三天的设备）" placement="right">
+                            <i class="el-icon-info"></i>
+                        </el-tooltip>
+                    </div>
                 </el-form-item>
-                <el-form-item label="预约设备时长" prop="timeDevideInterval">
+                <el-form-item prop="timeDevideInterval">
+                    <span slot="label" >预约时间段 <br>(单位：分钟)</span>
                     <el-input-number v-model="editForm.timeDevideInterval"></el-input-number>
+                    <el-tooltip class="item" effect="dark" content="指在有起止时间（营业时间）的情况下，可按照所设置的分钟数将该设备划成几个时间段" placement="right">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
-                    <el-input type="textarea" v-model="editForm.remark" auto-complete="off"></el-input>
+                    <el-input type="textarea" v-model="editForm.remark" auto-complete="off" style="width: 50%;"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -91,14 +101,22 @@
                 <el-form-item label="模板名称" prop="modelName">
                     <el-input v-model="addForm.modelName" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="预约天数" prop="availableDays">
+                <el-form-item prop="availableDays">
+                    <span slot="label" >预约天数 <br>(单位:天)</span>
                     <el-input-number v-model="addForm.availableDays"></el-input-number>
+                    <el-tooltip class="item" effect="dark" content="指可开放几天供用户预约（如：今日为26日预约天数为三天。那么用户便可预约27、28、29三天的设备）" placement="right">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
-                <el-form-item label="预约设备时长" prop="timeDevideInterval">
+                <el-form-item prop="timeDevideInterval">
+                    <span slot="label" >预约时间段 <br>(单位：分钟)</span>
                     <el-input-number v-model="addForm.timeDevideInterval"></el-input-number>
+                    <el-tooltip class="item" effect="dark" content="指在有起止时间（营业时间）的情况下，可按照所设置的分钟数将该设备划成几个时间段" placement="right">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
-                    <el-input type="textarea" v-model="addForm.remark" auto-complete="off"></el-input>
+                    <el-input type="textarea" v-model="addForm.remark" auto-complete="off" style="width: 50%;"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -437,5 +455,25 @@
 </script>
 
 <style scoped>
+    .el-dialog .el-input{
+        width: 25%;
+    }
 
+    .el-dialog .el-input-number{
+        width: 25%;
+    }
+
+    .el-icon-info{
+        margin-left: 10px;
+        font-size: 20px;
+    }
+
+    .el-icon-info:hover{
+        color: #409EFF;
+    }
+
+    .el-form-item span{
+        display:inline-block;
+        line-height:1.3;
+    }
 </style>

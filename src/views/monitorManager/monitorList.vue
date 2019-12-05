@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.assetName" placeholder="设备名称"></el-input>
+                    <el-input v-model="filters.assetName" placeholder="设备名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="handleQuery">查询</el-button>
@@ -14,7 +14,7 @@
 
         <!--列表-->
         <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="monitor" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-            <el-table-column type="index" style="width: 10%;">
+            <el-table-column type="index" label="序号" style="width: 10%;">
             </el-table-column>
             <el-table-column prop="deviceNo" label="设备编号" style="width: 15%;" sortable>
             </el-table-column>

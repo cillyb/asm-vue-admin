@@ -1,9 +1,6 @@
 import axios from 'axios';
 
 export const requestLogin = params => {
-    return axios.post(`/api/login/bgManagerLogin`, params,{
-        headers: {
-            'Content-Type': 'application/json'
-        }
+    return axios.post(`/bgapi/login/bgManagerLogin`, params,{
     }).then(res => res.data);
 };

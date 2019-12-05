@@ -3,7 +3,7 @@
         <div class="app-container">
             <el-row :gutter="20">
                 <!--部门数据-->
-                <el-col :span="4" :xs="24" style="width: 240px ">
+                <el-col :span="4" :xs="24" style="width: 250px; ">
                     <div class="head-container" style="margin-top: 10px;">
                         设备类型
                     </div>
@@ -52,11 +52,11 @@
                         <el-button type="primary" @click.native="editTypeSubmit" :loading="editLoading">提交</el-button>
                     </div>
                 </el-dialog>
-                <el-col :span="20" :xs="24" :sm="22" :md="20" :lg="18" :xl="18">
+                <el-col :span="20" :xs="24" :sm="22" :md="20" :lg="18" :xl="18" style="width: 80%;">
                     <!--工具条-->
                     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-                        设备名称:<el-input v-model="condition.assetName" style="width: 10%;"></el-input>
-                        所属社区:<el-input v-model="condition.communityName" style="width: 10%;"></el-input>
+                        设备名称:<el-input v-model="condition.assetName" style="width: 10%;" clearable></el-input>
+                        所属社区:<el-input v-model="condition.communityName" style="width: 10%;" clearable></el-input>
                         <el-select v-model="condition.isAppuserHold" clearable placeholder="是否有持有人">
                             <el-option
                                     v-for="item in options"
@@ -74,7 +74,7 @@
                               @selection-change="selsChange" style="width: 100%;">
                         <el-table-column type="selection" width="55">
                         </el-table-column>
-                        <el-table-column type="index" width="60">
+                        <el-table-column type="index" label="序号" width="60">
                         </el-table-column>
                         <el-table-column prop="assetName" label="设备名称" width="120" sortable>
                         </el-table-column>
@@ -194,7 +194,7 @@
                             <el-radio class="radio" :label="1">是</el-radio>
                         </el-radio-group>
                         <el-form-item v-if="addForm.isAppuserHold == 1" label="持有人: ">
-                            <span v-model="addForm.appuserId">{{ addForm.userName.length == 0 ? addForm.phoneNumber : addForm.userName }}</span>
+                            <span v-model="addForm.appuserId">{{(addForm.userName != null && addForm.userName.length == 0) ? addForm.phoneNumber : addForm.userName }}</span>
                             <el-button @click="addChoiceHolder">选择</el-button>
                         </el-form-item>
                         <el-form-item v-if="addForm.isAppuserHold == 1" label="分利方案: " >
@@ -965,7 +965,7 @@
                             if (this.optionsType.length > 0) {
                                 this.$refs.treeBox.setCurrentKey(this.optionsType[0].id);
                                 this.condition.typeId = this.optionsType[0].id;
-                                console.log("getTypeTree:" + this.condition.typeId);
+                                // console.log("getTypeTree:" + this.condition.typeId);
                                 this.editTypeForm.editTypeName = this.optionsType[0].typeName;
                                 this.getDevices();
                             } else {
@@ -982,8 +982,6 @@
             },
 
             handleNodeClick(data) {
-                // console.log(this.currentNode);
-                // console.log(data.id);
                 this.condition.typeId = data.id;
                 this.getDevices();
             },
@@ -1031,7 +1029,7 @@
                     },
                     condition: newCondition
                 };
-                console.log("getDevices: " + this.condition.typeId);
+                // console.log("getDevices: " + this.condition.typeId);
                 this.listLoading = true;
                 //NProgress.start();
                 getDevices(para).then((res) => {

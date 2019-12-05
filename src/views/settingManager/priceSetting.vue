@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.modelName" placeholder="价格模板名称"></el-input>
+                    <el-input v-model="filters.modelName" placeholder="价格模板名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="handleQuery">查询</el-button>
@@ -19,7 +19,7 @@
         <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="shareholding" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
             <el-table-column type="selection">
             </el-table-column>
-            <el-table-column type="index">
+            <el-table-column type="index" label="序号">
             </el-table-column>
             <!--<el-table-column prop="id" label="模板id" sortable>-->
             <!--</el-table-column>-->
@@ -73,11 +73,19 @@
                 <el-form-item label="模板名称" prop="modelName">
                     <el-input v-model="editForm.modelName" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="时长" prop="unitCount">
-                    <el-input-number v-model="editForm.unitCount" auto-complete="off" placeholder="请输入分钟时长"></el-input-number>
+                <el-form-item prop="unitCount">
+                    <span slot="label" >时长 <br>(单位：分钟)</span>
+                    <el-input-number v-model="editForm.unitCount" auto-complete="off" placeholder="请输入时长"></el-input-number>
+                    <el-tooltip class="item" effect="dark" content="指设备单次运行所需要的时间" placement="right">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
-                <el-form-item label="价格" prop="price">
-                    <el-input v-model="editForm.price" auto-complete="off" placeholder="单位是元"></el-input>
+                <el-form-item prop="price">
+                    <span slot="label" >价格 <br>(单位：元)</span>
+                    <el-input v-model="editForm.price" auto-complete="off" placeholder="请输入价格"></el-input>
+                    <el-tooltip class="item" effect="dark" content="指设备单次运行所要支付的价格" placement="right">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -92,11 +100,19 @@
                 <el-form-item label="模板名称" prop="modelName">
                     <el-input v-model="addForm.modelName" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="时长（单位是分）" prop="unitCount">
+                <el-form-item prop="unitCount">
+                    <span slot="label" >时长 <br>(单位：分钟)</span>
                     <el-input-number v-model="addForm.unitCount" auto-complete="off"></el-input-number>
+                    <el-tooltip class="item" effect="dark" content="指设备单次运行所需要的时间" placement="right">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
-                <el-form-item label="价格" prop="price">
+                <el-form-item prop="price">
+                    <span slot="label" >价格 <br>(单位：元)</span>
                     <el-input v-model="addForm.price" auto-complete="off" placeholder="单位是元"></el-input>
+                    <el-tooltip class="item" effect="dark" content="指设备单次运行所要支付的价格" placement="right">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -406,5 +422,25 @@
 </script>
 
 <style scoped>
+    .el-dialog .el-input{
+        width: 25%;
+    }
 
+    .el-dialog .el-input-number{
+        width: 25%;
+    }
+
+    .el-icon-info{
+        margin-left: 10px;
+        font-size: 20px;
+    }
+
+    .el-icon-info:hover{
+        color: #409EFF;
+    }
+
+    .el-form-item span{
+        display:inline-block;
+        line-height:1.3;
+    }
 </style>

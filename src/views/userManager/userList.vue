@@ -3,7 +3,7 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             手机号码:&nbsp;
-            <el-input v-model="condition.phoneNumber" style="width:10%" maxlength="11"></el-input>
+            <el-input v-model="condition.phoneNumber" style="width:10%" maxlength="11" clearable></el-input>
             &nbsp;&nbsp;注册时间:&nbsp;
             <el-date-picker type="date" placeholder="开始日期" v-model="condition.registBeginDate" value-format="yyyy-MM-dd" style="width:12%"></el-date-picker>
             &nbsp;-&nbsp;
@@ -14,10 +14,10 @@
 
         <!--列表-->
         <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange"
-                  fit="true" style="width: 100%; ">
+                   style="width: 100%; ">
 <!--            <el-table-column type="selection" >-->
 <!--            </el-table-column>-->
-            <el-table-column type="index" >
+            <el-table-column type="index" label="序号" >
             </el-table-column>
             <el-table-column prop="createTime" label="注册时间" sortable>
             </el-table-column>
@@ -72,7 +72,7 @@
                     <el-input v-model="editForm.phoneNumber" disabled="true" auto-complete="off" maxlength="11" style="width: 25%"></el-input>
                 </el-form-item>
                 <el-form-item label="用户名" prop="userName">
-                    <el-input v-model="editForm.userName" auto-complete="off" maxlength="10" style="width: 25%"></el-input>
+                    <el-input v-model="editForm.userName" placeholder="为持有人时用户名必填" auto-complete="off" maxlength="10" style="width: 25%"></el-input>
                 </el-form-item>
                 <el-form-item label="性别" prop="sex">
                     <el-radio-group v-model="editForm.sex">
@@ -104,7 +104,7 @@
                     <el-input v-model="addForm.phoneNumber" auto-complete="off" maxlength="11" style="width: 25%"></el-input>
                 </el-form-item>
                 <el-form-item label="用户名" prop="userName">
-                    <el-input v-model="addForm.userName" auto-complete="off" maxlength="10" style="width: 25%"></el-input>
+                    <el-input v-model="addForm.userName" placeholder="为持有人时用户名必填" auto-complete="off" maxlength="10" style="width: 25%"></el-input>
                 </el-form-item>
                 <el-form-item label="性别" prop="sex">
                     <el-radio-group v-model="addForm.sex">
@@ -156,12 +156,6 @@
                     phoneNumber: [
                         { required: true, message: '请输入手机号', trigger: 'blur' }
                     ],
-                    // sex: [
-                    //     { required: true, message: '请选择性别', trigger: 'blur' }
-                    // ],
-                    // birthday: [
-                    //     { required: true, message: '请选择生日', trigger: 'blur' }
-                    // ],
                     isHolder: [
                         { required: true, message: '请选择是否为持有人', trigger: 'blur' }
                     ],
@@ -181,12 +175,6 @@
                     phoneNumber: [
                         { required: true, message: '请输入手机号', trigger: 'blur' }
                     ],
-                    // sex: [
-                    //     { required: true, message: '请选择性别', trigger: 'blur' }
-                    // ],
-                    // birthday: [
-                    //     { required: true, message: '请选择生日', trigger: 'blur' }
-                    // ],
                     isHolder: [
                         { required: true, message: '请选择是否为持有人', trigger: 'blur' }
                     ],
@@ -351,6 +339,13 @@
                                 })
                                 return;
                             }
+                            if(para.isHolder == 1 && (para.userName == '' || para.userName == null)) {
+                                this.$message({
+                                    message: '持有人必须填写用户名！',
+                                    type: 'error'
+                                })
+                                return;
+                            }
                             this.editLoading = true;
                             // para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             editUser(para).then((res) => {
@@ -380,9 +375,16 @@
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         // this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.addLoading = true;
                             //NProgress.start();
                             let para = Object.assign({}, this.addForm);
+                            if(para.isHolder == 1 && (para.userName == '' || para.userName == null)) {
+                                this.$message({
+                                    message: '持有人必须填写用户名！',
+                                    type: 'error'
+                                })
+                                return;
+                            }
+                            this.addLoading = true;
                             // para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             console.log(para);
                             addUser(para).then((res) => {

@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.communityName" placeholder="社区名称"></el-input>
+                    <el-input v-model="filters.communityName" placeholder="社区名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="handleQuery">查询</el-button>
@@ -19,7 +19,7 @@
         <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="community" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
             <el-table-column type="selection" width="50">
             </el-table-column>
-            <el-table-column type="index" width="50">
+            <el-table-column type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column prop="communityName" label="社区名称" sortable>
             </el-table-column>
@@ -84,7 +84,7 @@
                 <el-input v-model="editForm.latitude"></el-input>
             </el-form-item>
             <el-form-item label="地址" prop="address">
-                <el-input type="textarea" v-model="editForm.address" auto-complete="off"></el-input>
+                <el-input type="textarea" v-model="editForm.address" auto-complete="off" style="width: 50%;"></el-input>
             </el-form-item>
             <el-form-item label="管理员" prop="manager">
                 <el-input v-model="editForm.manager" auto-complete="off"></el-input>
@@ -126,7 +126,7 @@
                 <el-input v-model="addForm.latitude"></el-input>
             </el-form-item>
             <el-form-item label="地址" prop="address">
-                <el-input type="textarea" v-model="addForm.address" auto-complete="off"></el-input>
+                <el-input type="textarea" v-model="addForm.address" auto-complete="off" style="width: 50%;"></el-input>
             </el-form-item>
             <el-form-item label="管理员" prop="manager">
                 <el-input v-model="addForm.manager" auto-complete="off"></el-input>
@@ -511,5 +511,7 @@
 </script>
 
 <style scoped>
-
+    .el-dialog .el-input{
+        width: 25%;
+    }
 </style>

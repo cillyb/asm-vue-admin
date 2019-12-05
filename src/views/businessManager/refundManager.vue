@@ -2,9 +2,12 @@
     <section>
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-            <el-form :inline="true" :model="filters">
+            <el-form :inline="true" :model="condition">
                 <el-form-item>
-                    <el-input v-model="filters.id" placeholder="退款编号"></el-input>
+                    <el-input v-model="condition.id" placeholder="退款编号" clearable></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-input v-model="condition.phoneNumber" placeholder="手机号" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="handleQuery">查询</el-button>
@@ -14,7 +17,7 @@
 
         <!--列表-->
         <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="refund" highlight-current-row v-loading="listLoading" style="width: 100%;">
-            <el-table-column type="index">
+            <el-table-column type="index" label="序号">
             </el-table-column>
             <el-table-column prop="orderNo" label="订单编号" sortable>
             </el-table-column>
@@ -22,11 +25,13 @@
             </el-table-column>
             <el-table-column prop="createTime" label="申请时间" sortable>
             </el-table-column>
+            <el-table-column prop="appointTimeStr" label="预约时间" sortable>
+            </el-table-column>
             <el-table-column prop="assetName" label="设备名称" sortable>
             </el-table-column>
-            <el-table-column prop="orderStatus" label="交易状态" sortable>
+            <el-table-column prop="orderStatus" label="退款状态" sortable>
             </el-table-column>
-            <el-table-column prop="reason" label="退款理由" sortable>
+            <el-table-column prop="phoneNumber" label="手机号" sortable>
             </el-table-column>
             <el-table-column prop="price" label="支付金额" :formatter="formatPrice" sortable>
             </el-table-column>
@@ -52,7 +57,7 @@
     export default {
         data() {
             return {
-                filters: {
+                condition: {
                     id: ''
                 },
                 refund: [],
@@ -94,7 +99,7 @@
                         current:this.page,
                         size:this.size
                     },
-                    condition: this.filters
+                    condition: this.condition
                 };
                 para.condition = util.filterParams(para.condition);
                 this.listLoading = true;

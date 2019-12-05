@@ -4,10 +4,10 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.userName" placeholder="用户名"></el-input>
+                    <el-input v-model="filters.userName" placeholder="用户名" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-input v-model="filters.phoneNumber" placeholder="手机号"></el-input>
+                    <el-input v-model="filters.phoneNumber" placeholder="手机号" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="handleQuery">查询</el-button>
@@ -16,7 +16,7 @@
         </el-col>
 
         <!--列表-->
-        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="holder"
+        <el-table :header-cell-style="{'text-align':'center'}" :cell-style="cellStyle" :data="holder"
                   highlight-current-row
                   v-loading="listLoading"
                   @selection-change="selsChange"
@@ -25,32 +25,21 @@
                   :load="load"
                   :tree-props="{children: 'children', hasChildren: 'hasAsset'}"
                   style="width: 100%;">
-<!--            <el-table-column type="index" style="width: 10%;">-->
-<!--                <template scope="scope"><span>{{scope.$index+(page - 1) * size + 1}} </span></template>-->
-<!--            </el-table-column>-->
-            <el-table-column prop="idx" label="序号" align="center" width="70">
+            <el-table-column prop="idx" label="序号" width="70">
             </el-table-column>
             <el-table-column prop="userName" label="名称" style="width: 15%;" sortable>
             </el-table-column>
-<!--            <el-table-column prop="assetName" label="设备名称" style="width: 15%;" sortable>-->
-<!--            </el-table-column>-->
             <el-table-column prop="phoneNumber" label="手机号" style="width: 15%;" sortable>
             </el-table-column>
             <el-table-column prop="typeName" label="设备类型" style="width: 15%;" >
             </el-table-column>
             <el-table-column prop="deviceNo" label="设备编号" :formatter="formatNo" style="width: 15%;" >
             </el-table-column>
-            <el-table-column prop="sex" label="性别" style="width: 10%;" sortable>
-            </el-table-column>
             <el-table-column prop="shareholdingPercent" label="分利比" :formatter="formatPercent" style="width: 15%;" >
-            </el-table-column>
-            <el-table-column prop="birthday" label="生日" style="width: 10%;" sortable>
             </el-table-column>
             <el-table-column prop="totalShareBenefit" label="总收益" :formatter="formatBenefit" style="width: 10%;" >
             </el-table-column>
             <el-table-column prop="status" label="状态" :formatter="formatStatus" style="width: 10%;" >
-            </el-table-column>
-            <el-table-column prop="lastUseTime" label="上次使用时间" style="width: 20%;" sortable>
             </el-table-column>
             <el-table-column prop="createTime" label="注册时间" style="width: 20%;" sortable>
             </el-table-column>
@@ -85,6 +74,14 @@
             }
         },
         methods: {
+            cellStyle({row, column, rowIndex, columnIndex}){
+                if(columnIndex === 0){ //指定坐标
+                    return 'text-align:right'
+                }else{
+                    return 'text-align:center'
+                }
+            },
+
             //百分比显示格式转化
             formatPercent: function (row, column) {
                 if(row.shareholdingPercent != null) {
