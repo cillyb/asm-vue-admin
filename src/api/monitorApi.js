@@ -30,25 +30,16 @@ export const closeStatus = params =>{
 //可预约
 export const openIsCanBook = params =>{
     return axios.post(`/bgapi/bg/assets/asset/enableBook`, params, {
-        headers :{
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 }
 
 //不可预约
 export const closeIsCanBook = params =>{
     return axios.post(`/bgapi/bg/assets/asset/disableBook`, params, {
-        headers :{
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 }
 
 export const getLogs = params =>{
     return axios.post(`/bgapi/bg/view/log-view/list`, params, {
-        headers :{
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 }

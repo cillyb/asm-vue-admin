@@ -3,36 +3,24 @@ import axios from 'axios';
 //获取社区列表
 export const getCommunityListPage = params => {
     return axios.post(`/bgapi/bg/view/community-view/list`, params, {
-        headers: {
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 };
 
 //删除社区
 export const removeCommunity = params => {
     return axios.post(`/bgapi/bg/admin/community/delete`, params, {
-        headers: {
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 };
 
 //添加社区
 export const addCommunity = params => {
     return axios.post(`/bgapi/bg/admin/community/add`, params, {
-        headers: {
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 };
 
 //修改社区
 export const editCommunity = params => {
     return axios.post(`/bgapi/bg/admin/community/update`, params, {
-        headers: {
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 };
 
@@ -51,17 +39,11 @@ export function isvalidTel(str){
 //社区状态-开启
 export const openCommunity = params =>{
     return axios.post(`/bgapi/bg/admin/community/enable`, params, {
-        headers :{
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 }
 
 //社区状态-关闭
 export const closeCommunity = params =>{
     return axios.post(`/bgapi/bg/admin/community/disable`, params, {
-        headers :{
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 }

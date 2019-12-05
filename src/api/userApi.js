@@ -29,8 +29,5 @@ export const openUser = params =>{
 //用户状态-关闭
 export const closeUser = params =>{
     return axios.post(`/bgapi/bg/users/app-user/disable`, params, {
-        headers :{
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 }
