@@ -3,21 +3,21 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             &nbsp;&nbsp;下单日期:&nbsp;
-            <el-date-picker type="date" placeholder="下单开始日期" v-model="condition.aimQueryDateBegin" value-format="yyyy-MM-dd" style="width:10%"></el-date-picker>
+            <el-date-picker type="date" placeholder="下单开始日期" v-model="condition.aimQueryDateBegin" value-format="yyyy-MM-dd" style="width:13%"></el-date-picker>
             &nbsp;-&nbsp;
-            <el-date-picker type="date" placeholder="下单结束日期" v-model="condition.aimQueryDateEnd" value-format="yyyy-MM-dd" style="width:10%"></el-date-picker>
+            <el-date-picker type="date" placeholder="下单结束日期" v-model="condition.aimQueryDateEnd" value-format="yyyy-MM-dd" style="width:13%"></el-date-picker>
 
             &nbsp;&nbsp;预约日期:&nbsp;
-            <el-date-picker type="date" placeholder="预约开始日期" v-model="condition.appointQueryDateBegin" value-format="yyyy-MM-dd" style="width:10%"></el-date-picker>
+            <el-date-picker type="date" placeholder="预约开始日期" v-model="condition.appointQueryDateBegin" value-format="yyyy-MM-dd" style="width:13%"></el-date-picker>
             &nbsp;-&nbsp;
-            <el-date-picker type="date" placeholder="预约结束日期" v-model="condition.appointQueryDateEnd" value-format="yyyy-MM-dd" style="width:10%"></el-date-picker>
+            <el-date-picker type="date" placeholder="预约结束日期" v-model="condition.appointQueryDateEnd" value-format="yyyy-MM-dd" style="width:13%"></el-date-picker>
             <br><br>
-            <el-input v-model="condition.orderNo" placeholder="订单编号" style="width: 8%" clearable></el-input>
-            <el-input v-model="condition.communityName" placeholder="所属社区" style="width: 8%" clearable></el-input>
-            <el-input v-model="condition.deviceNo" placeholder="设备编号" style="width: 8%" clearable></el-input>
-            <el-input v-model="condition.phoneNumber" placeholder="使用人手机" style="width: 8%" clearable></el-input>
-<!--            <el-input v-model="condition.orderNo" placeholder="订单状态" style="width: 8%"></el-input>-->
-            <el-select v-model="condition.orderStatus" clearable placeholder="订单状态" style="width: 8%">
+            <el-input v-model="condition.orderNo" placeholder="订单编号" style="width: 11%" clearable></el-input>
+            <el-input v-model="condition.communityName" placeholder="所属社区" style="width: 11%" clearable></el-input>
+            <el-input v-model="condition.deviceNo" placeholder="设备编号" style="width: 11%" clearable></el-input>
+            <el-input v-model="condition.phoneNumber" placeholder="使用人手机" style="width: 11%" clearable></el-input>
+<!--            <el-input v-model="condition.orderNo" placeholder="订单状态" style="width: 11%"></el-input>-->
+            <el-select v-model="condition.orderStatus" clearable placeholder="订单状态" style="width: 11%">
                 <el-option
                         v-for="item in options"
                         :key="item.value"
@@ -32,7 +32,7 @@
 
         <!--列表-->
         <el-table id="out-table" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="order" highlight-current-row v-loading="listLoading" style="width: 100%;">
-            <el-table-column type="index" label="序号">
+            <el-table-column type="index" label="序号" >
             </el-table-column>
             <el-table-column prop="orderNo" label="订单编号" sortable>
             </el-table-column>

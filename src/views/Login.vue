@@ -96,7 +96,7 @@
     border-radius: 5px;
     -moz-border-radius: 5px;
     background-clip: padding-box;
-    margin: 180px auto;
+    margin: 150px auto;
     width: 350px;
     padding: 75px 75px 45px 75px;
     background: #fff;
