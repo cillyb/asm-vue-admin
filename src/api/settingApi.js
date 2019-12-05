@@ -174,18 +174,12 @@ export const closePriceModel = params =>{
 //分利模板状态-开启
 export const openShareholding = params =>{
     return axios.post(`/bgapi/bg/assets/shareholding-model/enable`, params, {
-        headers :{
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 }
 
 //分利模板状态-关闭
 export const closeShareholding = params =>{
     return axios.post(`/bgapi/bg/assets/shareholding-model/disable`, params, {
-        headers :{
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 }
 
@@ -194,17 +188,11 @@ export const closeShareholding = params =>{
 //获取交易设置
 export const getOrderSettingListPage = params =>{
     return axios.post(`/bgapi/bg/settings/orders-setting/getOrderSetting`, params, {
-        headers :{
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 }
 
 //修改交易设置
 export const editOrderSetting = params =>{
     return axios.post(`/bgapi/bg/settings/orders-setting/update`, params, {
-        headers :{
-            'Content-Type': 'application/json',
-        }
     }).then(res => res.data);
 }

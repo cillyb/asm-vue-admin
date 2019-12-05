@@ -26,8 +26,8 @@
             </el-table-column>
             <el-table-column prop="orderStatus" label="交易状态" sortable>
             </el-table-column>
-            <el-table-column prop="reason" label="退款理由" sortable>
-            </el-table-column>
+<!--            <el-table-column prop="reason" label="退款理由" sortable>-->
+<!--            </el-table-column>-->
             <el-table-column prop="price" label="支付金额" :formatter="formatPrice" sortable>
             </el-table-column>
             <el-table-column prop="refundMoney" label="退款金额" :formatter="formatRefundMoney" sortable>
