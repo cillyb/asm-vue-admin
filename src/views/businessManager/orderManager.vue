@@ -26,13 +26,16 @@
                 </el-option>
             </el-select>
             &nbsp;&nbsp;<el-button type="primary" v-on:click="handleQuery">查询</el-button>
-            &nbsp;&nbsp;<el-button type="primary" v-on:click="exportExcel">导出Excel</el-button>
+            &nbsp;&nbsp;<el-button type="primary" v-on:click="downloadExcel">导出Excel</el-button>
 
         </el-col>
 
         <!--列表-->
-        <el-table id="out-table" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="order" highlight-current-row v-loading="listLoading" style="width: 100%;">
-            <el-table-column type="index" label="序号" >
+        <el-table id="networkTable" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="order" highlight-current-row v-loading="listLoading" style="width: 100%;"
+                  @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55">
+            </el-table-column>
+            <el-table-column prop="idx" label="序号">
             </el-table-column>
             <el-table-column prop="orderNo" label="订单编号" sortable>
             </el-table-column>
@@ -79,6 +82,9 @@
     export default {
         data() {
             return {
+                multipleSelection:[],
+                excelData:[],
+
                 options:[
                     {
                         value: '待付款',
@@ -141,6 +147,48 @@
             }
         },
         methods: {
+            handleSelectionChange (val) { // 操作多选
+                this.multipleSelection = val; // 多选的行会存入multipleSelection数组中
+            },
+            // 列表下载
+            downloadExcel () {
+                if(this.multipleSelection.length == 0) {
+                    this.$message({
+                        message: "请勾选需要导出的订单!",
+                        type: 'error'
+                    });
+                    return ;
+                }
+                this.$confirm('确定导出勾选的订单?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.excelData = this.multipleSelection; // multipleSelection是一个数组，存储表格中选择的行的数据。
+                    this.export2Excel();
+                }).catch(() => {
+
+                });
+            },
+            // 数据写入excel
+            export2Excel () {
+                var that = this;
+                require.ensure([], () => {
+                    const { export_json_to_excel } = require('@/excel/export2Excel'); // 这里必须使用绝对路径，使用@/+存放export2Excel的路径
+                    const tHeader = ['序号', '订单编号', '使用人手机', '下单时间', '订单状态', '设备编号', '所属社区', '预约时间']; // 导出的表头名信息
+                    const filterVal = ['idx', 'orderNo', 'phoneNumber', 'createTime', 'orderStatus', 'deviceNo', 'communityName', 'appointTimeStr']; // 导出的表头字段名，需要导出表格字段名
+                    const list = that.excelData;
+                    const data = that.formatJson(filterVal, list);
+
+                    export_json_to_excel(tHeader, data, '订单列表(导出时间:'+util.formatDate.getDateTime(new Date())+')');// 导出的表格名称，根据需要自己命名
+                });
+            },
+            // 格式转换，直接复制即可
+            formatJson (filterVal, jsonData) {
+                return jsonData.map(v => filterVal.map(j => v[j]));
+            },
+
+
             handleSizeChange(val) {
                 this.size = val;
                 this.getOrder();
@@ -150,6 +198,7 @@
                 this.getOrder();
             },
             //导出Excel
+            //暂时作废 此方法只能导出所有列
             exportExcel(){
                 var xlsxParam = { raw: true };//转换成excel时，使用原始的格式
                 /* 从表生成工作簿对象 */
@@ -219,6 +268,9 @@
                     console.log(res)
                     this.total = res.data.total;
                     this.order = res.data.records;
+                    for(let i = 0; i < this.order.length; i++) {
+                        this.order[i].idx = (this.page-1)*this.size+i+1;
+                    }
                     this.listLoading = false;
                 });
             },

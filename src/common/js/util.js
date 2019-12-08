@@ -58,7 +58,7 @@ export default {
             var mm=date.getMinutes();
             //秒
             var ss=date.getSeconds();
-            var rq=year+"年"+month+"月"+day+"日"+hh+":"+mm+":"+ss;
+            var rq=year+"年"+month+"月"+day+"日"+hh+"时"+mm+"分"+ss+"秒";
             return rq;
         },
         parse: function (dateString, pattern) {
