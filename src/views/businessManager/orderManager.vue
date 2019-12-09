@@ -33,9 +33,9 @@
         <!--列表-->
         <el-table id="networkTable" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="order" highlight-current-row v-loading="listLoading" style="width: 100%;"
                   @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55">
+            <el-table-column type="selection" width="45">
             </el-table-column>
-            <el-table-column prop="idx" label="序号">
+            <el-table-column prop="idx" label="序号" width="50">
             </el-table-column>
             <el-table-column prop="orderNo" label="订单编号" sortable>
             </el-table-column>

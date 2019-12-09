@@ -2,10 +2,17 @@
     <section>
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-            用户名:<el-input v-model="condition.userName" style="width: 10%;"></el-input>
-            手机号(后台暂不支持):<el-input v-model="condition.phoneNumber" style="width: 10%;"></el-input>
-            订单编号(后台暂不支持):<el-input v-model="condition.orderNo" style="width: 10%;"></el-input>
-            设备编号(后台暂不支持):<el-input v-model="condition.deviceNo" style="width: 10%;"></el-input>
+            设备编号:<el-input v-model="condition.deviceNo" clearable style="width: 10%;"></el-input>
+            手机号:<el-input v-model="condition.phoneNumber" clearable style="width: 10%;"></el-input>
+            流水状态:
+            <el-select v-model="condition.isSuccess" clearable style="width: 10%">
+            <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+        </el-select>
             <el-button type="primary" v-on:click="handleQuery">查询</el-button>
         </el-col>
 
@@ -34,13 +41,17 @@
             </el-table-column>
             <el-table-column prop="accountDate" label="结账日" :formatter="formatDate" style="width: 15%;" sortable>
             </el-table-column>
-            <el-table-column prop="moneyChange" label="该单收益" style="width: 10%;" sortable>
+            <el-table-column prop="price" label="该单收益" :formatter="formatMoney1" style="width: 10%;" sortable>
             </el-table-column>
-            <el-table-column prop="totalShareBenefit" label="总收益" style="width: 20%;" sortable>
+            <el-table-column prop="moneyChange" label="该单持有人收益" :formatter="formatMoney2" style="width: 10%;" sortable>
             </el-table-column>
-            <el-table-column prop="remark" label="备注" style="width: 20%;" sortable>
+            <el-table-column prop="accountDateBenefit" label="结账日前收益" :formatter="formatMoney3" style="width: 10%;" sortable>
             </el-table-column>
-            <el-table-column prop="createTime" label="时间" style="width: 20%;" sortable>
+            <el-table-column prop="totalShareBenefit" label="总收益" :formatter="formatMoney4" style="width: 20%;" sortable>
+            </el-table-column>
+            <el-table-column prop="isSuccess" label="流水状态" :formatter="formatStatus" style="width: 20%;" sortable>
+            </el-table-column>
+            <el-table-column prop="createTime" label="创建时间" style="width: 20%;" sortable>
             </el-table-column>
         </el-table>
 
@@ -60,11 +71,22 @@
     export default {
         data() {
             return {
+                options:[
+                    {
+                        value: '-1',
+                        label:'未转账'
+                    },
+                    {
+                        value: '1',
+                        label:'已转账'
+                    },
+                ],
                 condition: {
                     userName:'',
                     orderNo:'',
                     phoneNumber:'',
-                    deviceNo:''
+                    deviceNo:'',
+                    isSuccess:''
                 },
                 flows: [],
                 total: 0,
@@ -84,6 +106,21 @@
             //每月结算日格式转化
             formatDate: function (row, colum) {
                 return "每月"+row.accountDate+"号";
+            },
+            formatStatus: function (row, colum) {
+                return row.isSuccess == 0 ? "未转账" : "已转账";
+            },
+            formatMoney1: function (row, colum) {
+                return row.price+"元";
+            },
+            formatMoney2: function (row, colum) {
+                return row.moneyChange+"元";
+            },
+            formatMoney3: function (row, colum) {
+                return row.accountDateBenefit+"元";
+            },
+            formatMoney4: function (row, colum) {
+                return row.totalShareBenefit+"元";
             },
 
             handleSizeChange(val) {
@@ -111,6 +148,9 @@
                     "condition": this.condition
                 };
                 para.condition = util.filterParams(para.condition);
+                if(para.condition.isSuccess == -1) {
+                    para.condition.isSuccess = 0;
+                }
                 this.listLoading = true;
                 getHolderCapitalFlow(para).then((res) => {
                     this.total = res.data.total;

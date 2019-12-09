@@ -38,22 +38,28 @@
         <!--编辑界面-->
         <el-dialog title="编辑" :visible.sync="editFormVisible" @close="editCancel" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="180px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="待付款订单的存在时间" prop="orderPayTimeout">
+                <el-form-item prop="orderPayTimeout">
+                    <span slot="label" >待付款订单的存在时间 <br>(单位:分钟)</span>
                     <el-input v-model="editForm.orderPayTimeout" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="一级时间" prop="refundLimitLevel1">
+                <el-form-item prop="refundLimitLevel1">
+                    <span slot="label" >一级时间 <br>(单位:分钟)</span>
                     <el-input v-model="editForm.refundLimitLevel1" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="一级手续费比例" prop="refundLimitLevel1ServerPercent">
+                <el-form-item prop="refundLimitLevel1ServerPercent">
+                    <span slot="label" >一级手续费比例 <br>(单位:%)</span>
                     <el-input v-model="editForm.refundLimitLevel1ServerPercent" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="二级时间" prop="refundLimitLevel2">
+                <el-form-item prop="refundLimitLevel2">
+                    <span slot="label" >二级时间 <br>(单位:分钟)</span>
                     <el-input v-model="editForm.refundLimitLevel2" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="二级手续费比例" prop="refundLimitLevel2ServerPercent">
+                <el-form-item prop="refundLimitLevel2ServerPercent">
+                    <span slot="label" >二级手续费比例 <br>(单位:%)</span>
                     <el-input v-model="editForm.refundLimitLevel2ServerPercent" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="提醒时间" prop="remindTime">
+                <el-form-item prop="remindTime">
+                    <span slot="label" >提醒时间 <br>(单位:分钟)</span>
                     <el-input v-model="editForm.remindTime" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
@@ -187,5 +193,10 @@
 <style scoped>
     .el-dialog .el-input{
         width: 25%;
+    }
+
+    .el-form-item span{
+        display:inline-block;
+        line-height:1.3;
     }
 </style>

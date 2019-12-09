@@ -243,8 +243,8 @@
 				width: 60px;
 			}
 			.menu-expanded{
-				flex:0 0 230px;
-				width: 230px;
+				flex:0 0 180px;
+				width: 180px;
 				padding-top: 50px;
 				overflow: auto;
 			}
