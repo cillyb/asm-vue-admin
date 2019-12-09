@@ -56,6 +56,7 @@
                     <!--工具条-->
                     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
                         设备名称:<el-input v-model="condition.assetName" style="width: 10%;" clearable></el-input>
+                        设备编号:<el-input v-model="condition.deviceNo" style="width: 10%;" clearable></el-input>
                         所属社区:<el-input v-model="condition.communityName" style="width: 10%;" clearable></el-input>
                         <el-select v-model="condition.isAppuserHold" clearable placeholder="是否有持有人">
                             <el-option
@@ -445,6 +446,7 @@
                     isAppuserHold:'',
                     assetName: '',
                     communityName: '',
+                    deviceNo:'',
                 },
                 //treeData
                 data: {},
