@@ -2,14 +2,27 @@
     <section>
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-            <el-form :inline="true" :model="filters">
-                <el-form-item>
-                    <el-input v-model="filters.assetName" placeholder="设备名称" clearable></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" v-on:click="handleQuery">查询</el-button>
-                </el-form-item>
-            </el-form>
+            设备编号:<el-input v-model="condition.deviceNo" clearable style="width: 10%;"></el-input>
+            所属社区:<el-input v-model="condition.communityName" clearable style="width: 10%;"></el-input>
+            上下架状态:
+            <el-select v-model="condition.status" clearable style="width: 10%">
+                <el-option
+                        v-for="item in options1"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+            设备状态:
+            <el-select v-model="condition.runningCondition" clearable style="width: 10%">
+                <el-option
+                        v-for="item in options2"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+            <el-button type="primary" v-on:click="handleQuery">查询</el-button>
         </el-col>
 
         <!--列表-->
@@ -38,18 +51,18 @@
                     </el-switch>
                 </template>
             </el-table-column>
-            <el-table-column prop="isCanBook" label="预约设置" style="width: 15%;" sortable>
-                <template scope="scope">
-                    <el-switch
-                            v-model="scope.row.isCanBook"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949"
-                            :active-value="1"
-                            :inactive-value="0"
-                            @change=changeSwitchBook(scope.row)>
-                    </el-switch>
-                </template>
-            </el-table-column>
+<!--            <el-table-column prop="isCanBook" label="预约设置" style="width: 15%;" sortable>-->
+<!--                <template scope="scope">-->
+<!--                    <el-switch-->
+<!--                            v-model="scope.row.isCanBook"-->
+<!--                            active-color="#13ce66"-->
+<!--                            inactive-color="#ff4949"-->
+<!--                            :active-value="1"-->
+<!--                            :inactive-value="0"-->
+<!--                            @change=changeSwitchBook(scope.row)>-->
+<!--                    </el-switch>-->
+<!--                </template>-->
+<!--            </el-table-column>-->
         </el-table>
 
         <!--工具条-->
@@ -68,9 +81,32 @@
     export default {
         data() {
             return {
-                filters: {
-                    assetName:''
+                condition: {
+                    deviceNo:'',
+                    status:'',
+                    communityName:'',
+                    runningCondition:''
                 },
+                options1:[
+                    {
+                        value: '1',
+                        label:'上架中'
+                    },
+                    {
+                        value: '-1',
+                        label:'下架中'
+                    },
+                ],
+                options2:[
+                    {
+                        value: '忙碌',
+                        label:'忙碌'
+                    },
+                    {
+                        value: '空闲',
+                        label:'空闲'
+                    },
+                ],
                 monitor: [],
                 total: 0,
                 page: 1,
@@ -175,9 +211,12 @@
                         "current":this.page,
                         "size":this.size
                     },
-                    "condition": this.filters
+                    "condition": this.condition
                 };
                 para.condition = util.filterParams(para.condition);
+                if(para.condition.status == -1) {
+                    para.condition.status = 0;
+                }
                 this.listLoading = true;
                 getMonitorListPage(para).then((res) => {
                     this.total = res.data.total;

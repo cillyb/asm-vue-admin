@@ -54,6 +54,7 @@ body {
 	.el-form-item {
 		margin-bottom: 10px;
 	}
+	color: #475669;
 }
 
 .fade-enter-active,

@@ -6,13 +6,13 @@
             手机号:<el-input v-model="condition.phoneNumber" clearable style="width: 10%;"></el-input>
             流水状态:
             <el-select v-model="condition.isSuccess" clearable style="width: 10%">
-            <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
-        </el-select>
+                <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
             <el-button type="primary" v-on:click="handleQuery">查询</el-button>
             <el-button type="primary" v-on:click="downloadExcel">导出Excel</el-button>
         </el-col>
@@ -26,7 +26,7 @@
                   style="width: 100%;">
             <el-table-column type="selection" width="45">
             </el-table-column>
-            <el-table-column prop="idx" label="序号" style="width: 10%;">
+            <el-table-column prop="idx" label="序号" width="50">
             </el-table-column>
             <el-table-column prop="orderNo" label="订单编号" style="width: 15%;" sortable>
             </el-table-column>
