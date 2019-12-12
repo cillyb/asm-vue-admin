@@ -27,9 +27,7 @@
             </el-table-column>
             <el-table-column prop="price" label="价格" :formatter="formatPrice" sortable>
             </el-table-column>
-            <el-table-column prop="unitCount" label="时长" sortable>
-            </el-table-column>
-            <el-table-column prop="unitName" label="单位" sortable>
+            <el-table-column prop="unitCount" label="时长" :formatter="formatTime" sortable>
             </el-table-column>
             <el-table-column prop="createTime" label="创建时间" sortable>
             </el-table-column>
@@ -252,6 +250,10 @@
             formatPrice: function (row, column) {
                 return row.price+"元";
             },
+            formatTime: function (row, column) {
+                return row.unitCount+row.unitName;
+            },
+
 
             handleCurrentChange(val) {
                 this.page = val;
