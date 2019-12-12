@@ -889,7 +889,7 @@
                 this.$refs.editTypeForm.validate((valid) => {
                     // console.log(va)
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.editLoading = true;
                             //NProgress.start();
                             let para = {
@@ -914,7 +914,7 @@
                                     });
                                 }
                             });
-                        });
+                        // });
                     }
                 });
             },
@@ -923,7 +923,7 @@
                 this.$refs.addTypeForm.validate((valid) => {
                     // console.log(va)
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.editLoading = true;
                             //NProgress.start();
                             let para = {
@@ -948,7 +948,7 @@
                                     });
                                 }
                             });
-                        });
+                        // });
                     }
                 });
             },
