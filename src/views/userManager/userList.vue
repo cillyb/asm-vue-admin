@@ -1,4 +1,4 @@
-<template>
+zui'j<template>
     <section>
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
@@ -264,7 +264,7 @@
                 this.listLoading = true;
                 //NProgress.start();
                 getUserListPage(para).then((res) => {
-                    // console.log(res);
+                     console.log(res);
                     if(res.meta.success) {
                         this.total = res.data.total;
                         this.users = res.data.records;
