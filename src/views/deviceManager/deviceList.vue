@@ -31,7 +31,7 @@
                     <el-form label-width="30%" :model="addTypeForm" ref="addTypeForm">
                         <el-form-item label="类型名" prop="name">
                             <el-input v-model="addTypeForm.addTypeName" auto-complete="off" size="small"
-                                      style="width: 60%;"></el-input>
+                                      style="width: 60%;" maxlength="12" placeholder="最多12个字"></el-input>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -44,7 +44,7 @@
                     <el-form label-width="30%" :model="editTypeForm" ref="editTypeForm">
                         <el-form-item label="类型名" prop="name">
                             <el-input v-model="editTypeForm.editTypeName" auto-complete="off" size="small"
-                                      style="width: 60%;"></el-input>
+                                      style="width: 60%;" maxlength="12" placeholder="最多12个字"></el-input>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -144,7 +144,7 @@
             <el-dialog :title="op == 'add' ? '新增' : '编辑'" :visible.sync="addFormVisible" :close-on-click-modal="false">
                 <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
                     <el-form-item label="设备名称" prop="assetName">
-                        <el-input v-model="addForm.assetName" auto-complete="off" style="width: 25%;"></el-input>
+                        <el-input v-model="addForm.assetName" auto-complete="off" style="width: 25%;" maxlength="20" placeholder="最多20个字"></el-input>
                     </el-form-item>
                     <el-form-item label="分类" prop="typeId">
                         <el-cascader

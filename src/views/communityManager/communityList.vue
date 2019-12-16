@@ -75,7 +75,7 @@
         <el-dialog title="编辑" :visible.sync="editFormVisible" @close="editCancel" :close-on-click-modal="false">
         <el-form :model="editForm" label-width="150px" :rules="editFormRules" ref="editForm">
             <el-form-item label="社区名称" prop="communityName">
-                <el-input v-model="editForm.communityName" auto-complete="off"></el-input>
+                <el-input v-model="editForm.communityName" auto-complete="off" maxlength="15" placeholder="最多15个字"></el-input>
             </el-form-item>
             <el-form-item label="经度" prop="longitude">
                 <el-input v-model="editForm.longitude"></el-input>
@@ -117,7 +117,7 @@
         <el-dialog title="新增" :visible.sync="addFormVisible" @close="addCancel" :close-on-click-modal="false">
         <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
             <el-form-item label="社区名称" prop="communityName">
-                <el-input v-model="addForm.communityName" auto-complete="off"></el-input>
+                <el-input v-model="addForm.communityName" auto-complete="off" maxlength="15" placeholder="最后15个字"></el-input>
             </el-form-item>
             <el-form-item label="经度" prop="longitude">
                 <el-input v-model="addForm.longitude"></el-input>

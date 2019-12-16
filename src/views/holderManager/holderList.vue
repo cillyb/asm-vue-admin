@@ -106,6 +106,8 @@
             formatBenefit: function (row, column) {
                 if(row.totalShareBenefit != null) {
                     return row.totalShareBenefit+"元";
+                } else if(row.totalBenefit != null){
+                    return row.totalBenefit+"元";
                 } else {
                     return null;
                 }
