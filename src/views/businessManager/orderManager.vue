@@ -57,8 +57,6 @@
             </el-table-column>
             <el-table-column prop="realBeginTime" label="开始运行时间">
             </el-table-column>
-            <el-table-column prop="realEndTime" label="结束运行时间">
-            </el-table-column>
             <el-table-column prop="serverTotalTime" label="总运行时间" :formatter="formatMin"sortable>
             </el-table-column>
             <el-table-column prop="shareholdingMoney" label="持有人应得" :formatter="formatPrice2" sortable>

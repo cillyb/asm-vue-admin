@@ -73,7 +73,7 @@
                 </el-form-item>
                 <el-form-item prop="shareholdingPercent">
                     <span slot="label" >持有人分利 <br>(单位：%)</span>
-                    <el-input v-model.number="editForm.shareholdingPercent"></el-input>
+                    <el-input v-model.number="editForm.shareholdingPercent" placeholder="最大30%"></el-input>
                     <el-tooltip class="item" effect="dark" content="指持有人会获得的获利比率" placement="right">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
@@ -100,7 +100,7 @@
                 </el-form-item>
                 <el-form-item prop="shareholdingPercent">
                     <span slot="label" >持有人分利 <br>(单位：%)</span>
-                    <el-input v-model.number="addForm.shareholdingPercent"></el-input>
+                    <el-input v-model.number="addForm.shareholdingPercent"  placeholder="最大30%"></el-input>
                     <el-tooltip class="item" effect="dark" content="指持有人会获得的获利比率" placement="right">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
@@ -131,7 +131,9 @@
             callback(new Error('请输入分利'))
         }else  if (!isvalidSharing(value)){
             callback(new Error('请输入正确的分利'))
-        }else {
+        }else if(value > 30){
+            callback(new Error('分利比最大只允许30%'))
+        } else{
             callback()
         }
     };
