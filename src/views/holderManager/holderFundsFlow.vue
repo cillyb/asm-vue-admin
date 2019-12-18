@@ -36,8 +36,8 @@
             </el-table-column>
             <el-table-column prop="assetName" label="设备名" style="width: 15%;" >
             </el-table-column>
-            <el-table-column prop="accountDate" label="结账日" :formatter="formatDate" style="width: 15%;" sortable>
-            </el-table-column>
+<!--            <el-table-column prop="accountDate" label="结账日" :formatter="formatDate" style="width: 15%;" sortable>-->
+<!--            </el-table-column>-->
             <el-table-column prop="moneyChange" label="持有人收益" :formatter="formatMoney2" style="width: 10%;" sortable>
             </el-table-column>
             <el-table-column prop="accountDateBenefit" label="结账日前收益" :formatter="formatMoney3" style="width: 10%;" sortable>

@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="condition">
                 <el-form-item>
-                    <el-input v-model="condition.id" placeholder="退款编号" clearable></el-input>
+                    <el-input v-model="condition.refundNo" placeholder="退款编号" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-input v-model="condition.phoneNumber" placeholder="手机号" clearable></el-input>
@@ -21,7 +21,7 @@
             </el-table-column>
             <el-table-column prop="orderNo" label="订单编号" sortable>
             </el-table-column>
-            <el-table-column prop="id" label="退款编号" sortable>
+            <el-table-column prop="refundNo" label="退款编号" sortable>
             </el-table-column>
             <el-table-column prop="createTime" label="申请时间" sortable>
             </el-table-column>
@@ -58,7 +58,8 @@
         data() {
             return {
                 condition: {
-                    id: ''
+                    refundNo: '',
+                    phoneNumber:''
                 },
                 refund: [],
                 total: 0,
