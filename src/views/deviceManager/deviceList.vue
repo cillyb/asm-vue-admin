@@ -1046,7 +1046,7 @@
             },
             //删除
             handleDel: function (index, row) {
-                this.$confirm('确认删除该记录吗?', '提示', {
+                this.$confirm('确认删除该设备吗?', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
@@ -1261,7 +1261,7 @@
                 for (var i = 0; i < this.sels.length; i++) {
                     ids.push(this.sels[i].id);
                 }
-                this.$confirm('确认删除选中记录吗？', '提示', {
+                this.$confirm('确认删除选中设备吗？', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;

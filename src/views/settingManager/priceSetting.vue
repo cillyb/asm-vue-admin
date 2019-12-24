@@ -278,7 +278,7 @@
             },
             //删除价格模板
             handleDel: function (index, row) {
-                this.$confirm('确认删除该记录吗?', '提示', {
+                this.$confirm('确认删除该模板吗?', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
@@ -321,7 +321,7 @@
             editSubmit: function () {
                 this.$refs.editForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.editLoading = true;
                             let para = Object.assign({}, this.editForm);
                             editPriceModel(para).then((res) => {
@@ -341,7 +341,7 @@
                                 this.editFormVisible = false;
                                 this.getPriceModel();
                             });
-                        });
+                        // });
                     }
                 });
             },
@@ -391,7 +391,7 @@
                 for(var i = 0;i < this.sels.length; i++){
                     ids.push(this.sels[i].id);
                 }
-                this.$confirm('确认删除选中记录吗？', '提示', {
+                this.$confirm('确认删除选中模板吗？', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;

@@ -117,7 +117,7 @@
         <el-dialog title="新增" :visible.sync="addFormVisible" @close="addCancel" :close-on-click-modal="false">
         <el-form :model="addForm" label-width="150px" :rules="addFormRules" ref="addForm">
             <el-form-item label="社区名称" prop="communityName">
-                <el-input v-model="addForm.communityName" auto-complete="off" maxlength="15" placeholder="最后15个字"></el-input>
+                <el-input v-model="addForm.communityName" auto-complete="off" maxlength="15" placeholder="最多15个字"></el-input>
             </el-form-item>
             <el-form-item label="经度" prop="longitude">
                 <el-input v-model="addForm.longitude"></el-input>
@@ -152,6 +152,26 @@
 <script>
     import { getCommunityListPage, removeCommunity, addCommunity, editCommunity, isvalidPhone, isvalidTel, openCommunity, closeCommunity } from '../../api/communityApi';
     import util from '../../common/js/util'
+    import { isNumber } from '../../api/settingApi';
+
+    var validNumberLo=(rule, value,callback)=>{
+        if (value === ''){
+            callback(new Error('请输入经度'))
+        }else if(!isNumber(value)) {
+            callback(new Error('请输入正确的经度'))
+        }else{
+            callback()
+        }
+    };
+    var validNumberLa=(rule, value,callback)=>{
+        if (value === ''){
+            callback(new Error('请输入纬度'))
+        }else if(!isNumber(value)) {
+            callback(new Error('请输入正确的纬度'))
+        }else{
+            callback()
+        }
+    };
 
     //手机号码验证
     var validPhone=(rule, value,callback)=>{
@@ -185,10 +205,10 @@
                         { required: true, message: '请输入社区名称', trigger: 'blur' }
                     ],
                     longitude: [
-                        { required: true, message: '请输入经度', trigger: 'blur' }
+                        { required: true, trigger: 'blur', validator: validNumberLo }
                     ],
                     latitude: [
-                        { required: true, message: '请输入纬度', trigger: 'blur' }
+                        { required: true, trigger: 'blur', validator: validNumberLa }
                     ],
                     address: [
                         { required: true, message: '请输入地址', trigger: 'blur' }
@@ -227,10 +247,10 @@
                         { required: true, message: '请输入社区名称', trigger: 'blur' }
                     ],
                     longitude: [
-                        { required: true, message: '请输入经度', trigger: 'blur' }
+                        { required: true, trigger: 'blur', validator: validNumberLo }
                     ],
                     latitude: [
-                        { required: true, message: '请输入纬度', trigger: 'blur' }
+                        { required: true, trigger: 'blur', validator: validNumberLa }
                     ],
                     address: [
                         { required: true, message: '请输入地址', trigger: 'blur' }
@@ -336,7 +356,7 @@
             },
             //删除社区
             handleDel: function (index, row) {
-                this.$confirm('确认删除该记录吗?', '提示', {
+                this.$confirm('确认删除该社区吗?', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
@@ -387,7 +407,7 @@
                    var regPos = /^\d+(\.\d+)?$/; //非负浮点数
                    if(regPos.test(this.editForm.longitude) && regPos.test(this.editForm.latitude)){
                        if (valid) {
-                           this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                           // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                                this.editLoading = true;
                                let para = Object.assign({}, this.editForm);
                                var communityNoBusinessSetList = [];
@@ -414,7 +434,7 @@
                                    this.editFormVisible = false;
                                    this.getCommunity();
                                });
-                           });
+                           // });
                        }
                    }else{
                        this.$message({
@@ -478,7 +498,7 @@
                 for(var i = 0;i < this.sels.length; i++){
                     ids.push(this.sels[i].id);
                 }
-                this.$confirm('确认删除选中记录吗？', '提示', {
+                this.$confirm('确认删除选中社区吗？', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;

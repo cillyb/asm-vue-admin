@@ -12,8 +12,8 @@
             </el-table-column>
             <el-table-column prop="refundLimitLevel2ServerPercent" label="二级手续费比例" :formatter="formatLevelPercent2">
             </el-table-column>
-            <el-table-column prop="remindTime" label="提醒时间" :formatter="formatRemindTime">
-            </el-table-column>
+<!--            <el-table-column prop="remindTime" label="提醒时间" :formatter="formatRemindTime">-->
+<!--            </el-table-column>-->
             <el-table-column label="操作">
                 <template scope="scope">
                     <el-dropdown trigger="click">
@@ -58,10 +58,10 @@
                     <span slot="label" >二级手续费比例 <br>(单位:%)</span>
                     <el-input v-model="editForm.refundLimitLevel2ServerPercent" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="remindTime">
-                    <span slot="label" >提醒时间 <br>(单位:分钟)</span>
-                    <el-input v-model="editForm.remindTime" auto-complete="off"></el-input>
-                </el-form-item>
+<!--                <el-form-item prop="remindTime">-->
+<!--                    <span slot="label" >提醒时间 <br>(单位:分钟)</span>-->
+<!--                    <el-input v-model="editForm.remindTime" auto-complete="off"></el-input>-->
+<!--                </el-form-item>-->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click.native="editCancel">取消</el-button>
@@ -99,9 +99,9 @@
                     refundLimitLevel2ServerPercent: [
                         { required: true, message: '请输入二级手续费比例', trigger: 'blur' }
                     ],
-                    remindTime: [
-                        { required: true, message: '请输入提醒时间', trigger: 'blur' }
-                    ],
+                    // remindTime: [
+                    //     { required: true, message: '请输入提醒时间', trigger: 'blur' }
+                    // ],
                 },
                 //编辑界面数据
                 editForm: {
@@ -153,6 +153,10 @@
             handleEdit: function (index, row) {
                 this.editFormVisible = true;
                 this.editForm = Object.assign({}, row);
+            },
+            editCancel: function(){
+                this.$refs.editForm.resetFields();
+                this.editFormVisible = false;
             },
             //编辑交易设置
             editSubmit: function () {

@@ -345,7 +345,7 @@
                         });
                     }else{
                         if (valid) {
-                            this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                            // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                                 this.editLoading = true;
                                 let para = Object.assign({}, this.editForm);
                                 editTimeModel(para).then((res) => {
@@ -365,7 +365,7 @@
                                     this.editFormVisible = false;
                                     this.getTimeModel();
                                 });
-                            });
+                            // });
                         }
                     }
                 });

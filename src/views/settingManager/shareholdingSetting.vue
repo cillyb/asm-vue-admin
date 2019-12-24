@@ -124,11 +124,13 @@
 <script>
     import util from '../../common/js/util'
 
-    import { getShareholdingListPage, removeShareholding, addShareholding, editShareholding, isvalidSharing, openShareholding, closeShareholding, isvalidDate } from '../../api/settingApi';
+    import { getShareholdingListPage, removeShareholding, addShareholding, editShareholding, isvalidSharing, openShareholding, closeShareholding, isvalidDate, isNumber } from '../../api/settingApi';
 
     var validSharing=(rule, value,callback)=>{
         if (value === ''){
             callback(new Error('请输入分利'))
+        }else if(!isNumber(value)) {
+            callback(new Error('请输入正确的分利'))
         }else  if (!isvalidSharing(value)){
             callback(new Error('请输入正确的分利'))
         }else if(value > 30){
@@ -283,7 +285,7 @@
             },
             //删除分利
             handleDel: function (index, row) {
-                this.$confirm('确认删除该记录吗?', '提示', {
+                this.$confirm('确认删除该分利吗?', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
@@ -324,7 +326,7 @@
             editSubmit: function () {
                 this.$refs.editForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.editLoading = true;
                             let para = Object.assign({}, this.editForm);
                             editShareholding(para).then((res) => {
@@ -344,7 +346,7 @@
                                 this.editFormVisible = false;
                                 this.getShareholding();
                             });
-                        });
+                        // });
                     }
                 });
             },
@@ -393,7 +395,7 @@
                 for(var i = 0;i < this.sels.length; i++){
                     ids.push(this.sels[i].id);
                 }
-                this.$confirm('确认删除选中记录吗？', '提示', {
+                this.$confirm('确认删除选中分利吗？', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
