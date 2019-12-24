@@ -1165,10 +1165,13 @@
                         //TODO 提交失败一次this.addForm长度减一
                         // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             console.log(this.addForm);
-                            let para = Object.assign({}, this.addForm);
+                            // let para = Object.assign({}, this.addForm);
+                            //Object.assign存在深拷贝
+                            let para = this.addForm;
                             if (Array.isArray(para.typeId) && para.typeId != null && para.typeId.length > 0) {
                                 para.typeId = para.typeId.pop();
                             }
+                            console.log(this.addForm);
                             if(para.isAppuserHold == 0) {
                                 para.appuserId = null;
                                 para.shareholdingPercentModelId = null;
@@ -1208,8 +1211,9 @@
                     if (valid) {
                         // this.$confirm('确认提交吗？', '提示', {}).then(() => {
 
-                            let para = Object.assign({}, this.addForm);
-                            if (Array.isArray(para.typeId) && para.typeId != null && para.typeId.length > 0) {
+                            // let para = Object.assign({}, this.addForm);
+                        let para = this.addForm;
+                        if (Array.isArray(para.typeId) && para.typeId != null && para.typeId.length > 0) {
                                 para.typeId = para.typeId.pop();
                             }
                             if(para.isAppuserHold == 0) {
