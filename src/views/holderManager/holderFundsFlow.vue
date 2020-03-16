@@ -46,16 +46,6 @@
             </el-table-column>
             <el-table-column prop="createTime" label="完成时间" style="width: 20%;" sortable>
             </el-table-column>
-<!--            <el-table-column prop="userName" label="用户名" style="width: 15%;" sortable>-->
-<!--            </el-table-column>-->
-<!--            <el-table-column prop="shareholdingPercent" label="分利比" :formatter="formatPercent" style="width: 15%;" sortable>-->
-<!--            </el-table-column>-->
-<!--            <el-table-column prop="capitalFlowType" label="流水类型" style="width: 10%;" sortable>-->
-<!--            </el-table-column>-->
-<!--            <el-table-column prop="price" label="该单收益" :formatter="formatMoney1" style="width: 10%;" sortable>-->
-<!--            </el-table-column>-->
-<!--            <el-table-column prop="totalShareBenefit" label="总收益" :formatter="formatMoney4" style="width: 20%;" sortable>-->
-<!--            </el-table-column>-->
         </el-table>
 
         <!--工具条-->

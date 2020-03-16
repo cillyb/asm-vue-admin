@@ -29,8 +29,6 @@ const router = new VueRouter({
 // http request 拦截器
 axios.interceptors.request.use(
     config => {
-      // console.log("拦截器拦截了请求: ");
-      // console.log(config);
       if (localStorage.user) { //判断token是否存在
         config.headers['X-BG-TOKEN'] = localStorage.user;  //将token设置成请求头
       }
@@ -45,8 +43,6 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
     response => {
-      // console.log("拦截器拦截了响应：")
-      // console.log(response);
       if (response.data.meta.code === '10002') {    //判断token是否失效
         console.log("token过期");
         router.replace('/login');
@@ -71,10 +67,6 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-
-//router.afterEach(transition => {
-//NProgress.done();
-//});
 
 new Vue({
   //el: '#app',

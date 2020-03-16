@@ -245,14 +245,11 @@
             addSubmit: function () {
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.addLoading = true;
-                            //NProgress.start();
                             let para = Object.assign({}, this.addForm);
                             para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             addUser(para).then((res) => {
                                 this.addLoading = false;
-                                //NProgress.done();
                                 this.$message({
                                     message: '提交成功',
                                     type: 'success'
@@ -261,7 +258,6 @@
                                 this.addFormVisible = false;
                                 this.getUsers();
                             });
-                        // });
                     }
                 });
             },
@@ -275,11 +271,9 @@
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
-                    //NProgress.start();
                     let para = { ids: ids };
                     batchRemoveUser(para).then((res) => {
                         this.listLoading = false;
-                        //NProgress.done();
                         this.$message({
                             message: '删除成功',
                             type: 'success'

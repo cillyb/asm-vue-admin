@@ -2,7 +2,7 @@
     <div id="app"  :style="backgroundDiv" >
 
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
-      <p style="font-size: 20px;font-weight: bold;" class="title">ASM资产共享管理软件</p>
+      <p style="font-size: 20px;font-weight: bold;" class="title">众颐资产共享用户端软件</p>
       <el-form-item prop="account">
         <el-input type="text" v-model="ruleForm.account" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>

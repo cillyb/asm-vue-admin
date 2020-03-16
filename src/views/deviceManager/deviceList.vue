@@ -544,7 +544,6 @@
                 if (Array.isArray(tmp) && tmp != null && tmp.length > 0) {
                     tmp = tmp[tmp.length-1];
                 }
-                // console.log(tmp);
                 this.addForm.typeId = tmp;
             },
 
@@ -611,7 +610,6 @@
             },
 
             handleQuery(){
-                // console.log(this.condition);
                 this.current = 1;
                 this.getDevices();
             },
@@ -657,7 +655,6 @@
                 this.getCommunity();
                 this.selsCommunity = '';
                 this.showCommunityList = true;
-                // this.addForm.communityId = 321;
             },
 
             //------------------------------------------------
@@ -820,7 +817,6 @@
             },
             //点击选择
             choiceShare() {
-                // console.log(this.selsAppoint);
                 if (this.selsShare == '' || this.selsShare == null) {
                     this.$message({
                         message: '请选择分利模板',
@@ -832,9 +828,7 @@
                     this.showShareList = false;
                 }
             },
-            //
             selsShareChange(val) {
-                // console.log(val);
                 this.selsShare = val;
             },
             //点击选择分利方案
@@ -845,7 +839,6 @@
                 this.showShareList = true;
             },
 
-            //------------------------------------------------
 
 
 
@@ -887,11 +880,8 @@
             //编辑类型
             editTypeSubmit: function () {
                 this.$refs.editTypeForm.validate((valid) => {
-                    // console.log(va)
                     if (valid) {
-                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.editLoading = true;
-                            //NProgress.start();
                             let para = {
                                 id: this.condition.typeId,
                                 typeName: this.editTypeForm.editTypeName
@@ -906,7 +896,6 @@
                                     this.$refs['editTypeForm'].resetFields();
                                     this.editTypeVisible = false;
                                     this.getTypeTree();
-                                    // this.getDevices();
                                 } else {
                                     this.$message({
                                         message: res.meta.message,
@@ -914,18 +903,14 @@
                                     });
                                 }
                             });
-                        // });
                     }
                 });
             },
             //新增类型
             addTypeSubmit: function () {
                 this.$refs.addTypeForm.validate((valid) => {
-                    // console.log(va)
                     if (valid) {
-                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.editLoading = true;
-                            //NProgress.start();
                             let para = {
                                 pId: this.condition.typeId,
                                 typeName: this.addTypeForm.addTypeName
@@ -940,7 +925,6 @@
                                     this.$refs['addTypeForm'].resetFields();
                                     this.addTypeVisible = false;
                                     this.getTypeTree();
-                                    // this.getDevices();
                                 } else {
                                     this.$message({
                                         message: res.meta.message,
@@ -948,7 +932,6 @@
                                     });
                                 }
                             });
-                        // });
                     }
                 });
             },
@@ -967,7 +950,6 @@
                             if (this.optionsType.length > 0) {
                                 this.$refs.treeBox.setCurrentKey(this.optionsType[0].id);
                                 this.condition.typeId = this.optionsType[0].id;
-                                // console.log("getTypeTree:" + this.condition.typeId);
                                 this.editTypeForm.editTypeName = this.optionsType[0].typeName;
                                 this.getDevices();
                             } else {
@@ -1031,16 +1013,12 @@
                     },
                     condition: newCondition
                 };
-                // console.log("getDevices: " + this.condition.typeId);
                 this.listLoading = true;
-                //NProgress.start();
                 getDevices(para).then((res) => {
-                    // console.log(res);
                     if (res.meta.success) {
                         this.total = res.data.total;
                         this.devices = res.data.records;
                         this.listLoading = false;
-                        //NProgress.done();
                     }
                 });
             },
@@ -1050,12 +1028,10 @@
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
-                    //NProgress.start();
                     let para = {ids: []};
                     para.ids.push(row.id);
                     removeDevice(para).then((res) => {
                         this.listLoading = false;
-                        //NProgress.done();
                         if (res.meta.success) {
                             this.$message({
                                 message: '删除成功',
@@ -1090,8 +1066,6 @@
                         });
                     }
                 });
-                // console.log(row.typeId + " " + row.typeId.length + " " + Array.isArray(row.typeId));
-                //typeId设置不正确
                 para.id = row.typeId;
                 if (Array.isArray(para.id) && para.id != null && para.id.length > 0) {
                     para.id = para.id[para.id.length-1];
@@ -1123,9 +1097,6 @@
                         });
                     }
                 });
-                // this.editFormVisible = true;
-                // this.editForm = Object.assign({}, row);
-                //获取分类的路径
             },
             //显示新增界面
             handleAdd: function () {
@@ -1150,23 +1121,10 @@
             },
             //编辑
             editSubmit: function () {
-                // let para = Object.assign({}, this.addForm);
-                // if (para.typeId != null && para.typeId.length > 0) {
-                //     para.typeId = para.typeId.pop();
-                // }
-                // if(para.isAppuserHold == 0) {
-                //     para.appuserId = null;
-                //     para.shareholdingPercentModelId = null;
-                // }
-                // para = util.filterParams(para);
-                // console.log(para);
+
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        //TODO 提交失败一次this.addForm长度减一
-                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             console.log(this.addForm);
-                            // let para = Object.assign({}, this.addForm);
-                            //Object.assign存在深拷贝
                             let para = this.addForm;
                             if (Array.isArray(para.typeId) && para.typeId != null && para.typeId.length > 0) {
                                 para.typeId = para.typeId.pop();
@@ -1178,8 +1136,6 @@
                             }
                             console.log(para.typeId);
                             this.addLoading = true;
-                            //NProgress.start();
-                            // let para = Object.assign({}, this.addForm);
                             updateDevice(para).then((res) => {
                                 this.addLoading = false;
                                 if(res.meta.success) {
@@ -1205,13 +1161,8 @@
             },
             //新增
             addSubmit: function () {
-                // para = util.filterParams(para);
-                // console.log(para);
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
-
-                            // let para = Object.assign({}, this.addForm);
                         let para = this.addForm;
                         if (Array.isArray(para.typeId) && para.typeId != null && para.typeId.length > 0) {
                                 para.typeId = para.typeId.pop();
@@ -1220,11 +1171,7 @@
                                 para.appuserId = null;
                                 para.shareholdingPercentModelId = null;
                             }
-                            // console.log(this.addForm);
-                            // console.log(para);
                             this.addLoading = true;
-                            //NProgress.start();
-                            // let para = Object.assign({}, this.addForm);
                             addDevice(para).then((res) => {
                                 this.addLoading = false;
                                 if(res.meta.success) {
@@ -1243,7 +1190,6 @@
                                     });
                                 }
                             });
-                        // });
                     }
                 });
             },
@@ -1260,7 +1206,6 @@
             },
             //批量删除
             batchRemove: function () {
-                // var ids = this.sels.map(item => item.id).toString();
                 var ids = [];
                 for (var i = 0; i < this.sels.length; i++) {
                     ids.push(this.sels[i].id);
@@ -1294,7 +1239,6 @@
         },
         mounted() {
             this.getTypeTree();
-            // this.getDevices();
         }
     }
 

@@ -12,8 +12,6 @@
             </el-table-column>
             <el-table-column prop="refundLimitLevel2ServerPercent" label="二级手续费比例" :formatter="formatLevelPercent2">
             </el-table-column>
-<!--            <el-table-column prop="remindTime" label="提醒时间" :formatter="formatRemindTime">-->
-<!--            </el-table-column>-->
             <el-table-column label="操作">
                 <template scope="scope">
                     <el-dropdown trigger="click">
@@ -58,10 +56,6 @@
                     <span slot="label" >二级手续费比例 <br>(单位:%)</span>
                     <el-input v-model="editForm.refundLimitLevel2ServerPercent" auto-complete="off"></el-input>
                 </el-form-item>
-<!--                <el-form-item prop="remindTime">-->
-<!--                    <span slot="label" >提醒时间 <br>(单位:分钟)</span>-->
-<!--                    <el-input v-model="editForm.remindTime" auto-complete="off"></el-input>-->
-<!--                </el-form-item>-->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click.native="editCancel">取消</el-button>
@@ -162,7 +156,6 @@
             editSubmit: function () {
                 this.$refs.editForm.validate((valid) => {
                     if (valid) {
-                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.editLoading = true;
                             let para = Object.assign({}, this.editForm);
                             editOrderSetting(para).then((res) => {
@@ -182,7 +175,6 @@
                                 this.editFormVisible = false;
                                 this.getOrderSetting();
                             });
-                        // });
                     }
                 });
             },

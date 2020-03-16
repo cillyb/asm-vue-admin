@@ -422,7 +422,6 @@ zui'j<template>
             },
             //批量删除
             batchRemove: function () {
-                // var ids = this.sels.map(item => item.id).toString();
                 var ids = [];
                 for(var i = 0; i < this.sels.length; i++) {
                     ids.push(this.sels[i].id);

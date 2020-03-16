@@ -58,7 +58,7 @@
 	export default {
 		data() {
 			return {
-				sysName:'ASM后台管理系统',
+				sysName:'众颐资产共享用户端软件',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',
@@ -193,7 +193,7 @@
 				}
 			}
 			.logo-width{
-				width:230px;
+				width:400px;
 			}
 			.logo-collapse-width{
 				width:60px

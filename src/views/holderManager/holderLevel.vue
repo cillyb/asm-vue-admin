@@ -247,12 +247,10 @@
                     if (valid) {
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.addLoading = true;
-                            //NProgress.start();
                             let para = Object.assign({}, this.addForm);
                             para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             addUser(para).then((res) => {
                                 this.addLoading = false;
-                                //NProgress.done();
                                 this.$message({
                                     message: '提交成功',
                                     type: 'success'
