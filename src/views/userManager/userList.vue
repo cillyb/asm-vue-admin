@@ -15,8 +15,6 @@ zui'j<template>
         <!--列表-->
         <el-table :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange"
                    style="width: 100%; ">
-<!--            <el-table-column type="selection" >-->
-<!--            </el-table-column>-->
             <el-table-column type="index" label="序号" >
             </el-table-column>
             <el-table-column prop="createTime" label="注册时间" sortable>
@@ -60,7 +58,6 @@ zui'j<template>
 
         <!--工具条-->
         <el-col :span="24" class="toolbar">
-<!--            <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>-->
             <el-pagination background layout="total, sizes, prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 50, 100, 200, 300, 400]" :page-size="size" :total="total" style="float:right;">
             </el-pagination>
         </el-col>
@@ -347,10 +344,8 @@ zui'j<template>
                                 return;
                             }
                             this.editLoading = true;
-                            // para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             editUser(para).then((res) => {
                                 this.editLoading = false;
-                                //NProgress.done();
                                 if(res.meta.success) {
                                     this.$message({
                                         message: '提交成功',
@@ -374,8 +369,6 @@ zui'j<template>
             addSubmit: function () {
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        // this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            //NProgress.start();
                             let para = Object.assign({}, this.addForm);
                             if(para.isHolder == 1 && (para.userName == '' || para.userName == null)) {
                                 this.$message({
@@ -385,7 +378,6 @@ zui'j<template>
                                 return;
                             }
                             this.addLoading = true;
-                            // para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             console.log(para);
                             addUser(para).then((res) => {
                                 this.addLoading = false;
@@ -404,7 +396,6 @@ zui'j<template>
                                     });
                                 }
                             });
-                        // });
                     }
                 });
             },
@@ -430,11 +421,9 @@ zui'j<template>
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
-                    //NProgress.start();
                     let para = { ids: ids };
                     removeUser(para).then((res) => {
                         this.listLoading = false;
-                        //NProgress.done();
                         if(res.meta.success) {
                             this.$message({
                                 message: '删除成功',
